@@ -1,0 +1,45 @@
+
+        <svg xmlns="http://www.w3.org/2000/svg" id="svg_content">
+            <defs>
+                <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path stroke="black" fill="none" d="M0,0H20V20"></path>
+                </pattern>
+            </defs>
+            <rect x="0" y="0" width="1200" height="1000" fill="url(#grid)"></rect>
+            <g>
+                <text x="0" y="15">这是第一行</text>
+            </g>
+            <script type="text/javascript"><![CDATA[
+
+                //执行父页面的svgElementClicked方法
+                function callToParent(evt) {
+                    if (window.parent.svgElementClicked)
+                        window.parent.svgElementClicked( evt.target);
+                    else
+                        alert("miss parent function svgElementClicked");
+                }
+                 function textClicked(evt) {
+                    if (window.parent.textClicked)
+                        window.parent.textClicked( evt.target);
+                    else
+                        alert("miss parent function textClicked");
+                }
+                //鼠标按下事件
+                function mouseDownFun(evt) {
+                    if (window.parent.svgElementMouseDown)
+                        window.parent.svgElementMouseDown( evt.target);
+                    else
+                        alert("miss parent function svgElementMouseDown");
+                }
+                //鼠标松开事件
+                function mouseUpFun(evt) {
+                    if (window.parent.svgElementMouseUp)
+                        window.parent.svgElementMouseUp( evt.target);
+                    else
+                        alert("miss parent function svgElementMouseUp");
+                }
+            ]]></script>
+        </svg>
+
+
+

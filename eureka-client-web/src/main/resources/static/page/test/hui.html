@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../../js/jquery.min.js" ></script>
+    <script type="text/javascript" src="../../lib/layer/2.4/layer.js" ></script>
+    <script charset="utf-8" src="../../lib/kindeditor/kindeditor-all.js"></script>
+    <script charset="utf-8" src="../../lib/kindeditor/lang/zh-CN.js"></script>
+
+</head>
+<body>
+<button class="btn radius btn-primary size-L" onClick="modaldemo()">弹出对话框</button>
+
+<div style="display: none;position: absolute" id="editor_div">
+    <textarea id="text_editor" name="content" style="width:300px;height:400px;"></textarea>
+</div>
+
+<script>
+    KindEditor.ready(function(K) {
+        window.editor = K.create('#text_editor');
+
+    });
+
+    function showEditor(){
+        var editor_div_element=document.getElementById("editor_div");
+        editor_div_element.setAttribute("z-index",0);
+        editor_div_element.setAttribute("style",
+            "left:"+(window.screen.width-500)/2+
+            "px;top:"+( window.screen.height-500)/2+
+            "px;zIndex:0"+
+            ";position: absolute"+
+            ";display:block");
+
+
+    }
+
+
+
+</script>
+
+</body>
+</html>
