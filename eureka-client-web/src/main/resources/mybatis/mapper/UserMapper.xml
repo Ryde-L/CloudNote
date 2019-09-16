@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.UserMapper" >
-  <resultMap id="BaseResultMap" type="graduation.project.sgu.cloudnote.eureka.client.web.pojo.User" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
-    <result column="phone" property="phone" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="gender" property="gender" jdbcType="INTEGER" />
-    <result column="sculpture" property="sculpture" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
+  <resultMap id="UserResultMap" type="graduation.project.sgu.cloudnote.eureka.client.web.pojo.User" >
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="pwd" property="pwd" jdbcType="VARCHAR"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    <result column="email" property="email" jdbcType="VARCHAR"/>
+    <result column="gender" property="gender" jdbcType="INTEGER"/>
+    <result column="sculpture" property="sculpture" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <collection property="noteBookList" ofType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook">
+      <id property="id" column="note_book_id"/>
+      <result property="userId" column="user_id"/>
+      <result property="title" column="title"/>
+      <result property="deletable" column="deletable"/>
+    </collection>
   </resultMap>
+
+  <sql id="user_columns">
+    u.id ,u.name,u.pwd,u.phone,u.email,u.gender,u.sculpture,u.status
+  </sql>
+
+<!--  test-->
+  <select id="selectMany" resultMap="UserResultMap">
+    select
+        <include refid="user_columns"/> ,<include refid="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteBookMapper.nick_name_columns"/>
+    from user u
+    left join note_book nb on u.id=nb.user_id
+    where u.id=#{param1}
+  </select>
+
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -72,7 +92,7 @@
   <sql id="Base_Column_List" >
     id, name, pwd, phone, email, gender, sculpture, status
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.UserExample" >
+  <select id="selectByExample" resultMap="UserResultMap" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.UserExample" >
     select
     <if test="distinct" >
       distinct
@@ -86,7 +106,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="UserResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from user
@@ -102,7 +122,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.User" >
+  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.User" useGeneratedKeys="true" keyProperty="id" >
     insert into user (id, name, pwd, 
       phone, email, gender, 
       sculpture, status)

@@ -285,6 +285,76 @@ public class RecycleBinExample {
             return (Criteria) this;
         }
 
+        public Criteria andNoteTitleIsNull() {
+            addCriterion("note_title is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleIsNotNull() {
+            addCriterion("note_title is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleEqualTo(String value) {
+            addCriterion("note_title =", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleNotEqualTo(String value) {
+            addCriterion("note_title <>", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleGreaterThan(String value) {
+            addCriterion("note_title >", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleGreaterThanOrEqualTo(String value) {
+            addCriterion("note_title >=", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleLessThan(String value) {
+            addCriterion("note_title <", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleLessThanOrEqualTo(String value) {
+            addCriterion("note_title <=", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleLike(String value) {
+            addCriterion("note_title like", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleNotLike(String value) {
+            addCriterion("note_title not like", value, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleIn(List<String> values) {
+            addCriterion("note_title in", values, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleNotIn(List<String> values) {
+            addCriterion("note_title not in", values, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleBetween(String value1, String value2) {
+            addCriterion("note_title between", value1, value2, "noteTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteTitleNotBetween(String value1, String value2) {
+            addCriterion("note_title not between", value1, value2, "noteTitle");
+            return (Criteria) this;
+        }
+
         public Criteria andThrowAwayTimeIsNull() {
             addCriterion("throw_away_time is null");
             return (Criteria) this;

@@ -16,6 +16,8 @@ public class RecycleBin {
 
     private Integer noteBookId;
 
+    private String noteTitle;
+
     private Date throwAwayTime;
 
     private Date clearTime;

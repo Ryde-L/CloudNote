@@ -3,9 +3,11 @@ package graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTag;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTagExample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface NoteTagMapper {
     int countByExample(NoteTagExample example);
 

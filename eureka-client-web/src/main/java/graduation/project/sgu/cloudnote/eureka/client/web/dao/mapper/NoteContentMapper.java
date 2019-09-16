@@ -3,9 +3,12 @@ package graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteContent;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteContentExample;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface NoteContentMapper {
     int countByExample(NoteContentExample example);
 
@@ -34,4 +37,7 @@ public interface NoteContentMapper {
     int updateByPrimaryKeyWithBLOBs(NoteContent record);
 
     int updateByPrimaryKey(NoteContent record);
+
+    @Select("select * from note_content where note_id=#{param1} limit 0,1")
+    NoteContent selectOneByNoteId(Integer noteId);
 }

@@ -1,6 +1,6 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.service.impl;
 
-import cn.com.tiptop.msck.service.NoteAttachmentService;
+import graduation.project.sgu.cloudnote.eureka.client.web.service.NoteAttachmentService;
 import org.springframework.stereotype.Service;
 
 /**

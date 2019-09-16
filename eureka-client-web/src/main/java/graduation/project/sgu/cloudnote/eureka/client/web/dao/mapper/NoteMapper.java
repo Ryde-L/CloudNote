@@ -1,11 +1,15 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper;
 
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note;
+import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteExample;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
+import org.aspectj.weaver.ast.Not;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface NoteMapper {
     int countByExample(NoteExample example);
 
@@ -28,4 +32,17 @@ public interface NoteMapper {
     int updateByPrimaryKeySelective(Note record);
 
     int updateByPrimaryKey(Note record);
+
+    /**
+     * 根据标签模糊匹配笔记
+     *
+     * @param tag 标签
+     * @return 笔记集合
+     */
+    @Select("select n.id,n.title,n.note_book_id from note n left join note_tag ng on n.id=ng.note_id where ng.tag like  CONCAT('%',#{param},'%') ")
+    List<Note> selectByTag( String tag);
+
+    @Select("select * from note where note_book_id=#{param}")
+    List<Note> selectByNoteBookId(Integer noteBookId);
+
 }

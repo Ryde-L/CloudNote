@@ -12,7 +12,11 @@ import java.util.Date;
 public class Share {
     private Integer id;
 
+    private Integer userId;
+
     private Integer noteId;
+
+    private Integer noteBookId;
 
     private String link;
 

@@ -1,11 +1,13 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import pojo.NoteBook;
-import pojo.NoteBookExample;
+import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook;
+import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBookExample;
+import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface NoteBookMapper {
     int countByExample(NoteBookExample example);
 
@@ -28,4 +30,20 @@ public interface NoteBookMapper {
     int updateByPrimaryKeySelective(NoteBook record);
 
     int updateByPrimaryKey(NoteBook record);
+
+    NoteBook selectByIdContainsNoteList(Integer id);
+
+    @Select("select * from note_book where id=#{param}")
+    NoteBook get(Integer id);
+
+    @Select("select * from note_book where user_id=#{param} and deletable=0 limit 0,1")
+    NoteBook selectDefaultNoteBook(Integer userId);
+
+    @Select("select * from note_book where id=#{param}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "noteList",column = "id",many = @Many(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteMapper.selectByNoteBookId"))
+        })
+    NoteBook selectWithNoteList(Integer id);
+
 }

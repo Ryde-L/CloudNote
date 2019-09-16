@@ -6,6 +6,15 @@
     <result column="note_book_id" property="noteBookId" jdbcType="INTEGER" />
     <result column="title" property="title" jdbcType="VARCHAR" />
   </resultMap>
+
+  <sql id="nick_name_columns">
+    n.id note_id ,n.note_book_id,n.title note_title
+  </sql>
+
+  <sql id="Base_Columns_With_Namespace" >
+    n.id, n.note_book_id, n.title
+  </sql>
+
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -97,7 +106,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note" >
+  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note" useGeneratedKeys="true" keyProperty="id">
     insert into note (id, note_book_id, title
       )
     values (#{id,jdbcType=INTEGER}, #{noteBookId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}

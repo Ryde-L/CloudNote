@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class User {
     private Integer id;
 
@@ -24,4 +25,16 @@ public class User {
 
     private Integer status;
 
+    private List<NoteBook> noteBookList;
+
+    public User(Integer id, String name, String pwd, String phone, String email, Integer gender, String sculpture, Integer status) {
+        this.id = id;
+        this.name = name;
+        this.pwd = pwd;
+        this.phone = phone;
+        this.email = email;
+        this.gender = gender;
+        this.sculpture = sculpture;
+        this.status = status;
+    }
 }

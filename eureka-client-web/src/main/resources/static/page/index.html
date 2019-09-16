@@ -45,7 +45,7 @@
             text-align: right;
         }
     </style>
-    <script type="text/javascript" src="../js/jquery.min.js" ></script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js" ></script>
     <script type="text/javascript" src="../lib/svg/svg.js" ></script>
     <script type="text/javascript" src="../lib/svg/svg.draggable.js" ></script>
     <script type="text/javascript" src="../lib/kindeditor/kindeditor-all.js"></script>
@@ -118,15 +118,6 @@
             </pattern>
         </defs>
         <rect id="backgroud_grid" name="backgroud_grid" x="0" y="0" width="100%" height="100%" fill="url(#grid)"></rect>
-<!--        <path stroke="red" stroke-width="2" fill="none" d="M0,0H550V850"></path>-->
-<!--        <path stroke="blue" stroke-width="2" fill="none" d="M0,0V850H550"></path>-->
-<!--        <foreignObject width="100" height="100" name="text">-->
-<!--            <body xmlns="http://www.w3.org/1999/xhtml">-->
-<!--                <p>这是第一行</p>-->
-<!--                <p>这是第二行</p>-->
-<!--            </body>-->
-<!--        </foreignObject>-->
-
     </svg>
 </div>
 
@@ -523,20 +514,29 @@
     }
     
     function submitSvg() {
+
+
         var params = encodeURIComponent(JSON.stringify({
-            "svg": document.getElementById("svg_content").outerHTML
+            "content": document.getElementById("svg_content").outerHTML,
+            "title":"这里填标题",
+            "note_book_id":"1"
         }));
         params=pako.gzip(params, {to: "string"});
         $.ajax({
             type: 'post',
-            url: '/svg/submit',
+            url: '/note/add',
             data:params,
             contentType:"",
             headers: {
                 "Content-Encoding":"gzip"
             },
             success: function(data){
-                alert("成功");
+                var result=JSON.parse(data);
+                if (result['isSuccessful'] == 1){
+                    console.log("成功！")
+                } else{
+                    console.log("失败！"+result['msg'])
+                }
 
             },
             error:function(data) {

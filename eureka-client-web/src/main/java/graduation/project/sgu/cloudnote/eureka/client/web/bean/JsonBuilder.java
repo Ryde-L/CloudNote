@@ -9,7 +9,7 @@ import java.util.HashMap;
 @Component
 @Scope("prototype")
 public class JsonBuilder {
-    private HashMap<String,Object> json=new HashMap<String, Object>();
+    private HashMap<String,Object> json;
 
     /**
      * @return 生成的json字符串
@@ -35,9 +35,22 @@ public class JsonBuilder {
      * @throws IllegalArgumentException 参数需为2的倍数
      */
     public JsonBuilder createConstructor(String ...keysAndValues) throws IllegalArgumentException{
+        json=new HashMap<String, Object>();
         if (keysAndValues.length % 2 !=0) throw new IllegalArgumentException("参数长度需为2的倍数");
         for (int i = 0; i < keysAndValues.length; i+=2)
             json.put(keysAndValues[i],keysAndValues[i+1]);
+        return this;
+    }
+
+    /**
+     * 一个键一个值的形式，参数长度需为2的倍数
+     * @param isSuccessful 成功与否，0或1
+     * @param msg 消息
+     */
+    public JsonBuilder setValuesIntoTemplate(String isSuccessful,String msg){
+        json=new HashMap<String, Object>();
+        json.put("isSuccessful",isSuccessful);
+        json.put("msg",msg);
         return this;
     }
 
