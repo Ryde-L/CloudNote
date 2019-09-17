@@ -1,12 +1,13 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.service.impl;
 
-import graduation.project.sgu.cloudnote.eureka.client.web.bean.JsonBuilder;
 import graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteBookMapper;
+import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.NoteBookService;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.RecycleBinService;
 import graduation.project.sgu.cloudnote.eureka.client.web.utils.CheckerUtil;
+import graduation.project.sgu.cloudnote.eureka.client.web.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,6 @@ public class NoteBookServiceImpl implements NoteBookService {
 
     private static final Logger logger = LoggerFactory.getLogger(NoteBookServiceImpl.class);
 
-
-    @Autowired
-    JsonBuilder jsonBuilder;
-
     @Autowired
     NoteBookMapper noteBookMapper;
 
@@ -50,22 +47,13 @@ public class NoteBookServiceImpl implements NoteBookService {
      *
      * @param userId 用户id
      * @param title  笔记本标题
-     * @return 返回json {"msg":"消息内容","isSuccessful":"0|1"}
+     * @return 返回ResponseDto
      */
-    public String createNoteBook(Integer userId, String title) {
-        try {
-            if (CheckerUtil.checkNull(userId))
-                return jsonBuilder.setValuesIntoTemplate("0", "获取不到用户id").build();
-            if (CheckerUtil.checkNull(title))
-                return jsonBuilder.setValuesIntoTemplate("0", "笔记本标题不为空").build();
-
-            noteBookMapper.insert(new NoteBook(null, userId, title, 1));
-            return jsonBuilder.setValuesIntoTemplate("1", "").build();
-        } catch (Exception e) {
-            logger.error("创建笔记本发生异常：" + e.getMessage());
-            return jsonBuilder.setValuesIntoTemplate("0", "创建笔记本发生异常").build();
-        }
-
+    public ResponseDto createNoteBook(Integer userId, String title) {
+        if (CheckerUtil.checkNull(userId)) return ResultUtil.error("获取不到用户id", null);
+        if (CheckerUtil.checkNull(title)) return ResultUtil.error("笔记本标题不为空", null);
+        noteBookMapper.insert(new NoteBook(null, userId, title, 1));
+        return ResultUtil.success("", null);
     }
 
     public NoteBook getNoteBook(Integer id) {
@@ -93,38 +81,24 @@ public class NoteBookServiceImpl implements NoteBookService {
 
     /**
      * 删除笔记本
-     * @param noteBookId 笔记本id
-     * @return json
+     * @param id 笔记本id
+     * @return ResponseDto
      */
-    public String remove(String noteBookId){
-        try {
-            if (CheckerUtil.checkNull(noteBookId))
-                return jsonBuilder.setValuesIntoTemplate("0", "缺少参数").build();
-            Integer id=Integer.valueOf(noteBookId);
+    public ResponseDto remove(Integer id) {
+        if (CheckerUtil.checkNull(id)) return ResultUtil.error("缺少参数", null);
 
-            NoteBook noteBookWithNoteList = noteBookMapper.selectWithNoteList(id);
-            List<Note> noteList=noteBookWithNoteList.getNoteList();
-            Integer[] noteIds=new Integer[noteList.size()];
-            for (int i = 0; i < noteIds.length; i++)
-                noteIds[i]=noteList.get(i).getId();
+        NoteBook noteBookWithNoteList = noteBookMapper.selectWithNoteList(id);
+        List<Note> noteList = noteBookWithNoteList.getNoteList();
+        Integer[] noteIds = new Integer[noteList.size()];
+        for (int i = 0; i < noteIds.length; i++)
+            noteIds[i] = noteList.get(i).getId();
 
-            //删除笔记
-            recycleBinService.throwNoteIntoRecycleBin(noteIds);
+        //删除笔记
+        recycleBinService.throwNoteIntoRecycleBin(noteIds);
 
-            //删除笔记本
-            noteBookMapper.deleteByPrimaryKey(id);
+        //删除笔记本
+        noteBookMapper.deleteByPrimaryKey(id);
 
-            return jsonBuilder.setValuesIntoTemplate("1", "")
-                    .add("data",noteBookMapper.selectWithNoteList(id))
-                    .build();
-        } catch (NumberFormatException e) {
-            return jsonBuilder.setValuesIntoTemplate("0", "格式转换出错").build();
-        } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//事务回滚
-            logger.error("创建笔记本发生异常：" + e.getMessage());
-            return jsonBuilder.setValuesIntoTemplate("0", "创建笔记本发生异常").build();
-        }
-
-
+        return ResultUtil.success("", noteBookMapper.selectWithNoteList(id));
     }
 }

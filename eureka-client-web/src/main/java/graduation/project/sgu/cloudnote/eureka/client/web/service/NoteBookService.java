@@ -1,5 +1,6 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.service;
 
+import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook;
 
 /**
@@ -22,7 +23,7 @@ public interface NoteBookService {
      * @param title  笔记本标题
      * @return {"msg":"消息内容","isSuccessful":"0|1"}
      */
-    String createNoteBook(Integer userId, String title);
+    ResponseDto createNoteBook(Integer userId, String title);
 
     NoteBook getNoteBook(Integer id);
 
@@ -43,9 +44,9 @@ public interface NoteBookService {
 
     /**
      * 删除笔记本
-     * @param noteBookId 笔记本id
-     * @return json
+     * @param id 笔记本id
+     * @return ResponseDto
      */
-    public String remove(String noteBookId);
+    public ResponseDto remove(Integer id);
 
 }

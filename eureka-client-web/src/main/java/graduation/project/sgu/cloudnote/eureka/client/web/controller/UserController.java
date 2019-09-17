@@ -1,6 +1,7 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.controller;
 
 import graduation.project.sgu.cloudnote.eureka.client.web.bean.JsonBuilder;
+import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.User;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.NoteBookService;
@@ -34,9 +35,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value={"/register"},produces = "text/plain;charset=utf-8")
+    @RequestMapping(value={"/register"})
     @ResponseBody
-    public String register(HttpServletRequest request) {
+    public ResponseDto register(HttpServletRequest request) {
         String username = request.getParameter("username");
         String pwd = request.getParameter("pwd");
         String phone = request.getParameter("phone");

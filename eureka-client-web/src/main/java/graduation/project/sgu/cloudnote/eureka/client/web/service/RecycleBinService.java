@@ -1,5 +1,6 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.service;
 
+import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin;
 
 /**
@@ -20,19 +21,13 @@ public interface RecycleBinService {
      */
     public RecycleBin getRecycleBin(Integer noteId);
 
-    /**
-     * 将笔记本扔进回收站
-     * @param noteIds 笔记id
-     * @return json
-     */
-    String throwNoteIntoRecycleBin(String ...noteIds);
 
     /**
      * 将笔记本扔进回收站
      * @param noteIds 笔记id
      * @return json
      */
-    String throwNoteIntoRecycleBin(Integer[] noteIds);
+    ResponseDto throwNoteIntoRecycleBin(Integer[] noteIds);
 
     /**
      * 将笔记本从回收站恢复
@@ -40,7 +35,7 @@ public interface RecycleBinService {
      * @return json
      */
 
-    public String noteRecover(Integer userId,String ...noteIds);
+    public ResponseDto noteRecover(Integer userId,Integer ...noteIds);
 
 
 }

@@ -1,13 +1,12 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.controller;
 
+import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.RecycleBinService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -28,21 +27,17 @@ public class RecycleBinController {
     /**
      * 笔记丢入回收站
      */
-    @RequestMapping(value = {"/noteThrowAway"}, produces = "text/plain;charset=utf-8")
-    @ResponseBody
-    public String noteThrowAway(HttpServletRequest request) {
-        String noteId = request.getParameter("note_id");
-        return recycleBinService.throwNoteIntoRecycleBin(noteId);
+    @RequestMapping(value = {"/noteThrowAway"})
+    public ResponseDto noteThrowAway(@RequestParam("note_id[]")Integer[] noteIds) {
+        return recycleBinService.throwNoteIntoRecycleBin(noteIds);
     }
 
     /**
      * 笔记从回收站恢复
      */
-    @RequestMapping(value = {"/noteRecover"}, produces = "text/plain;charset=utf-8")
-    @ResponseBody
-    public String noteRecover(HttpServletRequest request) {
-        String noteId = request.getParameter("note_id");
-        Integer  userId = (Integer) request.getSession().getAttribute("userId");
+    @RequestMapping(value = {"/noteRecover"})
+    public ResponseDto noteRecover(@RequestParam("note_id")Integer noteId, HttpSession session) {
+        Integer  userId = (Integer) session.getAttribute("userId");
         return recycleBinService.noteRecover(userId,noteId);
     }
 	

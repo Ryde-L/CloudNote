@@ -1,5 +1,6 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.service;
 
+import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.User;
 
 /**
@@ -13,8 +14,6 @@ import graduation.project.sgu.cloudnote.eureka.client.web.pojo.User;
  */
 public interface UserService {
 
-    int insert(User user);
-
     /**
      * 检查是否是有效登陆信息
      * @param username 用户名
@@ -24,7 +23,7 @@ public interface UserService {
     boolean isValidLogin(String username,String pwd);
 
     User getUser(String username, String pwd);
-    User getUser(Integer id);
+
     /**
      * 用户注册
      * @param username 用户名 非空
@@ -32,7 +31,7 @@ public interface UserService {
      * @param phone 手机 非空
      * @param email 邮箱
      * @param gender 性别
-     * @return 返回json {"msg":"消息内容","isSuccessful":"0|1"}
+     * @return 返回ResponseDto
      */
-    public String register(String username,String pwd,String phone,String email,String gender);
+    public ResponseDto register(String username, String pwd, String phone, String email, String gender);
 }

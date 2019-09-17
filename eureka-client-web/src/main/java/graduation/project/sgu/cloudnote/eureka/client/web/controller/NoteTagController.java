@@ -28,20 +28,22 @@ public class NoteTagController {
 
 
     @RequestMapping(value = {"/addTags"})
-    @ResponseBody
-    public ResponseDto addTags(HttpServletRequest request) throws Exception {
-        String noteId = request.getParameter("note_id");
-        String[] tags = request.getParameterValues("tags[]");
+    public ResponseDto addTags(@RequestParam("note_id") Integer noteId,@RequestParam("tags[]") String[] tags) throws Exception {
         return noteTagService.addTags(noteId, tags);
     }
 
     @RequestMapping("/delByTagId")
-    @ResponseBody
-    public ResponseDto delOne(HttpServletRequest request, @RequestParam("tag_id") int tagId) {
-        System.out.println(tagId);
-        //TODO 用户操作验证
-        return new ResponseDto();
+    public ResponseDto delOne( @RequestParam("tag_id") Integer tagId) {
+        return noteTagService.delByTagId(tagId);
     }
+
+
+    @RequestMapping("/delAllByNoteId")
+    public ResponseDto delAll( @RequestParam("note_id") Integer noteId) {
+        return noteTagService.delAll(noteId);
+    }
+
+
 
 
 

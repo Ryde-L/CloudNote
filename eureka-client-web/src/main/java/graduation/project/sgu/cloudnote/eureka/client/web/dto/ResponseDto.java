@@ -18,12 +18,5 @@ public class ResponseDto<T> {
     //成功与否 0或1
     private String isSuccessful;
 
-//    public ResponseDto(String code, String msg,T data,String isSuccessful) {
-//        this.code = code;
-//        this.msg = msg;
-//        this.data = data;
-//        this.isSuccessful = isSuccessful;
-//    }
-
 
 }
