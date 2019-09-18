@@ -16,8 +16,6 @@ public class Share {
 
     private Integer noteId;
 
-    private Integer noteBookId;
-
     private String link;
 
     private Integer ishaspwd;

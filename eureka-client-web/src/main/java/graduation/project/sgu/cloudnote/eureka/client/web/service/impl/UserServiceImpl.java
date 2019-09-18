@@ -1,6 +1,5 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.service.impl;
 
-import graduation.project.sgu.cloudnote.eureka.client.web.bean.JsonBuilder;
 import graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.UserMapper;
 import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 /**
  * <p>
@@ -70,5 +68,9 @@ public class UserServiceImpl implements UserService {
         userMapper.insert(user);
         noteBookService.insert(new NoteBook(null, user.getId(), "默认", 0));
         return ResultUtil.success("", null);
+    }
+
+    public User getUser(Integer id){
+        return userMapper.selectByPrimaryKey(id);
     }
 }

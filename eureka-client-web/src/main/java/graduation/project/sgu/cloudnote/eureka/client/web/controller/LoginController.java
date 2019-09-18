@@ -1,6 +1,5 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.controller;
 
-import graduation.project.sgu.cloudnote.eureka.client.web.bean.JsonBuilder;
 import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.User;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.UserService;

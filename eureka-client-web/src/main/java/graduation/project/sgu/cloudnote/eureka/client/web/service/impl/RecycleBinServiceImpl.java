@@ -1,6 +1,5 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.service.impl;
 
-import graduation.project.sgu.cloudnote.eureka.client.web.bean.JsonBuilder;
 import graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.RecycleBinMapper;
 import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note;
@@ -16,9 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.sql.Date;
 import java.util.Calendar;
 
 /**
@@ -26,9 +23,6 @@ import java.util.Calendar;
   * 废纸篓表 Service 接口实现
  * </p>
  *
- *
- * @author ryde
- * @since 2019-09-10T10:22:00Z
  */
 @Service()
 @Transactional(rollbackFor = Exception.class)
@@ -36,8 +30,6 @@ public class RecycleBinServiceImpl implements RecycleBinService {
 
     private static final Logger logger = LoggerFactory.getLogger(RecycleBinServiceImpl.class);
 
-    @Autowired
-    JsonBuilder jsonBuilder;
 
     @Autowired
     RecycleBinMapper recycleBinMapper;
@@ -112,5 +104,6 @@ public class RecycleBinServiceImpl implements RecycleBinService {
     public RecycleBin getRecycleBin(Integer noteId){
         return recycleBinMapper.selectByNoteId(noteId);
     }
+
 
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.io.IOException;
+
 /**
  * 全局异常处理
  */
@@ -48,7 +50,16 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     ResponseDto handleNullPointerException(NullPointerException e){
         System.out.println("抛出空指针异常");
-        logger.error("发生空指针异常："+e.getCause());
+        logger.error("发生空指针异常："+e.getMessage());
+        e.printStackTrace();
+        return ResultUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.toString(),e.getMessage());
+    }
+
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ResponseDto handleIOException(IOException e){
+        System.out.println("抛出IO异常");
+        logger.error("发生IO异常："+e.getMessage());
         e.printStackTrace();
         return ResultUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.toString(),e.getMessage());
     }

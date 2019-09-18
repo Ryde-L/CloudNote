@@ -3,6 +3,7 @@ package graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.ShareExample;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,4 +31,7 @@ public interface ShareMapper {
     int updateByPrimaryKeySelective(Share record);
 
     int updateByPrimaryKey(Share record);
+
+    @Select("select * from share where link=#{param} limit 0,1")
+    Share select(String link);
 }

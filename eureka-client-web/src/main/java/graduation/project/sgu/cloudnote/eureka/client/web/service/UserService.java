@@ -23,6 +23,7 @@ public interface UserService {
     boolean isValidLogin(String username,String pwd);
 
     User getUser(String username, String pwd);
+    User getUser(Integer id);
 
     /**
      * 用户注册
