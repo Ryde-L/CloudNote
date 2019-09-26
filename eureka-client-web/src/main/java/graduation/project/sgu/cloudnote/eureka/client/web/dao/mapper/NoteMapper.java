@@ -45,4 +45,17 @@ public interface NoteMapper {
     @Select("select * from note where note_book_id=#{param}")
     List<Note> selectByNoteBookId(Integer noteBookId);
 
+    /**
+     * 获取Note，包含笔记内容和笔记本相关的东西
+     * @param id 笔记id
+     * @return Note对象
+     */
+    @Select("select n.id,note_book_id,title,content from note n left join note_content nc on n.id=nc.note_id where n.id=#{param}")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "noteBookId", column = "note_book_id"),
+            @Result(property = "noteBook", column = "note_book_id", one = @One(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteBookMapper.get"))
+    })
+    Note selectByIdWithNoteBookAndContent(Integer id);
+
 }

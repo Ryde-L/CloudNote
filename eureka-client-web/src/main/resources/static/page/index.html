@@ -336,11 +336,12 @@
         var box=backgroud_grid.getBBox();
         if (svg.getAttribute("viewBox") == null)
             svg.setAttribute("viewBox", '0 0 ' + box['width'] + ' ' + box['height']);
-        //视野向下
+
         var viewBoxArr = svg.getAttribute("viewBox").split(' ');
 
-
-        if (type === 1)
+        if (type===0)
+            svg.setAttribute("viewBox", '0 0 ' + box['width'] + ' ' + box['height']);
+        else if (type === 1)
             viewBoxArr[1]= parseInt(viewBoxArr[1]) - 100;//上
         else if (type === 2)
             viewBoxArr[1]=parseInt(viewBoxArr[1]) + 100;//下
@@ -367,6 +368,28 @@
 
 
     window.onload=function (ev) {
+        if (getUrlParam("note") != null) {
+            //获取笔记内容
+            $.ajax({
+                url: '/note/getNote',
+                async: false,
+                data: {'note': getUrlParam("note")},
+                success: function (data) {
+                    if (data['isSuccessful'] == 1) {
+                        document.getElementById("svg_content").outerHTML = data['data']['content'];
+                        svgViewBoxChange(0);
+                    }
+                },
+                error: function (data) {
+                    layer.msg("error！");
+                }
+            });
+            svg = document.getElementById("svg_content");
+            svgAddClickEvent();
+        }
+    }
+        
+        
         //为原先的svg标签添加拖动事件
         var svg_chile_element = document.getElementById("svg_content").children;
         for (var i = 2; i <svg_chile_element.length ; i++) {

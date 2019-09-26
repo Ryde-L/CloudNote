@@ -65,14 +65,41 @@ public class NoteServiceImpl implements NoteService {
      */
     public ResponseDto createNote(Integer noteBookId, String title, String content) {
         NoteBook noteBook = noteBookService.getNoteBook(noteBookId);
-        if (noteBook == null) return ResultUtil.error("笔记本无效");
+        if (noteBook == null) return ResultUtil.error("笔记本对象无效");
 
         Note note = new Note(null, noteBookId, title);
         noteMapper.insert(note);
         noteContentService.insert(new NoteContent(null, note.getId(), content));
-        return ResultUtil.success();
+        return ResultUtil.success("",String.valueOf(note.getId()));
     }
 
+    /**
+     * 更新
+     * @param userId 用户id
+     * @param noteId 笔记id
+     * @param title 笔记标题
+     * @param content 笔记内容
+     * @return ResponseDto
+     */
+    public ResponseDto update(Integer userId,Integer noteId, String title, String content){
+        if (CheckerUtil.checkNulls(noteId,title,content)) return ResultUtil.error("缺少参数");
+        Note note = noteMapper.selectByIdWithNoteBookAndContent(noteId);
+        if (note==null) return ResultUtil.error("笔记对象无效");
+        if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
+        if (userId!=note.getNoteBook().getUserId()) return ResultUtil.error("非法操作");
+
+        note.setTitle(title);
+        noteMapper.updateByPrimaryKey(note);
+        NoteContent noteContent = noteContentService.getNoteContent(noteId);
+        if (noteContent==null) {
+            noteContent=new NoteContent(null,noteId,content);
+            noteContentService.insert(noteContent);
+        }else {
+            noteContent.setContent(content);
+            noteContentService.update(noteContent);
+        }
+        return ResultUtil.success();
+    }
     /**
      * 根据笔记本id获取笔记本里的笔记列表
      *
@@ -104,7 +131,20 @@ public class NoteServiceImpl implements NoteService {
     public ResponseDto getNoteListByTag(String tag) {
         if (CheckerUtil.checkNulls(tag)) return ResultUtil.error("标签不为空");
         return ResultUtil.success("", noteMapper.selectByTag(tag));
-
     }
 
+    /**
+     * 获取笔记详情
+     * @param userId 用户id
+     * @param id 笔记id
+     * @return ResponseDto
+     */
+    public ResponseDto getNoteWithNoteBookAndContent(Integer userId, Integer id) {
+        if(CheckerUtil.checkNulls(id)) return ResultUtil.error("缺少参数");
+        Note note = noteMapper.selectByIdWithNoteBookAndContent(id);
+        if (note==null) return ResultUtil.error("笔记对象不存在");
+        if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
+        if (userId!=note.getNoteBook().getUserId()) return ResultUtil.error("非法操作");
+        return ResultUtil.success("",note);
+    }
 }

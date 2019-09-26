@@ -4,6 +4,7 @@ import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteContent;
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteContentExample;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -40,4 +41,7 @@ public interface NoteContentMapper {
 
     @Select("select * from note_content where note_id=#{param1} limit 0,1")
     NoteContent selectOneByNoteId(Integer noteId);
+
+    @Update("update note_content set content=#{content,jdbcType=LONGVARCHAR} where id=#{id,jdbcType=INTEGER}")
+    int update(NoteContent record);
 }

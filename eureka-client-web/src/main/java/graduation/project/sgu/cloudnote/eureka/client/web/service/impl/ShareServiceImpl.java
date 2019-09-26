@@ -2,22 +2,18 @@ package graduation.project.sgu.cloudnote.eureka.client.web.service.impl;
 
 import graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.ShareMapper;
 import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
-import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteContent;
-import graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share;
-import graduation.project.sgu.cloudnote.eureka.client.web.pojo.User;
-import graduation.project.sgu.cloudnote.eureka.client.web.service.NoteContentService;
-import graduation.project.sgu.cloudnote.eureka.client.web.service.ShareService;
-import graduation.project.sgu.cloudnote.eureka.client.web.service.UserService;
+import graduation.project.sgu.cloudnote.eureka.client.web.pojo.*;
+import graduation.project.sgu.cloudnote.eureka.client.web.service.*;
 import graduation.project.sgu.cloudnote.eureka.client.web.utils.CheckerUtil;
 import graduation.project.sgu.cloudnote.eureka.client.web.utils.ResultUtil;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * <p>
@@ -36,6 +32,12 @@ public class ShareServiceImpl implements ShareService {
 
     @Autowired
     NoteContentService noteContentService;
+
+    @Autowired
+    NoteBookService noteBookService;
+
+    @Autowired
+    NoteService noteService;
 
     /**
      * 创建分享
@@ -64,30 +66,35 @@ public class ShareServiceImpl implements ShareService {
      * @param pwd  分享密码，如果没有，可为null
      * @return ResponseDto
      */
-    public ResponseDto openShare(String link, String pwd) {
+    public ResponseDto getShareContent(String link, String pwd) {
         Share share = shareMapper.select(link);
+        if (CheckerUtil.checkNulls(link)) return ResultUtil.error("链接不能为空");
         if (share == null) return ResultUtil.error("无效链接");
         if (share.getStatus() != 1) return ResultUtil.error("该分享链接已无效");
         if (share.getIshaspwd() == 1) {//分享密码校验
             if (CheckerUtil.checkNulls(pwd)) return ResultUtil.error("请输入分享密码");
             if (!pwd.equals(share.getPwd())) return ResultUtil.error("分享密码不正确");//TODO 密码加密
         }
-        if (share.getLimitType() == 1) {//分享次数校验
-            if (share.getLimitContent() <= 0) {
-                share.setStatus(0);
-                return ResultUtil.error("超过分享次数");
-            }
-            share.setLimitContent(share.getLimitType() - 1);
-        } else if (share.getLimitType() == 2) {//分享天数校验
-            if (Calendar.getInstance().getTime().getTime() > share.getCreateTime().getTime()) {
+        if (share.getLimitType() == 1) {//分享天数校验
+            Calendar ExpireTime = Calendar.getInstance();
+            ExpireTime.setTime(share.getCreateTime());
+            ExpireTime.add(Calendar.DAY_OF_MONTH,share.getLimitContent());
+
+            if (Calendar.getInstance().getTime().getTime() > ExpireTime.getTime().getTime()) {
                 share.setStatus(0);
                 return ResultUtil.error("分享已过期");
             }
         }
+        Note note = noteService.getNote(share.getNoteId());
+        if (note==null) return ResultUtil.error("分享内容已被删除");
+
         NoteContent noteContent = noteContentService.getNoteContent(share.getNoteId());
         if (noteContent==null) return ResultUtil.error("分享内容已被删除");
         //有效
-        return ResultUtil.success("",noteContent.getContent());
+        Map<String,String> map=new HashMap<String,String>();
+        map.put("content",noteContent.getContent());
+        map.put("title",note.getTitle());
+        return ResultUtil.success("",map);
     }
 
     /**
@@ -109,5 +116,32 @@ public class ShareServiceImpl implements ShareService {
         shareMapper.updateByPrimaryKey(share);
         return ResultUtil.success();
 
+    }
+
+    /**
+     * 转存分享到自己的笔记本
+     * @param userId 用户id
+     * @param noteBookId 笔记本id
+     * @param link 分享的链接
+     * @param pwd 分享的密码
+     * @return ResponseDto
+     */
+    public ResponseDto save(Integer userId,Integer noteBookId,String link,String pwd) {
+
+        ResponseDto shareMsg = getShareContent(link, pwd);
+        if (shareMsg.getIsSuccessful().equals("0")) return ResultUtil.error(shareMsg.getMsg());
+        Map<String, String> map = (Map<String, String>) shareMsg.getData();
+
+        if (CheckerUtil.checkNulls(noteBookId)) return ResultUtil.error("缺少参数");
+        NoteBook noteBook = noteBookService.getNoteBook(noteBookId);
+        if (noteBook == null) return ResultUtil.error("笔记本对象无效");
+
+        if (userId != noteBook.getUserId()) return ResultUtil.error("非法操作");
+
+        Note myNote = new Note(null, noteBookId, map.get("title"));
+        noteService.insert(myNote);
+        noteContentService.insert(new NoteContent(null, myNote.getId(), map.get("content")));
+
+        return ResultUtil.success("", myNote.getId());
     }
 }

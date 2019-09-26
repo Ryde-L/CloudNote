@@ -46,4 +46,14 @@ public interface NoteBookMapper {
         })
     NoteBook selectWithNoteList(Integer id);
 
+    @Select("select * from note_book where user_id=#{param}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "noteList",column = "id",many = @Many(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteMapper.selectByNoteBookId"))
+    })
+    List<NoteBook>  selectUserNoteBooksWithNoteList(Integer userId);
+
+    @Select("select * from note_book where user_id=#{param}")
+    List<NoteBook>  selectUserNoteBooks(Integer userId);
+
 }

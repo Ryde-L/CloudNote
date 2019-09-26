@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -56,10 +57,43 @@ public class NoteController {
             params = URLDecoder.decode(params, "utf-8");
         }
         HashMap map = JsonUtil.jsonToPojo(params, HashMap.class);
-        return noteService.createNote(Integer.valueOf((String) map.get("note_book_id")),(String) map.get("title"), (String) map.get("content"));
+        System.out.println(map.get("note_book_id"));
+        System.out.println((String)map.get("note_book_id"));
+        Integer noteBookId=null;
+        if (map.get("note_book_id") instanceof String)
+            noteBookId=Integer.valueOf((String)map.get("note_book_id"));
+        else if (map.get("note_book_id") instanceof Integer)
+            noteBookId= (Integer) map.get("note_book_id");
+
+        return noteService.createNote(noteBookId,(String) map.get("title"), (String) map.get("content"));
 
     }
 
+    @RequestMapping(value = {"/update"})
+    public ResponseDto update(HttpServletRequest request) throws IOException {
+        String params = "";
+        // 获取 Content-Encoding 请求头
+        String contentEncoding = request.getHeader("Content-Encoding");
+        if (contentEncoding != null && contentEncoding.equals("gzip")) {
+            // 获取输入流
+            BufferedReader reader = request.getReader();
+            // 将输入流中的请求实体转换为 byte 数组, 进行 gzip 解压
+            byte[] bytes = IOUtils.toByteArray(reader, "iso-8859-1");
+            // 对 bytes 数组进行解压
+            params = GzipUtil.uncompress(bytes);
+        } else {
+            BufferedReader reader = request.getReader();
+            params = IOUtils.toString(reader);
+        }
+        if (params != null && params.trim().length() > 0) {
+            // 因为前台对参数进行了 url 编码, 在此进行解码
+            params = URLDecoder.decode(params, "utf-8");
+        }
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        HashMap map = JsonUtil.jsonToPojo(params, HashMap.class);
+        return noteService.update(userId,Integer.valueOf((String) map.get("note")),(String) map.get("title"), (String) map.get("content"));
+
+    }
 
 
     @RequestMapping(value = {"/getListByNoteBook"})
@@ -76,4 +110,11 @@ public class NoteController {
     public ResponseDto findByTags(String tag){
         return noteService.getNoteListByTag(tag);
     }
+
+    @RequestMapping(value = {"/getNote"})
+    public ResponseDto getNote(HttpSession session, @RequestParam("note") Integer noteId){
+        return noteService.getNoteWithNoteBookAndContent((Integer) session.getAttribute("userId"),noteId);
+    }
+
+
 }

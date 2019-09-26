@@ -2,11 +2,9 @@ package graduation.project.sgu.cloudnote.eureka.client.web.controller;
 
 import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.ShareService;
-import graduation.project.sgu.cloudnote.eureka.client.web.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,7 +51,7 @@ public class ShareController {
      */
     @RequestMapping(value = {"/open"})
     public ResponseDto openShareLink(@RequestParam("pwd") String pwd, @RequestParam("link_suffix") String linkSuffix) {
-        return shareService.openShare(shareLinkPrefix + linkSuffix, pwd);
+        return shareService.getShareContent(shareLinkPrefix + linkSuffix, pwd);
     }
 
     /**
@@ -64,4 +62,11 @@ public class ShareController {
         return shareService.cancel((Integer) session.getAttribute("userId"),shareId);
     }
 
+    /**
+     * 转存分享到自己的笔记本
+     */
+    @RequestMapping(value = {"/save"})
+    public ResponseDto save( HttpSession session,@RequestParam("note_book_id") Integer noteBookId,@RequestParam("pwd") String pwd, @RequestParam("link_suffix")String linkSuffix){
+        return shareService.save((Integer) session.getAttribute("userId"),noteBookId, shareLinkPrefix + linkSuffix,  pwd);
+    }
 }

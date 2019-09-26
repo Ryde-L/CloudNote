@@ -14,4 +14,13 @@ public class Note {
 
     private String title;
 
+    private NoteBook noteBook;
+
+    private String content;
+
+    public Note(Integer id, Integer noteBookId, String title) {
+        this.id = id;
+        this.noteBookId = noteBookId;
+        this.title = title;
+    }
 }

@@ -52,8 +52,9 @@ public class NoteBookServiceImpl implements NoteBookService {
     public ResponseDto createNoteBook(Integer userId, String title) {
         if (CheckerUtil.checkNull(userId)) return ResultUtil.error("获取不到用户id", null);
         if (CheckerUtil.checkNull(title)) return ResultUtil.error("笔记本标题不为空", null);
-        noteBookMapper.insert(new NoteBook(null, userId, title, 1));
-        return ResultUtil.success("", null);
+        NoteBook noteBook = new NoteBook(null, userId, title, 1);
+        noteBookMapper.insert(noteBook);
+        return ResultUtil.success("", noteBook);
     }
 
     public NoteBook getNoteBook(Integer id) {
@@ -101,4 +102,24 @@ public class NoteBookServiceImpl implements NoteBookService {
 
         return ResultUtil.success("", noteBookMapper.selectWithNoteList(id));
     }
+
+
+    /**
+     * 获取用户的所有笔记本和笔记
+     * @param userId 用户id
+     * @return ResponseDto
+     */
+    public ResponseDto getNoteBooksWithNoteList(Integer userId){
+        return ResultUtil.success("", noteBookMapper.selectUserNoteBooksWithNoteList(userId));
+    }
+
+    /**
+     * 获取用户的所有笔记本
+     * @param userId 用户id
+     * @return ResponseDto
+     */
+    public ResponseDto getNoteBooks(Integer userId){
+        return ResultUtil.success("", noteBookMapper.selectUserNoteBooks(userId));
+    }
+
 }

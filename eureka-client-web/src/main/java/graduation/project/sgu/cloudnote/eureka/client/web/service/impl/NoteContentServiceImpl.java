@@ -24,7 +24,9 @@ public class NoteContentServiceImpl implements NoteContentService {
     public int insert(NoteContent noteContent){
         return noteContentMapper.insert(noteContent);
     }
-
+    public int update(NoteContent noteContent){
+        return noteContentMapper.update(noteContent);
+    }
     /**
      * 通过笔记id获取笔记内容
      * @param noteId 笔记id
@@ -33,5 +35,5 @@ public class NoteContentServiceImpl implements NoteContentService {
     public NoteContent getNoteContent(Integer noteId){
         return  noteContentMapper.selectOneByNoteId(noteId);
     }
-	
+
 }

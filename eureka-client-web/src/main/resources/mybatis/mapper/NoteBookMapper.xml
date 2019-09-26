@@ -128,7 +128,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook" >
+  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteBook" useGeneratedKeys="true" keyProperty="id">
     insert into note_book (id, user_id, title, 
       deletable)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 

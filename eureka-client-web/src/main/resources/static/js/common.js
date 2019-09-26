@@ -5,3 +5,29 @@ function getUrlParam(name) {
     var r = decodeURI(decodeURI(window.location.search.substr(1))).match(reg);  //匹配目标参数
     if (r != null) return unescape(r[2]); return null; //返回参数值
 }
+
+/*判断当前设备是手机还是电脑*/
+function phoneOrPc() {
+    var system = {};
+    var p = navigator.platform;
+    system.win = p.indexOf("Win") == 0;
+    system.mac = p.indexOf("Mac") == 0;
+    system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+    if (system.win || system.mac || system.xll) {
+        return "pc";
+    } else {
+        return "phone";
+    }
+}
+
+//app上测试方法有没有执行,过后删除
+function testExec(msg) {
+    $.ajax({
+        url:'/testMsg',
+        data:{'msg':msg},
+        // async:false,
+        success: function(data){
+        },
+        error:function(data) {alert("error！");}
+    })
+}

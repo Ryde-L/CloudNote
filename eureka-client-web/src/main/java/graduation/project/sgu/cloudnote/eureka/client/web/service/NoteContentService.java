@@ -12,7 +12,7 @@ import graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteContent;
  */
 public interface NoteContentService {
     int insert(NoteContent noteContent);
-
+    int update(NoteContent noteContent);
     /**
      * 通过笔记id获取笔记内容
      *

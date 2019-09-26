@@ -37,7 +37,12 @@ public class NoteBookController {
     public ResponseDto del(@RequestParam("note_book_id") int noteBookId, HttpSession session){
         Integer userId = (Integer) session. getAttribute("userId");
         return noteBookService.remove(noteBookId);
+    }
 
+    @RequestMapping(value = {"/getNoteBooks"})
+    public ResponseDto getNoteBooks(HttpSession session){
+        Integer userId = (Integer) session. getAttribute("userId");
+        return noteBookService.getNoteBooks(userId);
     }
 
 }

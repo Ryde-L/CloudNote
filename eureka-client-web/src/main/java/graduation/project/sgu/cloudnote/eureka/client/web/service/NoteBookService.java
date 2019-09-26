@@ -49,4 +49,19 @@ public interface NoteBookService {
      */
     public ResponseDto remove(Integer id);
 
+
+    /**
+     * 获取用户的所有笔记本和笔记
+     * @param userId 用户id
+     * @return ResponseDto
+     */
+    public ResponseDto getNoteBooksWithNoteList(Integer userId);
+
+    /**
+     * 获取用户的所有笔记本
+     * @param userId 用户id
+     * @return ResponseDto
+     */
+    public ResponseDto getNoteBooks(Integer userId);
+
 }

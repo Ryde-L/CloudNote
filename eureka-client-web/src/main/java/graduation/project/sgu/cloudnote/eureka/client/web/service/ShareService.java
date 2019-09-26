@@ -21,7 +21,7 @@ public interface ShareService {
      * @param limitContent 限制的具体内容，结合limitType
      * @return ResponseDto
      */
-    public ResponseDto create(String shareLinkPrefix,Integer userId, Integer noteId, int isHasPwd, String pwd, int limitType, int limitContent);
+    ResponseDto create(String shareLinkPrefix,Integer userId, Integer noteId, int isHasPwd, String pwd, int limitType, int limitContent);
 
     /**
      * 打开分享链接
@@ -29,7 +29,7 @@ public interface ShareService {
      * @param pwd 分享密码，如果没有，可为null
      * @return
      */
-    public ResponseDto openShare(String link,String pwd);
+    ResponseDto getShareContent(String link, String pwd);
 
     /**
      * 取消分享
@@ -37,6 +37,16 @@ public interface ShareService {
      * @param shareId 分享id
      * @return ResponseDto
      */
-    public ResponseDto cancel(Integer userId,Integer shareId);
+    ResponseDto cancel(Integer userId,Integer shareId);
+
+    /**
+     * 转存分享到自己的笔记本
+     * @param userId 用户id
+     * @param noteBookId 笔记本id
+     * @param link 分享的链接
+     * @param pwd 分享密码
+     * @return ResponseDto
+     */
+    ResponseDto save(Integer userId,Integer noteBookId,String link,String pwd);
 
 }
