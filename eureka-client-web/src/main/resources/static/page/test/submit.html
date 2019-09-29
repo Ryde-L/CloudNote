@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Api</title>
+    <script type="text/javascript" src="../../lib/jquery/jquery.min.js" ></script>
+
+</head>
+<body>
+    <h2>登陆注册</h2>
+    <button onclick="register('name','pwd','1234')">注册</button><br>
+
+    <h2>笔记本api</h2>
+    <button onclick="submit('/noteBook/add?title=笔记本名')">创建笔记本（通过）</button><br>
+    <button onclick="submit('/noteBook/delete?note_book_id=2')">删除笔记本（通过）</button><br>
+
+    <h2>笔记api</h2>
+    <button onclick="submit('/note/getListByNoteBook?note_book_id=1')">获取笔记列表（通过）</button><br>
+    <button onclick="submit('/note/getContent?note_id=1')">获取笔记内容（通过）</button><br>
+
+    <h2>标签api</h2>
+    <button onclick="submitNoteTags()">添加笔记标签（通过）</button><br>
+    <button onclick="submit('/note/getListByTag?tag=1')">标签模糊匹配笔记（通过）</button><br>
+    <button onclick="submit('/noteTag/delByTagId?tag_id=16')">删除标签by标签id（通过）</button><br>
+    <button onclick="submit('/noteTag/delAllByNoteId?note_id=1')">清空标签by笔记id（通过）</button><br>
+
+    <h2>回收站api</h2>
+    <button onclick="submit('/recycleBin/noteThrowAway?note_id[]=1')">笔记丢入回收站（通过）</button><br>
+    <button onclick="submit('/recycleBin/noteRecover?note_id=1')">笔记从回收站恢复（通过）</button><br>
+
+    <h2>分享api</h2>
+    <button onclick="submit('/share/create?note_id=6&is_has_pwd=0&limit_type=0&limit_content=0')">创建分享（）</button><br>
+    <a href="/page/openShare.html?link_suffix=156880937627530f4643a-2b9b-4b94-8250-6633ea9f2ece-4">打开分享</a><br>
+</body>
+<script>
+    function submitNoteTags() {
+        var tags=["测试1","测试2"];
+        $.ajax({
+            url:"/noteTag/addTags",
+            data:{
+                "note_id":"1",
+                "tags":tags
+            },
+            success: function(data){
+                var result=JSON.parse(data);
+                if (result['isSuccessful'] == 1) alert("成功！");
+                else alert("失败！"+result['msg']);
+            },
+            error:function(data) {alert("error！");}
+        })
+    }
+
+    function submit(url) {
+        $.ajax({
+            url:url,
+            success: function(data){
+                if (data['isSuccessful'] == 1) alert("成功！");
+                else alert("失败！"+data['msg']);
+            },
+            error:function(data) {alert("error！");}
+        })
+    }
+
+
+    function register(username,pwd,phone) {
+        $.ajax({
+            url:"/user/register",
+            data:{
+              "username":username,
+              "pwd":pwd,
+              "phone":phone
+            },
+            success: function(data){
+                if (data['isSuccessful'] == 1) alert("成功！");
+                else alert("失败！"+data['msg']);
+            },
+            error:function(data) {alert("error！");}
+        })
+    }
+</script>
+</html>

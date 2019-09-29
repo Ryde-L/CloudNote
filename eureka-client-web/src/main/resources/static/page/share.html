@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>分享内容</title>
+    <link rel="stylesheet" href="../lib/jquery-pretty-radio-checkbox/css/jquery-labelauty.css">
+
+    <style>
+        #toolbox {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            /*width: 250px;*/
+            width: 20%;
+            border-right: 1px solid #CCC;
+        }
+
+        #toolbox h2 {
+            margin: 0;
+            padding: 0;
+            background: #EEE;
+            font-size: 16px;
+            height: 24px;
+            line-height: 24px;
+            padding: 5px 10px;
+        }
+
+        #toolbox form {
+            padding: 10px;
+        }
+
+        #canvas {
+            position: absolute;
+            left: 20%;
+            bottom: 10px;
+            right: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,.4);
+            border-radius: 5px;
+            width:80%;
+            height:100%;
+        }
+
+        label {
+            display: inline-block;
+            width: 80px;
+            text-align: right;
+        }
+
+        ul { list-style-type: none;}
+        /*li { display: inline-block;}*/
+        li { margin: 10px 0;}
+        input.labelauty + label { font: 12px "Microsoft Yahei";}
+    </style>
+</head>
+<body>
+<div id="toolbox">
+    <h2>操作</h2>
+    <form id="operation">
+        <button type="button" oper="turn_up" onclick="svgViewBoxChange(1)">↑</button>
+        <button type="button" oper="turn_down" onclick="svgViewBoxChange(2)">↓</button>
+        <button type="button" oper="turn_left" onclick="svgViewBoxChange(3)">←</button>
+        <button type="button" oper="turn_right" onclick="svgViewBoxChange(4)">→</button>
+    </form>
+    <h2>保存为自己的笔记</h2>
+
+        <button onclick="showSaveToWhichNoteBook()">保存</button>
+
+</div>
+<div id="canvas">
+    <svg xmlns="http://www.w3.org/2000/svg" id="svg_content" width="100%" height="100%">
+        <defs>
+            <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path stroke="black" fill="none" d="M0,0H20V20"></path>
+            </pattern>
+        </defs>
+        <rect id="backgroud_grid" name="backgroud_grid" x="0" y="0" width="100%" height="100%" fill="url(#grid)"></rect>
+    </svg>
+</div>
+
+<div style="display: none;position: absolute" id="editor_div">
+    <textarea id="text_editor" name="content" style="width:200px;height:400px;"></textarea>
+    <button onclick="saveEditText()">提交</button>
+    <button onclick="cancelEditText()">取消</button>
+</div>
+
+<div id="savePosition" style="display: none">
+    <ul id="noteBooks" ></ul>
+    <button onclick="save(null)">保存</button>
+    <button onclick="showCreateNoteBook()">保存到新笔记本</button>
+</div>
+</body>
+
+<script type="text/javascript" src="../lib/jquery/jquery.min.js" ></script>
+<script type="text/javascript" src="../lib/svg/svg.js" ></script>
+<script type="text/javascript" src="../lib/svg/svg.draggable.js" ></script>
+<script type="text/javascript" src="../lib/kindeditor/kindeditor-all.js"></script>
+<script type="text/javascript" src="../lib/kindeditor/lang/zh-CN.js"></script>
+<script type="text/javascript" src="../lib/pako/pako.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../lib/jquery-pretty-radio-checkbox/js/jquery-labelauty.js"></script>
+
+<script>
+    window.onload=function (ev) {
+        //分享页面
+        if(getUrlParam("type")!=null&&getUrlParam("type")==='share'){
+            $.ajax({
+                type: 'post',
+                url: '/share/open',
+                data:{
+                    "link_suffix":getUrlParam("link_suffix"),
+                    "pwd":'',
+                },
+                async:false,
+                success: function(data){
+                    if (data['isSuccessful'] == 1) {
+                        document.getElementById("svg_content").outerHTML=data['data']['content'];
+                        svgViewBoxChange(0);
+                    }else
+                        alert(data['msg']);
+                },
+                error:function(data) {
+                }
+            });
+        }
+
+    };
+
+    //视界移动
+    function svgViewBoxChange(type) {
+        var svg = document.getElementById("svg_content");
+        var backgroud_grid = document.getElementById("backgroud_grid");
+        var box=backgroud_grid.getBBox();
+        if (svg.getAttribute("viewBox") == null)
+            svg.setAttribute("viewBox", '0 0 ' + box['width'] + ' ' + box['height']);
+
+        var viewBoxArr = svg.getAttribute("viewBox").split(' ');
+
+        if (type===0)
+            svg.setAttribute("viewBox", '0 0 ' + box['width'] + ' ' + box['height']);
+        else if (type === 1)
+            viewBoxArr[1]= parseInt(viewBoxArr[1]) - 100;//上
+        else if (type === 2)
+            viewBoxArr[1]=parseInt(viewBoxArr[1]) + 100;//下
+        else if (type === 3)
+            viewBoxArr[0]=parseInt(viewBoxArr[0]) - 100;//左
+        else if (type === 4)
+            viewBoxArr[0]=parseInt(viewBoxArr[0]) + 100;//右
+
+
+        svg.setAttribute("viewBox", viewBoxArr[0] + ' ' + viewBoxArr[1] + ' ' + viewBoxArr[2] + ' ' + viewBoxArr[3]);
+        backgroud_grid.setAttribute("x",viewBoxArr[0]);
+        backgroud_grid.setAttribute("y",viewBoxArr[1]);
+
+    }
+
+
+    var toNoteBook=null;
+    var firstLoadNoteBook=true;
+    /*显示笔记保存到哪个位置*/
+    function showSaveToWhichNoteBook() {
+        if (firstLoadNoteBook) {
+            $.ajax({
+                type: 'post',
+                url: '/noteBook/getNoteBooks',
+                async:false,
+                success: function (data) {
+                    if (data['isSuccessful'] == 1) {
+                        for (var i = 0; i < data['data'].length; i++)
+                            addNoteBookLi(data['data'][i]['id'], data['data'][i]['title']);
+                        showNoteBooks();
+                    } else {
+                        console.log("失败！" + data['msg'])
+                    }
+                },
+                error: function (data) {
+                    alert("失败");
+                }
+            });
+            //初始化笔记本保存位置的单选按钮组
+            $(':input').labelauty();
+            //获取单选的值
+            $('input[name="noteBook"]').click(function(){
+                toNoteBook =$(this).context.value;
+            });
+            firstLoadNoteBook=false;
+        }else
+            showNoteBooks();
+    }
+
+    function showNoteBooks() {
+        layer.open({
+            type: 1,
+            shade: false,
+            title: '请选择保存到的笔记本',
+            content: $('#savePosition')
+        });
+    }
+    function addNoteBookLi(value, title) {
+        var noteBooks = document.getElementById("noteBooks");
+        var li = document.createElement("li");
+        var input = document.createElement("input");
+        input.setAttribute("type","radio");
+        input.setAttribute("name","noteBook");
+        input.setAttribute("value",value);
+        input.setAttribute("data-labelauty",title);
+        li.append(input);
+        noteBooks.append(li);
+    }
+
+
+
+    /*创建新的笔记本并转存*/
+    function showCreateNoteBook() {
+        layer.prompt({title: '请输入笔记本名', formType: 0}, function(text, index){
+            $.ajax({
+                url:'/noteBook/add',
+                async:false,
+                data:{'title':text},
+                success: function(data){
+                    if (data['isSuccessful'] == 1)
+                        save(data['data']['id']);
+                    else
+                        layer.msg("失败！"+data['msg']);
+                    layer.close(index);
+                },
+                error:function(data) {
+                    layer.msg("error!");
+                    layer.close(index);
+                }
+            });
+        });
+    }
+
+    /*提交转存分享给自己*/
+    function save(noteBookId) {
+        if (noteBookId == null)
+            noteBookId = toNoteBook;
+
+        $.ajax({
+            url: '/share/save',
+            async: false,
+            data: {
+                'link_suffix': getUrlParam("link_suffix"),
+                'pwd': '',
+                'note_book_id': noteBookId
+            },
+            success: function (data) {
+                if (data['isSuccessful'] == 1) {
+                    layer.msg("保存成功。即将跳转");
+                    setTimeout(function () {
+                        window.location.href='/page/index.html'
+                    },2000)
+                } else
+                    layer.msg("保存失败！"+data['msg']);
+                layer.close(index);
+            },
+            error: function (data) {layer.msg("error！");}
+        });
+    }
+</script>
+</html>

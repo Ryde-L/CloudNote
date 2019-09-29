@@ -1,0 +1,740 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SVG 编辑器</title>
+    <style>
+        #toolbox {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            /*width: 250px;*/
+            width: 20%;
+            border-right: 1px solid #CCC;
+            float: left;
+        }
+
+        #toolbox h2 {
+            margin: 0;
+            padding: 0;
+            background: #EEE;
+            font-size: 16px;
+            height: 24px;
+            line-height: 24px;
+            padding: 5px 10px;
+        }
+
+        #toolbox form {
+            padding: 10px;
+        }
+
+        #canvas {
+            position: absolute;
+            left: 20%;
+            bottom: 10px;
+            right: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,.4);
+            border-radius: 5px;
+            width:80%;
+            height:95%;
+            float: left;
+        }
+
+        label {
+            display: inline-block;
+            width: 80px;
+            text-align: right;
+        }
+
+        .input-texts{
+            /*box-sizing: border-box;*/
+            /*border: solid 1px #dddddd;*/
+            width: 100%;
+            /*min-width: 200px;*/
+            /*max-width: 100%;*/
+            /*height: 31px;*/
+            /*padding: 4px;*/
+            text-align:center;
+            font-size: 14px;
+        }
+
+        .title_div{
+            /*position: absolute;*/
+            /*left: 20%;*/
+
+            height: 5%;
+            width: 100%;
+            text-align:center;
+            margin:0;
+            padding: 0;
+        }
+        body{
+            margin: 0 10px;
+        }
+        ul { list-style-type: none;}
+        /*li { display: inline-block;}*/
+        li { margin: 10px 0;}
+        input.labelauty + label { font: 12px "Microsoft Yahei";}
+    </style>
+    <link rel="stylesheet" href="../lib/jquery-pretty-radio-checkbox/css/jquery-labelauty.css">
+
+</head>
+<body>
+<div id="toolbox">
+    <h2>操作</h2>
+    <form id="operation">
+        <button type="button" oper="arrow">arrow</button>
+        <button type="button" oper="drag">drag</button>
+        <button type="button" oper="svgDelete">del</button>
+        <button type="button" view="turn_up" onclick="svgViewBoxChange(1)">↑</button>
+        <button type="button" view="turn_down" onclick="svgViewBoxChange(2)">↓</button>
+        <button type="button" view="turn_left" onclick="svgViewBoxChange(3)">←</button>
+        <button type="button" view="turn_right" onclick="svgViewBoxChange(4)">→</button>
+    </form>
+    <h2>创建</h2>
+    <form id="create-shape">
+        <button type="button" create="rect">Rect</button>
+        <button type="button" create="circle">Circle</button>
+        <button type="button" create="ellipse">Ellipse</button>
+        <button type="button" create="line">Line</button>
+        <button type="button" my="text" onclick="useText()">Text</button>
+        <button type="button" my="pencil" onclick="usePencil()">Pencil</button>
+        <button type="button" my="foreignObject" disabled style="display: none">foreignObject</button>
+        <button type="button" create="foreignObject" disabled style="display: none">text</button>
+        <button type="button" create="path" disabled style="display: none">path</button>
+    </form>
+    <h2>形状</h2>
+    <form id="shape-attrs">
+        请先创建图形
+    </form>
+    <h2>外观和变换</h2>
+    <form id="look-and-transform" disabled="disabled">
+        <p>
+            <label style="display: inline;">填充</label>
+            <input id="fill" type="color" value="#ffffff" />
+        </p>
+        <p>
+            <label style="display: inline;">描边</label>
+            <input id="stroke" type="color" value="#ff0000" />
+            <input id="strokeWidth" type="range" value="1" />
+        </p>
+    </form>
+    <h2>提交内容</h2>
+
+    <button id="toolboxSaveButton" onclick="showSaveToWhichNoteBook()">保存</button>
+    <button>取消</button>
+
+</div>
+<div style="" class="title_div">
+
+    <input type="text" class="input-texts" name="title" id="title" placeholder="请输入标题" width="100%" />
+
+</div>
+<div id="canvas">
+    <svg xmlns="http://www.w3.org/2000/svg" id="svg_content" width="100%" height="100%">
+        <defs>
+            <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path stroke="black" fill="none" d="M0,0H20V20"></path>
+            </pattern>
+        </defs>
+        <rect id="backgroud_grid" name="backgroud_grid" x="0" y="0" width="100%" height="100%" fill="url(#grid)"></rect>
+    </svg>
+</div>
+
+<div style="display: none;" id="editor_div">
+    <textarea id="text_editor" name="content" style="width:30%;height:10%;"></textarea>
+    <button onclick="saveEditText()">提交</button>
+    <button onclick="cancelEditText()">取消</button>
+</div>
+
+<div id="savePosition" style="display: none">
+    <ul id="noteBooks" ></ul>
+    <button onclick="save(null)">保存</button>
+    <button onclick="showCreateNoteBook()">保存到新笔记本</button>
+</div>
+</body>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js" ></script>
+<script type="text/javascript" src="../lib/svg/svg.js" ></script>
+<script type="text/javascript" src="../lib/svg/svg.draggable.js" ></script>
+<script type="text/javascript" src="../lib/kindeditor/kindeditor-all.js"></script>
+<script type="text/javascript" src="../lib/kindeditor/lang/zh-CN.js"></script>
+<script type="text/javascript" src="../lib/pako/pako.js"></script>
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../lib/jquery-pretty-radio-checkbox/js/jquery-labelauty.js"></script>
+<script>
+
+    var SVG_NS = 'http://www.w3.org/2000/svg';
+    var XHTML_NS = 'http://www.w3.org/1999/xhtml';
+
+    var isFirstSave=true;//第一次为新笔记，后面为修改笔记
+    var note=null;
+    var editor=null;//富文本编辑器
+    var tempText='';//富文本编辑器的临时文本
+    var toNoteBook=null;
+    var firstLoadNoteBook=true;
+    var noteBookLayerIndex=null;//layer index
+
+    // 图形及对应默认属性
+    var shapeInfo = {
+        rect: 'x:10,y:10,width:200,height:100,rx:0,ry:0',
+        circle: 'cx:200,cy:200,r:50',
+        ellipse: 'cx:200,cy:200,rx:80,ry:30',
+        line: 'x1:10,y1:10,x2:100,y2:100',
+        foreignObject: 'x:50,y:50,width:200,height:100',
+        pencil: 'x:30,y:30',
+        path: 'x:30,y:30,width:200,height:100'
+    };
+
+    var operationInfo={
+        arrow:arrow,
+        drag:drag,
+        turn_up:svgViewBoxChange,
+        turn_down:svgViewBoxChange,
+        turn_left:svgViewBoxChange,
+        turn_right:svgViewBoxChange,
+        svgDelete:svgDelete,
+        bigger:"放大界面",
+        smaller:"缩界面小"
+    };
+
+    // 默认公共属性
+    var defaultAttrs = {
+        fill: '#ffffff',
+        stroke: '#ff0000'
+    };
+
+    var createForm = document.getElementById('create-shape');
+    var attrForm = document.getElementById('shape-attrs');
+    var lookForm = document.getElementById('look-and-transform');
+    var operForm = document.getElementById('operation');
+
+    var svg = document.getElementById("svg_content");
+
+    function svgAddClickEvent(){
+        svg.addEventListener('click', function(e) {
+            if (e.target.tagName.toLowerCase() in shapeInfo) {
+                //排除背景rect
+                if (e.target.attributes['name']==null||e.target.attributes['name'].value !== 'backgroud_grid')
+                    select(e.target);
+            }
+        });
+    }
+
+    createForm.addEventListener('click', function(e) {
+        if (e.target.tagName.toLowerCase() === 'button') {
+            if (e.target.getAttribute('my')==null)
+                create(e.target.getAttribute('create'));
+        }
+    });
+
+    attrForm.addEventListener('input', function(e) {
+        if (e.target.tagName.toLowerCase() != 'input') return;
+        var handle = e.target;
+        getCurrentSvgElement().setAttribute(handle.name, handle.value);
+    });
+
+    lookForm.addEventListener('input', function(e) {
+        if (e.target.tagName.toLowerCase() != 'input') return;
+        if (!getCurrentSvgElement()) return;
+        getCurrentSvgElement().setAttribute('fill', fill.value);
+        getCurrentSvgElement().setAttribute('stroke', stroke.value);
+        getCurrentSvgElement().setAttribute('stroke-width', strokeWidth.value);
+    });
+
+    //操作
+    operForm.addEventListener('click',function (e) {
+        if (e.target.getAttribute('oper') != null) {
+            operationInfo[(e.target.getAttribute('oper'))]();
+        }
+    });
+
+
+    //为绘图区所有元素添加拖动事件
+    function drag() {
+        arrow();
+        var svg_chile_element = document.getElementById("svg_content").children;
+        for (var i = 2; i < svg_chile_element.length; i++) {
+            if (svg_chile_element[i].tagName !== 'defs') {
+                var e = SVG.adopt(svg_chile_element[i]);
+                e.draggable();//设置为可拖动
+                svg_chile_element[i].setAttribute("style", "cursor:move");
+            }
+        }
+    }
+
+    function arrow() {
+        //移除画笔遮罩
+        if (document.getElementById("pencil_div"))
+            $("#pencil_div").remove();
+
+        svgAddClickEvent();//单击事件
+        document.getElementById("backgroud_grid").setAttribute("style", "cursor:default");
+        var svg_chile_element = document.getElementById("svg_content").children;
+        for (var i = 2; i <svg_chile_element.length ; i++) {
+            if (svg_chile_element[i].tagName !== 'defs') {
+                //设置为不可拖动
+                var e = SVG.adopt(svg_chile_element[i]);
+                // e.mousedown(null);
+                // e.mouseup(null);
+                // e.mouseover(null);
+                e.draggable(false);
+                svg_chile_element[i].setAttribute("style","cursor:default");
+            }
+        }
+    }
+
+    function create(name) {
+        arrow();
+        var shape = document.createElementNS(SVG_NS, name);
+        svg.appendChild(shape);
+        select(shape);
+    }
+
+    //设置形状属性
+    function select(shape) {
+        var attrs = shapeInfo[shape.tagName].split(',');
+        var attr, name, value;
+
+        attrForm.innerHTML = "";
+
+        while(attrs.length) {
+            attr = attrs.shift().split(':');
+            name = attr[0];
+            value = shape.getAttribute(name) || attr[1];
+            createHandle(shape, name, value);
+            shape.setAttribute(name, value);
+        }
+
+        for (name in defaultAttrs) {
+            value = shape.getAttribute(name) || defaultAttrs[name];
+            shape.setAttribute(name, value);
+        }
+        setCurrentSvgElement(null,shape);
+        updateLookHandle();
+    }
+
+    /**
+     * 创建形状的属性的range
+     * @param shape 形状
+     * @param name 属性名
+     * @param value 属性值
+     */
+    function createHandle(shape, name, value) {
+
+
+        var label = document.createElement('label');
+        label.textContent = name;
+
+        var handle = document.createElement('input');
+        handle.setAttribute('name', name);
+        handle.setAttribute('type', 'range');
+        handle.setAttribute('value', value);
+        handle.setAttribute('min', -500);
+        handle.setAttribute('max', 800);
+        $(handle).prop("value", value);//js转jq修改进度条
+        attrForm.appendChild(label);
+        attrForm.appendChild(handle);
+    }
+
+    function updateLookHandle() {
+        if (getCurrentSvgElement().getAttribute('fill')!='none')
+            fill.value = getCurrentSvgElement().getAttribute('fill');
+        stroke.value = getCurrentSvgElement().getAttribute('stroke');
+    }
+
+    function svgViewBoxChange(type) {
+        var svg = document.getElementById("svg_content");
+        var backgroud_grid = document.getElementById("backgroud_grid");
+        var width=document.getElementById("canvas").clientWidth;
+        var height=document.getElementById("canvas").clientHeight;
+        if (svg.getAttribute("viewBox") == null)
+            svg.setAttribute("viewBox", '0 0 ' + width + ' ' + height);
+
+        var viewBoxArr = svg.getAttribute("viewBox").split(' ');
+        if (type===0) {
+            viewBoxArr[0]=0;
+            viewBoxArr[1]=0;
+            viewBoxArr[2]=width;
+            viewBoxArr[3]=height;
+        }
+        else if (type === 1)
+            viewBoxArr[1]= parseInt(viewBoxArr[1]) - 100;//上
+        else if (type === 2)
+            viewBoxArr[1]=parseInt(viewBoxArr[1]) + 100;//下
+        else if (type === 3)
+            viewBoxArr[0]=parseInt(viewBoxArr[0]) - 100;//左
+        else if (type === 4)
+            viewBoxArr[0]=parseInt(viewBoxArr[0]) + 100;//右
+
+        svg.setAttribute("viewBox", viewBoxArr[0] + ' ' + viewBoxArr[1] + ' ' + viewBoxArr[2] + ' ' + viewBoxArr[3]);
+        backgroud_grid.setAttribute("x",viewBoxArr[0]);
+        backgroud_grid.setAttribute("y",viewBoxArr[1]);
+    }
+
+
+    //初始化编辑器
+    KindEditor.ready(function(K) {
+        var width=null;
+        var height=null;
+        var device = phoneOrPc();
+        if (device==='pc'){
+            width=500;
+            height=500;
+        } else{
+            width=document.body.clientWidth*0.15;
+            // height=document.body.clientHeight;
+            height=400;
+        }
+        document.getElementById("text_editor").setAttribute("style","width:"+width+"px;height:"+height+"px");
+
+        // editor = K.create('#text_editor');
+        editor=K.create('#text_editor', {
+            uploadJson : '/file/upload',
+            // fileManagerJson : '../jsp/file_manager_json.jsp',
+            allowFileManager : true
+        });
+    });
+    var editor_div_element=document.getElementById("editor_div");//富文本编辑器所在div
+
+
+    window.onload=function (ev) {
+        if (getUrlParam("note") != null) {
+            note=getUrlParam("note");
+            isFirstSave=false;
+            //获取笔记内容
+            $.ajax({
+                url: '/note/getNote',
+                async: false,
+                data: {'note': note},
+                success: function (data) {
+                    if (data['isSuccessful'] == 1) {
+                        document.getElementById("svg_content").outerHTML = data['data']['content'];
+                        document.getElementById("title").value=data['data']['title'];
+                        document.getElementById("toolboxSaveButton").setAttribute("onclick",'save('+data['data']['noteBook']['id']+')');
+                        // svgViewBoxChange(0);
+                    }
+                },
+                error: function (data) {
+                    layer.msg("error！");
+                }
+            });
+        }
+        svg = document.getElementById("svg_content");
+        svgAddClickEvent();
+        svgViewBoxChange(0);
+
+        //文本添加双击事件
+        for (var i = 0; i < svg.children.length; i++) {
+            if(svg.children[i].getAttribute("name")==='text')
+                addTestDbClick(svg.children[i]);
+        }
+    };
+
+
+    /*删除当前svg元素*/
+    function svgDelete(){
+        getCurrentSvgElement().remove();
+    }
+
+
+    //添加文本
+    function useText() {
+        arrow();
+        var foreignObject=document.createElementNS(SVG_NS,"foreignObject");
+        foreignObject.setAttribute("name","text");
+        addTestDbClick(foreignObject);
+
+        // var body=document.createElementNS(XHTML_NS,"body");
+        // body.setAttribute("xmlns",XHTML_NS);
+        // foreignObject.append(body);
+
+        document.getElementById("svg_content").append(foreignObject);
+        setCurrentSvgElement(null,foreignObject);
+        showEditor();
+    }
+
+    //文本双击修改
+    function addTestDbClick(element) {
+        element.addEventListener('dblclick',function (evt) {
+            setCurrentSvgElement(null,element);
+            showEditor();
+        })
+    }
+
+    //弹出富文本编辑器
+    function showEditor(){
+        // tempText=getCurrentSvgElement().firstChild.innerHTML;//暂存原先文本
+        tempText=getCurrentSvgElement().innerHTML;//暂存原先文本
+        editor.html(tempText);//富文本编辑器内容修改
+        editor_div_element.setAttribute("style",
+            // "left:"+(window.screen.width-800)/2+
+            // "px;top:"+( window.screen.height-500)/2+
+            "left:100"+
+            "px;top:100"+
+            "px;zIndex:0"+
+            ";position: absolute"+
+            ";display:block");
+    }
+
+    //取消文本编辑
+    function cancelEditText() {
+        // currentSvgElement.firstChild.innerHTML=tempText;//还原文本
+        getCurrentSvgElement().innerHTML=tempText;//还原文本
+        editor_div_element.setAttribute("style","display:none");//富文本编辑器隐藏
+        editor.html('');//清空富文本编辑器内容
+    }
+
+    //保存文本编辑
+    function saveEditText() {
+        editor.insertHtml("<p><br></p>");
+        // getCurrentSvgElement().firstChild.innerHTML=editor.html();
+        console.log("保存文本");
+        console.log(getCurrentSvgElement());
+        getCurrentSvgElement().innerHTML=editor.html();
+        getCurrentSvgElement().setAttribute("width",editor.edit.doc.body.scrollWidth);
+        getCurrentSvgElement().setAttribute("height",editor.edit.doc.body.scrollHeight+100);
+        editor_div_element.setAttribute("style","display:none");//富文本编辑器隐藏
+        editor.html('');//清空富文本编辑器内容
+    }
+
+
+    var path =null;
+    var path_d='';
+    var path_moving=false;
+
+    //添加画笔
+    function usePencil() {
+        console.log("画笔");
+        arrow();//清除事件
+        document.getElementById("backgroud_grid").setAttribute("style","cursor:crosshair");//鼠标样式
+
+        path = document.createElementNS(SVG_NS,"path");
+        path.setAttribute("d",'');
+        path.setAttribute("fill",'none');
+
+
+        var g = document.createElementNS(SVG_NS,"g");
+        g.setAttribute("stroke","#ff0000");
+        g.setAttribute("strokeWidth","0");
+        g.append(path);
+
+        var canvas_div = $("#canvas");
+        var pencil_div = document.createElement("div");
+        pencil_div.setAttribute("style","position:absolute;width:100%;height:100%;z-index:1");
+        pencil_div.setAttribute("id", "pencil_div");
+
+        var device=phoneOrPc();
+        testExec(device);
+        if (device==='pc'){
+            pencil_div.addEventListener("mousedown", pencilDownEvent,false);
+            pencil_div.addEventListener("mousemove", pencilMoveEvent,false);
+            pencil_div.addEventListener("mouseup", pencilUpEvent,false);
+        } else{
+            pencil_div.addEventListener("touchstart", h5TouchStart,false);
+            pencil_div.addEventListener("touchmove", h5TouchMove,false);
+            pencil_div.addEventListener("touchend", pencilUpEvent,false);
+        }
+        canvas_div.prepend(pencil_div);
+        document.getElementById("svg_content").append(g);
+    }
+
+    function pencilDownEvent(e) {
+        var toolboxWidth= document.getElementById("toolbox").offsetWidth;
+        var viewBoxArr=getSvgViewBox();
+        console.log("toolboxWidth："+toolboxWidth);
+        console.log("viewBoxArr："+viewBoxArr);
+        path_d+="M"+(parseInt(e.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(e.pageY)+parseInt(viewBoxArr[1]));
+        path.setAttribute("d",path_d);
+        path_moving=true;
+        console.log("鼠标按下"+path_d);
+    }
+    function h5TouchStart(e) {
+        var toolboxWidth= document.getElementById("toolbox").offsetWidth;
+        var viewBoxArr=getSvgViewBox();
+        var touche = e.touches[0];
+        e.preventDefault();
+        path_d+="M"+(parseInt(touche.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(touche.pageY)+parseInt(viewBoxArr[1]));
+        path.setAttribute("d",path_d);
+        path_moving=true;
+        testExec('h5鼠标按下'+path_d)
+    }
+
+    function pencilMoveEvent(e) {
+        if (path_moving ) {
+            var viewBoxArr=getSvgViewBox();
+            var toolboxWidth= document.getElementById("toolbox").offsetWidth;
+            path_d += "L"+(parseInt(e.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0])) + "," + (parseInt(e.pageY)+parseInt(viewBoxArr[1]));
+            path.setAttribute("d", path_d);
+        }
+    }
+    function h5TouchMove(e) {
+        if (path_moving ) {
+            var viewBoxArr=getSvgViewBox();
+            var toolboxWidth= document.getElementById("toolbox").offsetWidth;
+            var move=e.touches[0];
+            path_d += "L"+(parseInt(move.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0])) + "," + (parseInt(move.pageY)+parseInt(viewBoxArr[1]));
+            path.setAttribute("d", path_d);
+        }
+    }
+    function pencilUpEvent(e) {
+        setCurrentSvgElement(null,path);
+        path_moving=false;
+        updateLookHandle();
+    }
+
+
+
+
+
+    function getSvgViewBox() {
+        var svg = document.getElementById("svg_content");
+        var viewBoxAttr = svg.getAttribute("viewBox");
+        var viewBoxArr=null;
+        if (viewBoxAttr==null)
+            viewBoxArr=['0','0'];
+        else
+            viewBoxArr=viewBoxAttr.split(' ');
+        return viewBoxArr;
+    }
+
+    /*显示笔记保存到哪个位置*/
+    function showSaveToWhichNoteBook() {
+        if (firstLoadNoteBook) {
+            $.ajax({
+                type: 'post',
+                url: '/noteBook/getNoteBooks',
+                async:false,
+                success: function (data) {
+                    if (data['isSuccessful'] == 1) {
+                        for (var i = 0; i < data['data'].length; i++)
+                            addNoteBookLi(data['data'][i]['id'], data['data'][i]['title']);
+                        showNoteBooks();
+                    } else {
+                        console.log("失败！" + data['msg'])
+                    }
+                },
+                error: function (data) {
+                    alert("失败");
+                }
+            });
+            //初始化笔记本保存位置的单选按钮组
+            $(':input').labelauty();
+            //获取单选的值
+            $('input[name="noteBook"]').click(function(){
+                toNoteBook =$(this).context.value;
+            });
+            firstLoadNoteBook=false;
+        }else
+            showNoteBooks();
+    }
+
+    function addNoteBookLi(value, title) {
+        var noteBooks = document.getElementById("noteBooks");
+        var li = document.createElement("li");
+        var input = document.createElement("input");
+        input.setAttribute("type","radio");
+        input.setAttribute("name","noteBook");
+        input.setAttribute("value",value);
+        input.setAttribute("data-labelauty",title);
+        li.append(input);
+        noteBooks.append(li);
+    }
+
+    function showNoteBooks() {
+        noteBookLayerIndex=layer.open({
+            type: 1,
+            shade: false,
+            title: '请选择保存到的笔记本',
+            content: $('#savePosition')
+        });
+    }
+
+    /*创建新的笔记本并转存*/
+    function showCreateNoteBook() {
+        layer.prompt({title: '请输入笔记本名', formType: 0}, function(text, index){
+            $.ajax({
+                url:'/noteBook/add',
+                async:false,
+                data:{'title':text},
+                success: function(data){
+                    if (data['isSuccessful'] == 1)
+                        save(data['data']['id']);
+                    else
+                        layer.msg("失败！"+data['msg']);
+                    layer.close(index);
+                },
+                error:function(data) {
+                    layer.msg("error!");
+                    layer.close(index);
+                }
+            });
+        });
+    }
+
+    /*
+     * 提交保存或更新
+     */
+    function save(noteBookId) {
+        var title=$("#title").val();
+        if (title==null||title==''){
+            layer.msg("请填写标题");
+            $("#title").val("").focus();
+            return;
+        }
+        noteBookId=noteBookId==null?toNoteBook:noteBookId;
+        console.log("noteBookId:"+noteBookId);
+        if (noteBookId == null){
+            layer.msg("请选择要保存到的笔记本");
+            return;
+        }
+
+        var params=null;
+        var noteOper=null;
+        //添加
+        if (isFirstSave) {
+            noteOper = '/note/add';
+            params = encodeURIComponent(JSON.stringify({
+                "content": document.getElementById("svg_content").outerHTML,
+                "title": title,
+                "note_book_id": noteBookId
+            }));
+        } else {//更新
+            noteOper='/note/update';
+            params = encodeURIComponent(JSON.stringify({
+                "content": document.getElementById("svg_content").outerHTML,
+                "title": title,
+                "note": note,
+            }));
+        }
+
+
+        params=pako.gzip(params, {to: "string"});
+        $.ajax({
+            type: 'post',
+            url: noteOper,
+            data:params,
+            contentType:"",
+            headers: {
+                "Content-Encoding":"gzip"
+            },
+            success: function(data){
+                if (data['isSuccessful'] === '1'){
+                    layer.msg("保存成功！可以继续编辑");
+                    if (isFirstSave) {
+                        isFirstSave=false;
+                        note=data['data'];
+                        document.getElementById("toolboxSaveButton").setAttribute("onclick",'save('+noteBookId+')');
+                    }
+                    layer.close(noteBookLayerIndex);
+                } else
+                    layer.msg("失败！"+data['msg']);
+            },
+            error:function(data) {
+                alert("失败");
+            }
+        });
+    }
+</script>
+</html>

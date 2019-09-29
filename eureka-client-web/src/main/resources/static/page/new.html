@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>云笔记</title>
+    <style>
+        .title_div {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: green;
+        }
+
+        .left-div {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 7%;
+            height: 100%;
+            background-color: gray;
+        }
+
+        .lef-div-inner-top {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80%;
+            text-align: center;
+        }
+
+        .lef-div-inner-bottom {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 18%;
+            border: solid 1px black;
+            text-align: center;
+        }
+
+        .left-icons {
+            width: 50%;
+            margin: 10px 0 0 0;
+        }
+
+        .center-div {
+            left: 7%;
+            height: 100%;
+            width: 25%;
+        }
+
+        .center-notebook-div {
+            position: absolute;
+            left: 7%;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 40%;
+            overflow-y: auto;
+            background-color: gainsboro;
+            display: none;
+        }
+
+        .notebook-summary-and-operation-div,.recycle-bin{
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0 0 0;
+            /*margin: 10px 0 0 0;*/
+            margin: 0;
+            /*padding: 100px 0 0 10px;*/
+        }
+
+        .notebook-summary-div {
+            display: flex;
+            margin: 0 0 0 10px;
+            /*padding: 0 0 0 10px*/
+        }
+
+        .notebook-operation-div {
+            display: flex;
+            padding: 10px 0 0 0;
+            height: 30%;
+            /*text-align: right;*/
+        }
+
+        .notebook-title-font {
+            font-size: 16px
+        }
+
+        .notebook-number-font {
+            font-size: 12px
+        }
+
+        .notebook-hr {
+            text-align: center  ;
+            width: 80%;
+            size: 1px;
+            top: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center-note-div {
+            position: absolute;
+            left: 7%;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 35%;
+            background-color: beige;
+            /*display: none;*/
+        }
+        .center-icons{
+            width: 20%;
+            height: 20%;
+            padding: 10px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="top-div">
+
+    <!--  左  -->
+    <div class="left-div">
+        <div class="lef-div-inner-top">
+            <img src="../icon/un-add.png" name="over-leave" operType="icon" icon="add.png" tips="新建笔记" class="left-icons">
+            <img src="../icon/un-search.png" name="over-leave" operType="icon" icon="search.png" tips="搜索" class="left-icons">
+            <img src="../icon/un-notebook.png" name="over-leave" operType="icon" icon="notebook.png" tips="笔记本" class="left-icons">
+        </div>
+
+        <div class="lef-div-inner-bottom">
+            <img src="../icon/head.jpg" width="50%"
+                 style="border-radius: 100px;margin: auto;top: 50%;position: relative">
+        </div>
+    </div>
+
+    <!--  右  -->
+    <div class="center-div">
+        <!--    笔记本相关页面    -->
+        <div class="center-notebook-div">
+            <div class="center-notebook-div-top"
+                 style="display: flex; justify-content:space-between;height: 5%; padding: 10px;">
+                <label style="padding: 10px 10px;width: 80%; display: flex;font-size: 20px">笔记本</label>
+                <img src="../icon/bookAdd.png" style="width: 10%;display: flex;"/>
+            </div>
+            <div style="text-align: center;padding: 10px">
+                <input type="text" placeholder="🔍查找笔记本" style="width:90%;height:30px;text-align: center">
+            </div>
+
+            <div class="notebook-summary-and-operation-div" name="over-leave" operType="colorChange-div">
+                <div class="notebook-summary-div">
+                    <div>
+                        <label class="notebook-title-font">默认笔记本</label><br>
+                        <label class="notebook-number-font">两条笔记</label>
+                    </div>
+                </div>
+                <div class="notebook-operation-div">
+                    <label>分享</label>
+                    <label>加密</label>
+                </div>
+            </div>
+            <HR class="notebook-hr">
+
+
+            <div class="recycle-bin" name="over-leave" operType="colorChange-div">
+                <div class="notebook-summary-div">
+                    <div>
+                        <label class="notebook-title-font" style="font-size: 14px">废纸篓</label><br>
+                    </div>
+                </div>
+                <div class="notebook-operation-div">
+                    <label class="notebook-number-font">2</label>
+                </div>
+            </div>
+
+        </div>
+
+        <!--    笔记相关页面    -->
+        <div class="center-note-div">
+
+            <!--     标题       -->
+            <div style="height: 20%; padding: 10px 10px;display:flex;text-align: center; background-color:#393d41">
+                <label style="padding: 10px 10px;font-size: 26px;width: 100%;color: white;align-self: center">笔记标题</label>
+            </div>
+            <div style="margin: 5px">
+                <label style="font-size: 14px;padding: 10px">2条笔记</label>
+            </div>
+            <HR style="margin: 0;size: 1px;width: 100%" >
+
+            <div class="notebook-summary-and-operation-div" name="over-leave" operType="colorChange-div">
+                <div class="notebook-summary-div">
+                    <div>
+                        <label class="notebook-title-font">笔记A</label><br>
+                        <div>
+                            <label class="notebook-number-font">标签X</label>
+                            <label class="notebook-number-font">标签Y</label>
+                            <label class="notebook-number-font">标签Z</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="notebook-operation-div">
+                    <label>分享</label>
+                    <label>加密</label>
+                    <label>删除</label>
+                </div>
+            </div>
+            <HR class="notebook-hr" >
+
+            <div class="notebook-summary-and-operation-div" name="over-leave" operType="colorChange-div">
+                <div class="notebook-summary-div">
+                    <div>
+                        <label class="notebook-title-font">笔记B</label><br>
+                        <div>
+                            <label class="notebook-number-font">标签X</label>
+                            <label class="notebook-number-font">标签Y</label>
+                            <label class="notebook-number-font">标签Z</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="notebook-operation-div">
+                        <img src="../icon/un-clock.png" name="over-leave" operType="icon" icon="clock.png" tips="设置提醒" class="center-icons">
+                        <img src="../icon/un-lock.png" name="over-leave" operType="icon" icon="lock.png" tips="加密" class="center-icons">
+                        <img src="../icon/un-unlock.png" name="over-leave" operType="icon" icon="unlock.png" tips="解密" class="center-icons">
+                        <img src="../icon/un-delete.png" name="over-leave" operType="icon" icon="delete.png" tips="删除" class="center-icons">
+<!--                    <label>加密</label>-->
+                </div>
+            </div>
+            <HR class="notebook-hr">
+        </div>
+
+        <!--    其它页面    -->
+
+    </div>
+
+
+</div>
+</body>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+
+<script>
+
+    var iconSuffix = "../icon/";
+
+    $(function () {
+        addMouseOverAndLeaveEvent();
+        noteBooksAddClickEvent();
+    });
+
+    /*鼠标移入移出事件*/
+    function addMouseOverAndLeaveEvent() {
+        var elements = document.getElementsByName("over-leave");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener("mouseover", overs);
+            elements[i].addEventListener("mouseleave", leaves);
+        }
+    }
+
+    /*鼠标移入*/
+    function overs(e) {
+        var type = this.getAttribute("operType");
+        if (type === 'icon') {
+            this.setAttribute("src", iconSuffix + this.getAttribute("icon"));
+            layer.tips(this.getAttribute("tips"), this);
+        } else if (type === 'colorChange-div') {
+            this.style.backgroundColor = "rgba(43,181,92,0.9)";
+        }
+
+    }
+
+    /*鼠标移出*/
+    function leaves(e) {
+        var type = this.getAttribute("operType");
+        if (type === 'icon')
+            this.setAttribute("src", iconSuffix + "un-" + this.getAttribute("icon"));
+        else if (type === 'colorChange-div') {
+            this.style.backgroundColor = "white";
+        }
+    }
+
+
+    function noteBooksAddClickEvent() {
+        var notebooks = document.getElementsByClassName("notebook-summary-and-operation-div");
+        for (var i = 0; i < notebooks.length; i++) {
+            notebooks[i].addEventListener("click", noteBooksClick)
+        }
+    }
+
+    /*点击笔记本*/
+    function noteBooksClick(e) {
+        this.style.border = "solid 1px black";
+    }
+</script>
+</html>
