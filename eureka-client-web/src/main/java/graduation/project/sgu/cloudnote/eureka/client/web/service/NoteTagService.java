@@ -36,4 +36,11 @@ public interface NoteTagService {
      * @return ResponseDto
      */
     public ResponseDto delAll(Integer noteId);
+
+    /**
+     * 获取笔记的全部标签
+     * @param noteId 标签id
+     * @return ResponseDto
+     */
+    ResponseDto getTags(Integer noteId);
 }

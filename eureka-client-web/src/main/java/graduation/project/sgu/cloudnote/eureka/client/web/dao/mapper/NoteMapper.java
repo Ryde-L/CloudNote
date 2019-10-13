@@ -58,4 +58,29 @@ public interface NoteMapper {
     })
     Note selectByIdWithNoteBookAndContent(Integer id);
 
+    /**
+     * 根据笔记本id获取包含标签的笔记集合
+     * @param noteBookId 笔记本id
+     * @return List<Note>
+     */
+    @Select("select id as myId,title,note_book_id from note where note_book_id=#{param}")
+    @Results({
+            @Result(property = "id",column = "myId"),
+            @Result(property = "noteTagList",column = "myId",many=@Many(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteTagMapper.selectByNoteId"))
+    })
+    List<Note> selectByNoteBookIdWithTags(Integer noteBookId);
+
+    /**
+     * 获取包含笔记本的笔记
+     */
+    @Select("select * from note where id=#{param}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "noteBookId",column = "note_book_id"),
+            @Result(property = "noteBook",column = "note_book_id",one = @One(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteBookMapper.get"))
+    })
+    Note selectWithNoteBook(Integer noteId);
+
+
+
 }

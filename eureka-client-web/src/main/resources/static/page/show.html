@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SVG 编辑器</title>
+    <style>
+        #toolbox {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            /*width: 250px;*/
+            width: 5%;
+            border-right: 1px solid #CCC;
+            /*float: left;*/
+        }
+
+        #toolbox h2 {
+            margin: 0;
+            padding: 0;
+            background: #EEE;
+            font-size: 16px;
+            height: 24px;
+            line-height: 24px;
+            padding: 5px 10px;
+        }
+
+        #toolbox form {
+            padding: 10px;
+        }
+
+        #canvas {
+            position: absolute;
+            left: 5%;
+            bottom: 10px;
+            right: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,.4);
+            border-radius: 5px;
+            width:95%;
+            height:95%;
+            float: left;
+        }
+
+        label {
+            display: inline-block;
+            width: 80px;
+            text-align: right;
+        }
+
+        .input-texts{
+            width: 100%;
+            text-align:center;
+            font-size: 14px;
+        }
+
+        .title_div{
+            height: 5%;
+            width: 100%;
+            text-align:center;
+            margin:0;
+            padding: 0;
+        }
+        body{
+            margin: 0 10px;
+        }
+        button{
+            width: 30px;
+        }
+        ul { list-style-type: none;}
+        /*li { display: inline-block;}*/
+        li { margin: 10px 0;}
+        input.labelauty + label { font: 12px "Microsoft Yahei";}
+    </style>
+    <link rel="stylesheet" href="../lib/jquery-pretty-radio-checkbox/css/jquery-labelauty.css">
+
+</head>
+<body>
+<div id="toolbox">
+    <h2>操作</h2>
+    <form id="operation">
+        <button type="button" view="turn_up" onclick="svgViewBoxChange(1)">↑</button><br>
+        <button type="button" view="turn_down" onclick="svgViewBoxChange(2)">↓</button><br>
+        <button type="button" view="turn_left" onclick="svgViewBoxChange(3)">←</button><br>
+        <button type="button" view="turn_right" onclick="svgViewBoxChange(4)">→</button><br>
+    </form>
+</div>
+<div style="" class="title_div" id="title_div">
+
+    <input type="text" class="input-texts" name="title" id="title" placeholder="请输入标题" width="100%" />
+
+</div>
+<div id="canvas">
+    <svg xmlns="http://www.w3.org/2000/svg" id="svg_content" width="100%" height="100%">
+        <defs>
+            <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path stroke="black" fill="none" d="M0,0H20V20"></path>
+            </pattern>
+        </defs>
+        <rect id="backgroud_grid" name="backgroud_grid" x="0" y="0" width="100%" height="100%" fill="url(#grid)"></rect>
+    </svg>
+</div>
+
+
+</body>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js" ></script>
+<script type="text/javascript" src="../lib/svg/svg.js" ></script>
+<script type="text/javascript" src="../lib/svg/svg.draggable.js" ></script>
+<script type="text/javascript" src="../lib/kindeditor/kindeditor-all.js"></script>
+<script type="text/javascript" src="../lib/kindeditor/lang/zh-CN.js"></script>
+<script type="text/javascript" src="../lib/pako/pako.js"></script>
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../lib/jquery-pretty-radio-checkbox/js/jquery-labelauty.js"></script>
+<script>
+
+    var SVG_NS = 'http://www.w3.org/2000/svg';
+    var XHTML_NS = 'http://www.w3.org/1999/xhtml';
+
+    var isFirstSave=true;//第一次为新笔记，后面为修改笔记
+    var note=null;
+    var editor=null;//富文本编辑器
+    var tempText='';//富文本编辑器的临时文本
+    var toNoteBook=null;
+    var firstLoadNoteBook=true;
+    var noteBookLayerIndex=null;//layer index
+
+
+    var operationInfo={
+        turn_up:svgViewBoxChange,
+        turn_down:svgViewBoxChange,
+        turn_left:svgViewBoxChange,
+        turn_right:svgViewBoxChange,
+    };
+
+    var operForm = document.getElementById('operation');
+
+    var svg = document.getElementById("svg_content");
+
+    //操作
+    operForm.addEventListener('click',function (e) {
+        if (e.target.getAttribute('oper') != null) {
+            operationInfo[(e.target.getAttribute('oper'))]();
+        }
+    });
+
+
+
+
+    function svgViewBoxChange(type) {
+        var svg = document.getElementById("svg_content");
+        var backgroud_grid = document.getElementById("backgroud_grid");
+        var width=document.getElementById("canvas").clientWidth;
+        var height=document.getElementById("canvas").clientHeight;
+        if (svg.getAttribute("viewBox") == null)
+            svg.setAttribute("viewBox", '0 0 ' + width + ' ' + height);
+
+        var viewBoxArr = svg.getAttribute("viewBox").split(' ');
+        if (type===0) {
+            viewBoxArr[0]=0;
+            viewBoxArr[1]=0;
+            viewBoxArr[2]=width;
+            viewBoxArr[3]=height;
+        }
+        else if (type === 1)
+            viewBoxArr[1]= parseInt(viewBoxArr[1]) - 100;//上
+        else if (type === 2)
+            viewBoxArr[1]=parseInt(viewBoxArr[1]) + 100;//下
+        else if (type === 3)
+            viewBoxArr[0]=parseInt(viewBoxArr[0]) - 100;//左
+        else if (type === 4)
+            viewBoxArr[0]=parseInt(viewBoxArr[0]) + 100;//右
+
+        svg.setAttribute("viewBox", viewBoxArr[0] + ' ' + viewBoxArr[1] + ' ' + viewBoxArr[2] + ' ' + viewBoxArr[3]);
+        backgroud_grid.setAttribute("x",viewBoxArr[0]);
+        backgroud_grid.setAttribute("y",viewBoxArr[1]);
+    }
+
+
+
+    window.onload=function (ev) {
+        var hasNote=false;
+        var url="";
+        var note=null;
+        if (getUrlParam("note") != null){
+            hasNote=true;
+            url='/note/getNoteWithNoteBookAndContent';
+            note=getUrlParam("note");
+        }else if (getUrlParam("bin") != null) {
+            hasNote=true;
+            url='/recycleBin/getNoteWithNoteBookAndContent';
+            note=getUrlParam("bin");
+        }
+
+
+        if (hasNote) {
+            isFirstSave=false;
+            //获取笔记内容
+            $.ajax({
+                url: url,
+                async: false,
+                data: {'note': note},
+                success: function (data) {
+                    if (data['isSuccessful'] === '1') {
+                        document.getElementById("svg_content").outerHTML = data['data']['content'];
+                        document.getElementById("title").value=data['data']['title'];
+                    }
+                },
+                error: function (e) {
+                    var data=JSON.parse(e.responseText);
+                    if (data['isSuccessful']==='0'){
+                        layer.msg("请求失败！"+data['msg']);
+                    }else
+                        layer.msg("发生错误！");
+                }
+            });
+        }
+        svgViewBoxChange(0);
+    };
+
+</script>
+</html>

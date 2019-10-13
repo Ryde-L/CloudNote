@@ -96,10 +96,10 @@ public class NoteController {
     }
 
 
-    @RequestMapping(value = {"/getListByNoteBook"})
-    public ResponseDto getList(@RequestParam("note_book_id")Integer noteBookId) {
-        return noteService.getNoteBookList(noteBookId);
-    }
+//    @RequestMapping(value = {"/getNotesWithTags"})
+//    public ResponseDto getList(@RequestParam("note_book_id")Integer noteBookId) {
+//        return noteService.getNoteBookList(noteBookId);
+//    }
 
     @RequestMapping(value = {"/getContent"})
     public ResponseDto getContent(@RequestParam("note_id")Integer noteId) {
@@ -111,7 +111,7 @@ public class NoteController {
         return noteService.getNoteListByTag(tag);
     }
 
-    @RequestMapping(value = {"/getNote"})
+    @RequestMapping(value = {"/getNoteWithNoteBookAndContent"})
     public ResponseDto getNote(HttpSession session, @RequestParam("note") Integer noteId){
         return noteService.getNoteWithNoteBookAndContent((Integer) session.getAttribute("userId"),noteId);
     }

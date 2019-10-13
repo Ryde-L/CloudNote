@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 
@@ -62,13 +61,13 @@ public class NoteBookServiceImpl implements NoteBookService {
     }
 
     /**
-     * 根据笔记本id获取笔记本和其所有的所有笔记列表
+     * 根据笔记本id获取包含笔记集合和标签集合的笔记本
      *
      * @param id 笔记本id
-     * @return 包含NoteList的NoteBook对象
+     * @return ResponseDto
      */
-    public NoteBook getContainNoteList(Integer id) {
-        return noteBookMapper.selectByIdContainsNoteList(id);
+    public ResponseDto getContainNoteListWithTag(Integer id) {
+        return ResultUtil.success("", noteBookMapper.selectByIdContainsNoteListWithTags(id));
     }
 
     /**
@@ -82,10 +81,11 @@ public class NoteBookServiceImpl implements NoteBookService {
 
     /**
      * 删除笔记本
+     * @param userId 用户id
      * @param id 笔记本id
      * @return ResponseDto
      */
-    public ResponseDto remove(Integer id) {
+    public ResponseDto remove(Integer userId,Integer id) {
         if (CheckerUtil.checkNull(id)) return ResultUtil.error("缺少参数", null);
 
         NoteBook noteBookWithNoteList = noteBookMapper.selectWithNoteList(id);
@@ -95,7 +95,7 @@ public class NoteBookServiceImpl implements NoteBookService {
             noteIds[i] = noteList.get(i).getId();
 
         //删除笔记
-        recycleBinService.throwNoteIntoRecycleBin(noteIds);
+        recycleBinService.throwNoteIntoRecycleBin(userId,noteIds);
 
         //删除笔记本
         noteBookMapper.deleteByPrimaryKey(id);
@@ -119,7 +119,9 @@ public class NoteBookServiceImpl implements NoteBookService {
      * @return ResponseDto
      */
     public ResponseDto getNoteBooks(Integer userId){
-        return ResultUtil.success("", noteBookMapper.selectUserNoteBooks(userId));
+        return ResultUtil.success("", noteBookMapper.selectUserNoteBooksWithNoteList(userId));
     }
+
+
 
 }

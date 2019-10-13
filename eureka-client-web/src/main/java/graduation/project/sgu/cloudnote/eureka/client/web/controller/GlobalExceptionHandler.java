@@ -5,6 +5,7 @@ import graduation.project.sgu.cloudnote.eureka.client.web.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
+import java.sql.SQLTransientConnectionException;
 
 /**
  * 全局异常处理
@@ -62,6 +64,12 @@ public class GlobalExceptionHandler {
         logger.error("发生IO异常："+e.getMessage());
         e.printStackTrace();
         return ResultUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.toString(),e.getMessage());
+    }
+
+    @ExceptionHandler(CannotCreateTransactionException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ResponseDto handleCannotCreateTransactionException(IOException e){
+        return ResultUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"数据库连接超时");
     }
 
 

@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * <p>
   * 笔记标签表 Service 接口实现
@@ -79,10 +81,19 @@ public class NoteTagServiceImpl implements NoteTagService {
      * @return ResponseDto
      */
     public ResponseDto delAll(Integer noteId){
-        if (CheckerUtil.checkNulls(noteId))
-            return ResultUtil.error("缺少参数");
+        if (CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
         noteTagMapper.deleteByNoteId(noteId);
         return ResultUtil.success("");
+    }
+
+    /**
+     * 获取笔记的全部标签
+     * @param noteId
+     * @return
+     */
+    public ResponseDto getTags(Integer noteId){
+        if (CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
+        return ResultUtil.success( noteTagMapper.selectByNoteId(noteId));
     }
 	
 }

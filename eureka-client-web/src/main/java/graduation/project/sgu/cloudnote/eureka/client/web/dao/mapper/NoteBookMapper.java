@@ -56,4 +56,16 @@ public interface NoteBookMapper {
     @Select("select * from note_book where user_id=#{param}")
     List<NoteBook>  selectUserNoteBooks(Integer userId);
 
+    /**
+     * 根据笔记本id获取包含标签的笔记集合
+     * @param id 笔记本id
+     * @return NoteBook
+     */
+    @Select("select * from note_book where id=#{param}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "noteList",column = "id",many = @Many(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteMapper.selectByNoteBookIdWithTags"))
+    })
+    NoteBook selectByIdContainsNoteListWithTags(Integer id);
+
 }

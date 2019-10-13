@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -36,7 +35,7 @@ public class NoteBookController {
     @RequestMapping(value = {"/delete"})
     public ResponseDto del(@RequestParam("note_book_id") int noteBookId, HttpSession session){
         Integer userId = (Integer) session. getAttribute("userId");
-        return noteBookService.remove(noteBookId);
+        return noteBookService.remove(userId,noteBookId);
     }
 
     @RequestMapping(value = {"/getNoteBooks"})
@@ -45,4 +44,8 @@ public class NoteBookController {
         return noteBookService.getNoteBooks(userId);
     }
 
+    @RequestMapping(value = {"/getNotesWithTags"})
+    public ResponseDto getList(@RequestParam("note_book_id")Integer noteBookId) {
+        return noteBookService.getContainNoteListWithTag(noteBookId);
+    }
 }

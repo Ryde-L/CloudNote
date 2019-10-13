@@ -123,22 +123,22 @@
     <h2>提交内容</h2>
 
     <button id="toolboxSaveButton" onclick="showSaveToWhichNoteBook()">保存</button>
-    <button>取消</button>
+    <a href="javascript: window.location.href='new.html'"><button>返回</button></a>
 
 </div>
-<div style="" class="title_div">
+<div style="" class="title_div" id="title_div">
 
     <input type="text" class="input-texts" name="title" id="title" placeholder="请输入标题" width="100%" />
 
 </div>
 <div id="canvas">
     <svg xmlns="http://www.w3.org/2000/svg" id="svg_content" width="100%" height="100%">
-        <defs>
-            <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                <path stroke="black" fill="none" d="M0,0H20V20"></path>
-            </pattern>
-        </defs>
-        <rect id="backgroud_grid" name="backgroud_grid" x="0" y="0" width="100%" height="100%" fill="url(#grid)"></rect>
+<!--        <defs>-->
+<!--            <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">-->
+<!--                <path stroke="black" fill="none" d="M0,0H20V20"></path>-->
+<!--            </pattern>-->
+<!--        </defs>-->
+<!--        <rect id="backgroud_grid" name="backgroud_grid" x="0" y="0" width="100%" height="100%" fill="url(#grid)"></rect>-->
     </svg>
 </div>
 
@@ -270,15 +270,12 @@
             $("#pencil_div").remove();
 
         svgAddClickEvent();//单击事件
-        document.getElementById("backgroud_grid").setAttribute("style", "cursor:default");
+        // document.getElementById("backgroud_grid").setAttribute("style", "cursor:default");   --备份
         var svg_chile_element = document.getElementById("svg_content").children;
         for (var i = 2; i <svg_chile_element.length ; i++) {
             if (svg_chile_element[i].tagName !== 'defs') {
                 //设置为不可拖动
                 var e = SVG.adopt(svg_chile_element[i]);
-                // e.mousedown(null);
-                // e.mouseup(null);
-                // e.mouseover(null);
                 e.draggable(false);
                 svg_chile_element[i].setAttribute("style","cursor:default");
             }
@@ -346,7 +343,7 @@
 
     function svgViewBoxChange(type) {
         var svg = document.getElementById("svg_content");
-        var backgroud_grid = document.getElementById("backgroud_grid");
+        // var backgroud_grid = document.getElementById("backgroud_grid");  --备份
         var width=document.getElementById("canvas").clientWidth;
         var height=document.getElementById("canvas").clientHeight;
         if (svg.getAttribute("viewBox") == null)
@@ -369,8 +366,8 @@
             viewBoxArr[0]=parseInt(viewBoxArr[0]) + 100;//右
 
         svg.setAttribute("viewBox", viewBoxArr[0] + ' ' + viewBoxArr[1] + ' ' + viewBoxArr[2] + ' ' + viewBoxArr[3]);
-        backgroud_grid.setAttribute("x",viewBoxArr[0]);
-        backgroud_grid.setAttribute("y",viewBoxArr[1]);
+        // backgroud_grid.setAttribute("x",viewBoxArr[0]);
+        // backgroud_grid.setAttribute("y",viewBoxArr[1]);
     }
 
 
@@ -384,15 +381,12 @@
             height=500;
         } else{
             width=document.body.clientWidth*0.15;
-            // height=document.body.clientHeight;
             height=400;
         }
         document.getElementById("text_editor").setAttribute("style","width:"+width+"px;height:"+height+"px");
 
-        // editor = K.create('#text_editor');
         editor=K.create('#text_editor', {
             uploadJson : '/file/upload',
-            // fileManagerJson : '../jsp/file_manager_json.jsp',
             allowFileManager : true
         });
     });
@@ -400,12 +394,12 @@
 
 
     window.onload=function (ev) {
-        if (getUrlParam("note") != null) {
-            note=getUrlParam("note");
+        if (getUrlParam("note")!=null) {
+            var note=getUrlParam("note");
             isFirstSave=false;
             //获取笔记内容
             $.ajax({
-                url: '/note/getNote',
+                url: '/note/getNoteWithNoteBookAndContent',
                 async: false,
                 data: {'note': note},
                 success: function (data) {
@@ -508,8 +502,8 @@
     function usePencil() {
         console.log("画笔");
         arrow();//清除事件
-        document.getElementById("backgroud_grid").setAttribute("style","cursor:crosshair");//鼠标样式
-
+        // document.getElementById("backgroud_grid").setAttribute("style","cursor:crosshair");//鼠标样式    --备份
+        document.getElementById("svg_content").setAttribute("style","cursor:crosshair");
         path = document.createElementNS(SVG_NS,"path");
         path.setAttribute("d",'');
         path.setAttribute("fill",'none');
@@ -543,9 +537,7 @@
     function pencilDownEvent(e) {
         var toolboxWidth= document.getElementById("toolbox").offsetWidth;
         var viewBoxArr=getSvgViewBox();
-        console.log("toolboxWidth："+toolboxWidth);
-        console.log("viewBoxArr："+viewBoxArr);
-        path_d+="M"+(parseInt(e.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(e.pageY)+parseInt(viewBoxArr[1]));
+        path_d+="M"+(parseInt(e.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(e.pageY)-parseInt(document.getElementById("title_div").clientHeight)+parseInt(viewBoxArr[1]));
         path.setAttribute("d",path_d);
         path_moving=true;
         console.log("鼠标按下"+path_d);
@@ -555,7 +547,7 @@
         var viewBoxArr=getSvgViewBox();
         var touche = e.touches[0];
         e.preventDefault();
-        path_d+="M"+(parseInt(touche.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(touche.pageY)+parseInt(viewBoxArr[1]));
+        path_d+="M"+(parseInt(touche.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(touche.pageY)-parseInt(document.getElementById("title_div").clientHeight)+parseInt(viewBoxArr[1]));
         path.setAttribute("d",path_d);
         path_moving=true;
         testExec('h5鼠标按下'+path_d)
@@ -563,9 +555,10 @@
 
     function pencilMoveEvent(e) {
         if (path_moving ) {
+            // console.log( $("#title_div").height);
             var viewBoxArr=getSvgViewBox();
             var toolboxWidth= document.getElementById("toolbox").offsetWidth;
-            path_d += "L"+(parseInt(e.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0])) + "," + (parseInt(e.pageY)+parseInt(viewBoxArr[1]));
+            path_d += "L"+(parseInt(e.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0])) + "," + (parseInt(e.pageY)-parseInt(document.getElementById("title_div").clientHeight)+parseInt(viewBoxArr[1]));
             path.setAttribute("d", path_d);
         }
     }
@@ -574,7 +567,7 @@
             var viewBoxArr=getSvgViewBox();
             var toolboxWidth= document.getElementById("toolbox").offsetWidth;
             var move=e.touches[0];
-            path_d += "L"+(parseInt(move.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0])) + "," + (parseInt(move.pageY)+parseInt(viewBoxArr[1]));
+            path_d += "L"+(parseInt(move.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0])) + "," + (parseInt(move.pageY)-parseInt(document.getElementById("title_div").clientHeight)+parseInt(viewBoxArr[1]));
             path.setAttribute("d", path_d);
         }
     }
@@ -583,10 +576,6 @@
         path_moving=false;
         updateLookHandle();
     }
-
-
-
-
 
     function getSvgViewBox() {
         var svg = document.getElementById("svg_content");
@@ -601,6 +590,13 @@
 
     /*显示笔记保存到哪个位置*/
     function showSaveToWhichNoteBook() {
+        var title=$("#title").val();
+        if (title==null||title==''){
+            layer.msg("请填写标题");
+            $("#title").val("").focus();
+            return;
+        }
+
         if (firstLoadNoteBook) {
             $.ajax({
                 type: 'post',

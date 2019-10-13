@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +19,8 @@ public class Note {
     private NoteBook noteBook;
 
     private String content;
+
+    private List<NoteTag> noteTagList;
 
     public Note(Integer id, Integer noteBookId, String title) {
         this.id = id;

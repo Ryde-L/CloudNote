@@ -56,7 +56,11 @@ public class ShareServiceImpl implements ShareService {
         if (isHasPwd == 1 && CheckerUtil.checkNulls(pwd)) return ResultUtil.error("缺少分享密码");
         String link = shareLinkPrefix+Calendar.getInstance().getTime().getTime() + UUID.randomUUID().toString()+"-"+userId;
         shareMapper.insert(new Share(null, userId, noteId, link, isHasPwd, pwd, limitType, limitContent, Calendar.getInstance().getTime(), 1));
-        return ResultUtil.success();
+        Map<String,Object> map=new HashMap<String, Object>();
+        map.put("link",link);
+        map.put("isHasPwd",isHasPwd);
+        map.put("pwd",pwd);
+        return ResultUtil.success(map);
     }
 
     /**
@@ -72,8 +76,8 @@ public class ShareServiceImpl implements ShareService {
         if (share == null) return ResultUtil.error("无效链接");
         if (share.getStatus() != 1) return ResultUtil.error("该分享链接已无效");
         if (share.getIshaspwd() == 1) {//分享密码校验
-            if (CheckerUtil.checkNulls(pwd)) return ResultUtil.error("请输入分享密码");
-            if (!pwd.equals(share.getPwd())) return ResultUtil.error("分享密码不正确");//TODO 密码加密
+            if (CheckerUtil.checkNulls(pwd)) return ResultUtil.error("请输入提取码");
+            if (!pwd.equals(share.getPwd())) return ResultUtil.error("提取码不正确");//TODO 密码加密
         }
         if (share.getLimitType() == 1) {//分享天数校验
             Calendar ExpireTime = Calendar.getInstance();
@@ -111,7 +115,7 @@ public class ShareServiceImpl implements ShareService {
         Share share = shareMapper.selectByPrimaryKey(shareId);
         if (share==null) return ResultUtil.error("分享对象无效");
 
-        if (share.getUserId()!=user.getId()) return ResultUtil.error("非法操作");
+        if (!share.getUserId().equals( user.getId())) return ResultUtil.error("非法操作");
         share.setStatus(0);
         shareMapper.updateByPrimaryKey(share);
         return ResultUtil.success();
@@ -136,7 +140,7 @@ public class ShareServiceImpl implements ShareService {
         NoteBook noteBook = noteBookService.getNoteBook(noteBookId);
         if (noteBook == null) return ResultUtil.error("笔记本对象无效");
 
-        if (userId != noteBook.getUserId()) return ResultUtil.error("非法操作");
+        if (!userId.equals( noteBook.getUserId())) return ResultUtil.error("非法操作");
 
         Note myNote = new Note(null, noteBookId, map.get("title"));
         noteService.insert(myNote);

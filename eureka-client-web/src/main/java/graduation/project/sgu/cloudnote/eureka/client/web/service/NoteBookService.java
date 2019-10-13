@@ -28,12 +28,12 @@ public interface NoteBookService {
     NoteBook getNoteBook(Integer id);
 
     /**
-     * 根据笔记本id获取笔记本和其所有的所有笔记列表
+     * 根据笔记本id获取包含笔记集合和标签集合的笔记本
      *
      * @param id 笔记本id
      * @return 包含NoteList的NoteBook对象
      */
-    NoteBook getContainNoteList(Integer id);
+    ResponseDto getContainNoteListWithTag(Integer id);
 
     /**
      * 获取用户的默认笔记本
@@ -44,10 +44,11 @@ public interface NoteBookService {
 
     /**
      * 删除笔记本
+     * @param userId 用户id
      * @param id 笔记本id
      * @return ResponseDto
      */
-    public ResponseDto remove(Integer id);
+    public ResponseDto remove(Integer userId,Integer id);
 
 
     /**

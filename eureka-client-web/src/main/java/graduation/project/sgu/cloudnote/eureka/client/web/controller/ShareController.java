@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 /**
  * <p>
@@ -40,9 +41,17 @@ public class ShareController {
         Integer userId = (Integer) request.getSession().getAttribute("userId");
         Integer noteId = Integer.valueOf(request.getParameter("note_id"));
         int isHasPwd = Integer.parseInt(request.getParameter("is_has_pwd"));
-        String pwd = request.getParameter("pwd");
-        int limitType = Integer.parseInt(request.getParameter("limit_type"));
-        int limitContent = Integer.parseInt(request.getParameter("limit_content"));
+        String pwd = null;
+        if (isHasPwd==1) pwd= UUID.randomUUID().toString().substring(0,4);
+        else pwd=null;
+
+        int limitType =0;
+        int limitContent =0;
+        int days=Integer.parseInt(request.getParameter("days"));
+        if (days!=0) {
+            limitType = 1;
+            limitContent = days;
+        }
         return shareService.create(shareLinkPrefix,userId, noteId, isHasPwd, pwd, limitType, limitContent);
     }
 

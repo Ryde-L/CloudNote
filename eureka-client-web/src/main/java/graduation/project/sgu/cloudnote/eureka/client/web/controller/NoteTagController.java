@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -43,7 +44,10 @@ public class NoteTagController {
         return noteTagService.delAll(noteId);
     }
 
-
+    @RequestMapping("/getTags")
+    public ResponseDto getTags(@RequestParam("note_id") Integer noteId) {
+        return noteTagService.getTags(noteId);
+    }
 
 
 

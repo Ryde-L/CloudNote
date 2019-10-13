@@ -86,7 +86,7 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteMapper.selectByIdWithNoteBookAndContent(noteId);
         if (note==null) return ResultUtil.error("笔记对象无效");
         if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
-        if (userId!=note.getNoteBook().getUserId()) return ResultUtil.error("非法操作");
+        if (!userId.equals(note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
 
         note.setTitle(title);
         noteMapper.updateByPrimaryKey(note);
@@ -108,7 +108,7 @@ public class NoteServiceImpl implements NoteService {
      */
     public ResponseDto getNoteBookList(Integer noteBookId) {
         if (CheckerUtil.checkNull(noteBookId)) return ResultUtil.error("缺少参数");
-        return ResultUtil.success("", noteBookService.getContainNoteList(noteBookId));
+        return ResultUtil.success("", noteBookService.getContainNoteListWithTag(noteBookId));
     }
 
     /**
@@ -144,7 +144,23 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteMapper.selectByIdWithNoteBookAndContent(id);
         if (note==null) return ResultUtil.error("笔记对象不存在");
         if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
-        if (userId!=note.getNoteBook().getUserId()) return ResultUtil.error("非法操作");
+        if (!userId.equals( note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
         return ResultUtil.success("",note);
+    }
+
+
+    /**
+     * 获取包含NoteBook的Note,如果相应信息不符，返回data为null
+     * @param userId 用户id
+     * @param noteId 笔记id
+     * @return ResponseDto
+     */
+    public ResponseDto getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId){
+        if(CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
+        Note note = noteMapper.selectWithNoteBook(noteId);
+        if (note==null) return ResultUtil.success(null);
+        if (note.getNoteBook()==null) return ResultUtil.success(null);
+        if (!note.getNoteBook().getUserId().equals(userId)) return ResultUtil.success(null);
+        return ResultUtil.success(note);
     }
 }

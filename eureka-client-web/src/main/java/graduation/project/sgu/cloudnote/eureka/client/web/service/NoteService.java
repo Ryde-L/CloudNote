@@ -77,4 +77,12 @@ public interface NoteService {
      */
     ResponseDto getNoteWithNoteBookAndContent(Integer userId, Integer id);
 
+    /**
+     * 获取包含NoteBook的Note
+     * @param userId 用户id
+     * @param noteId 笔记id
+     * @return ResponseDto
+     */
+    ResponseDto getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId);
+
 }

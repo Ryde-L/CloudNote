@@ -35,4 +35,8 @@ public interface NoteTagMapper {
 
     @Delete("delete from `note_tag` where note_id=#{param}")
     int deleteByNoteId(Integer noteId);
+
+    @Select("select * from note_tag where note_id=#{param}")
+    List<NoteTag> selectByNoteId(Integer noteId);
+
 }

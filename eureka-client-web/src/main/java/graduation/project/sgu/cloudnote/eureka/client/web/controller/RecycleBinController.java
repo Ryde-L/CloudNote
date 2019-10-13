@@ -28,8 +28,18 @@ public class RecycleBinController {
      * 笔记丢入回收站
      */
     @RequestMapping(value = {"/noteThrowAway"})
-    public ResponseDto noteThrowAway(@RequestParam("note_id[]")Integer[] noteIds) {
-        return recycleBinService.throwNoteIntoRecycleBin(noteIds);
+    public ResponseDto noteThrowAway(@RequestParam("note_id[]")Integer[] noteIds, HttpSession session) {
+        Integer  userId = (Integer) session.getAttribute("userId");
+        return recycleBinService.throwNoteIntoRecycleBin(userId,noteIds);
+    }
+
+    /**
+     * 笔记从回收站彻底删除
+     */
+    @RequestMapping(value = {"/delete"})
+    public ResponseDto removeNotes(@RequestParam("id[]")Integer[] ids, HttpSession session) {
+        Integer  userId = (Integer) session.getAttribute("userId");
+        return recycleBinService.removeNotes(userId,ids);
     }
 
     /**
@@ -40,5 +50,23 @@ public class RecycleBinController {
         Integer  userId = (Integer) session.getAttribute("userId");
         return recycleBinService.noteRecover(userId,noteId);
     }
-	
+
+    /**
+     * 获取废纸篓的单个笔记信息
+     */
+    @RequestMapping(value = {"/getNoteWithNoteBookAndContent"})
+    public ResponseDto getNoteWithNoteBookAndContent(@RequestParam("note")Integer binId, HttpSession session) {
+        Integer  userId = (Integer) session.getAttribute("userId");
+        return recycleBinService.getNoteWithNoteBookAndContent(userId,binId);
+    }
+
+    /**
+     * 获取废纸篓的笔记List
+     */
+    @RequestMapping(value = {"/getNotes"})
+    public ResponseDto getNoteListByUserId( HttpSession session) {
+        Integer  userId = (Integer) session.getAttribute("userId");
+        return recycleBinService.getNotesByUserId(userId);
+    }
+
 }

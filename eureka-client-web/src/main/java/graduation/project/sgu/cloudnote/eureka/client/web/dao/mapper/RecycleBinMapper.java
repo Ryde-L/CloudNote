@@ -34,4 +34,8 @@ public interface RecycleBinMapper {
 
     @Select("select * from recycle_bin where note_id=#{param} limit 0,1")
     RecycleBin selectByNoteId(Integer id);
+
+    @Select("select * from recycle_bin where user_id=#{param}")
+    List<RecycleBin> selectRecycleBinListByUserId(Integer userId);
+
 }
