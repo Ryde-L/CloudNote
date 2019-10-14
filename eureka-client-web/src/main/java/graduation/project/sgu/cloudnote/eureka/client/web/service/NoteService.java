@@ -63,9 +63,10 @@ public interface NoteService {
      * 通过笔记标签模糊匹配出笔记
      *
      * @param tag 标签
-     * @return json
+     * @param userId 用户Id
+     * @return ResponseDto
      */
-    ResponseDto getNoteListByTag(String tag);
+    ResponseDto getNoteListByTag(String tag,Integer userId);
 
 
     /**
@@ -73,9 +74,10 @@ public interface NoteService {
      *
      * @param userId 用户id
      * @param id     笔记id
+     * @param pwd     笔记密码
      * @return ResponseDto
      */
-    ResponseDto getNoteWithNoteBookAndContent(Integer userId, Integer id);
+    ResponseDto getNoteWithNoteBookAndContent(Integer userId, Integer id,String pwd);
 
     /**
      * 获取包含NoteBook的Note
@@ -85,4 +87,21 @@ public interface NoteService {
      */
     ResponseDto getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId);
 
+    /**
+     * 笔记解密
+     * @param userId 用户id
+     * @param noteId 笔记id
+     * @param pwd 笔记密码
+     * @return ResponseDto
+     */
+    ResponseDto unlock(Integer userId, Integer noteId,String pwd);
+
+    /**
+     * 笔记加密
+     * @param userId 用户id
+     * @param noteId 笔记id
+     * @param pwd 笔记密码
+     * @return ResponseDto
+     */
+    ResponseDto lock(Integer userId, Integer noteId,String pwd);
 }

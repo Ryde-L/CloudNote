@@ -107,14 +107,23 @@ public class NoteController {
     }
 
     @RequestMapping(value = {"/getListByTag"})
-    public ResponseDto findByTags(String tag){
-        return noteService.getNoteListByTag(tag);
+    public ResponseDto findByTags(HttpSession session,String tag){
+        return noteService.getNoteListByTag(tag,(Integer) session.getAttribute("userId"));
     }
 
     @RequestMapping(value = {"/getNoteWithNoteBookAndContent"})
-    public ResponseDto getNote(HttpSession session, @RequestParam("note") Integer noteId){
-        return noteService.getNoteWithNoteBookAndContent((Integer) session.getAttribute("userId"),noteId);
+    public ResponseDto getNote(HttpSession session, @RequestParam("note") Integer noteId,String pwd){
+        return noteService.getNoteWithNoteBookAndContent((Integer) session.getAttribute("userId"),noteId,pwd);
     }
 
+    @RequestMapping(value = {"/unlock"})
+    public ResponseDto unlock(HttpSession session, @RequestParam("note_id") Integer noteId,String pwd){
+        return noteService.unlock((Integer) session.getAttribute("userId"),noteId,pwd);
+    }
+
+    @RequestMapping(value = {"/lock"})
+    public ResponseDto lock(HttpSession session, @RequestParam("note_id") Integer noteId,String pwd){
+        return noteService.lock((Integer) session.getAttribute("userId"),noteId,pwd);
+    }
 
 }

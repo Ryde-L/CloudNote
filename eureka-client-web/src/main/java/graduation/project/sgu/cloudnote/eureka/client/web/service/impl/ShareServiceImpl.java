@@ -142,7 +142,7 @@ public class ShareServiceImpl implements ShareService {
 
         if (!userId.equals( noteBook.getUserId())) return ResultUtil.error("非法操作");
 
-        Note myNote = new Note(null, noteBookId, map.get("title"));
+        Note myNote = new Note(null, noteBookId, map.get("title"),0,null);
         noteService.insert(myNote);
         noteContentService.insert(new NoteContent(null, myNote.getId(), map.get("content")));
 

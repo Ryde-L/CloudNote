@@ -16,15 +16,22 @@ public class Note {
 
     private String title;
 
+    private Integer ishaspwd;
+
+    private String pwd;
+
     private NoteBook noteBook;
 
     private String content;
 
     private List<NoteTag> noteTagList;
 
-    public Note(Integer id, Integer noteBookId, String title) {
+
+    public Note(Integer id, Integer noteBookId, String title, Integer ishaspwd, String pwd) {
         this.id = id;
         this.noteBookId = noteBookId;
         this.title = title;
+        this.ishaspwd = ishaspwd;
+        this.pwd = pwd;
     }
 }

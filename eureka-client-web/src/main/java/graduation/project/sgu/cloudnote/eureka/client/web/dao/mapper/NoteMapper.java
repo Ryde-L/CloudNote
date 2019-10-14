@@ -8,6 +8,7 @@ import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface NoteMapper {
@@ -39,8 +40,12 @@ public interface NoteMapper {
      * @param tag 标签
      * @return 笔记集合
      */
-    @Select("select n.id,n.title,n.note_book_id from note n left join note_tag ng on n.id=ng.note_id where ng.tag like  CONCAT('%',#{param},'%') ")
-    List<Note> selectByTag( String tag);
+    @Select("select n.id,n.title,n.note_book_id ,isHasPwd,pwd from note n " +
+            "left join note_tag ng on n.id=ng.note_id " +
+            "left join note_book nb on n.note_book_id=nb.id " +
+            "where ng.tag like  CONCAT('%',#{param1},'%') " +
+            "and nb.user_id=#{param2}")
+    Set<Note> selectByTag(String tag, Integer userId);
 
     @Select("select * from note where note_book_id=#{param}")
     List<Note> selectByNoteBookId(Integer noteBookId);
@@ -50,7 +55,7 @@ public interface NoteMapper {
      * @param id 笔记id
      * @return Note对象
      */
-    @Select("select n.id,note_book_id,title,content from note n left join note_content nc on n.id=nc.note_id where n.id=#{param}")
+    @Select("select n.id,note_book_id,title,isHasPwd,pwd,content from note n left join note_content nc on n.id=nc.note_id where n.id=#{param}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "noteBookId", column = "note_book_id"),
@@ -63,7 +68,7 @@ public interface NoteMapper {
      * @param noteBookId 笔记本id
      * @return List<Note>
      */
-    @Select("select id as myId,title,note_book_id from note where note_book_id=#{param}")
+    @Select("select id as myId,title,note_book_id,isHasPwd,pwd from note where note_book_id=#{param}")
     @Results({
             @Result(property = "id",column = "myId"),
             @Result(property = "noteTagList",column = "myId",many=@Many(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteTagMapper.selectByNoteId"))

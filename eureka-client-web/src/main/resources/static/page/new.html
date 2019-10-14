@@ -106,7 +106,7 @@
             padding: 0;
         }
 
-        .center-note-div {
+        .center-note-div ,.center-search-div{
             position: absolute;
             left: 7%;
             top: 0;
@@ -191,7 +191,7 @@
                     <img src="../icon/bookAdd.png" style="width: 10%;height: 10%;display: flex;" onclick="showCreateNoteBook()"/>
                 </div>
                 <div style="text-align: center;padding: 10px">
-                    <input type="text" placeholder="🔍查找笔记本" style="width:90%;height:30px;text-align: center">
+                    <input type="text" id="search-input" placeholder="🔍查找笔记本" style="width:90%;height:30px;text-align: center" onfocusout="showSearch()">
                 </div>
             </div>
             <div id="noteBookList">
@@ -300,7 +300,25 @@
         </div>
 
 
-        <!--    其它页面    -->
+        <!--    搜索    -->
+        <div class="center-search-div" id="center-search-div">
+
+            <!--     标题       -->
+            <div style="height: 20%; padding: 10px 10px;display:flex;text-align: center; background-color:#393d41">
+                <label style="padding: 10px 10px;font-size: 26px;width: 100%;color: white;align-self: center" id="search-title-label">搜索关键字</label>
+            </div>
+            <div style="margin: 5px">
+                <label style="font-size: 14px;padding: 10px" ><label id="search-note-number-label"></label> 条笔记</label>
+            </div>
+            <HR style="margin: 0;size: 1px;width: 100%" >
+
+            <div id="search-noteList">
+            </div>
+
+
+
+
+        </div>
 
     </div>
 
@@ -441,6 +459,7 @@
     function showNoteBooks() {
         document.getElementById("center-bin-div").style.display="none";
         document.getElementById("center-note-div").style.display="none";
+        document.getElementById("center-search-div").style.display="none";
         document.getElementById("center-notebook-div").style.display="block";
         getNoteBookList();
     }
@@ -449,14 +468,29 @@
     function showNotes(id) {
         document.getElementById("center-notebook-div").style.display="none";
         document.getElementById("center-bin-div").style.display="none";
+        document.getElementById("center-search-div").style.display="none";
         document.getElementById("center-note-div").style.display="block";
         getNoteList(id);
+    }
+
+    function showSearch(){
+        console.log("search");
+        var search=$("#search-input").val();
+        if (search!=null&&search!=''){
+            document.getElementById("center-bin-div").style.display="none";
+            document.getElementById("center-note-div").style.display="none";
+            document.getElementById("center-notebook-div").style.display="none";
+            document.getElementById("center-search-div").style.display="block";
+            getSearchList(search);
+        }
+
     }
 
     /*显示废纸篓*/
     function showRecycleBin() {
         document.getElementById("center-note-div").style.display="none";
         document.getElementById("center-notebook-div").style.display="none";
+        document.getElementById("center-search-div").style.display="none";
         document.getElementById("center-bin-div").style.display="block";
         getBinNoteList();
     }
@@ -586,14 +620,27 @@
                         clockImg.setAttribute("tips","设置提醒");
                         secondDiv2.append(clockImg);
 
-                        var lockImg=document.createElement("img");
-                        lockImg.setAttribute("name","over-leave");
-                        lockImg.setAttribute("operType","icon");
-                        lockImg.setAttribute("class","center-icons");
-                        lockImg.setAttribute("src","../icon/un-lock.png");
-                        lockImg.setAttribute("icon","lock.png");
-                        lockImg.setAttribute("tips","加密");
-                        secondDiv2.append(lockImg);
+                        if (data['data']['noteList'][i]['ishaspwd']===0) {
+                            var lockImg = document.createElement("img");
+                            lockImg.setAttribute("name", "over-leave");
+                            lockImg.setAttribute("operType", "icon");
+                            lockImg.setAttribute("class", "center-icons");
+                            lockImg.setAttribute("src", "../icon/un-lock.png");
+                            lockImg.setAttribute("icon", "lock.png");
+                            lockImg.setAttribute("tips", "加密");
+                            secondDiv2.append(lockImg);
+                            $(lockImg).click({id:data['data']['noteList'][i]['id']},lock);
+                        }else {
+                            var unlockImg = document.createElement("img");
+                            unlockImg.setAttribute("name", "over-leave");
+                            unlockImg.setAttribute("operType", "icon");
+                            unlockImg.setAttribute("class", "center-icons");
+                            unlockImg.setAttribute("src", "../icon/un-unlock.png");
+                            unlockImg.setAttribute("icon", "unlock.png");
+                            unlockImg.setAttribute("tips", "解除加密");
+                            secondDiv2.append(unlockImg);
+                            $(unlockImg).click({id:data['data']['noteList'][i]['id']},unlock);
+                        }
 
                         var deleteImg=document.createElement("img");
                         deleteImg.setAttribute("name","over-leave");
@@ -632,6 +679,130 @@
                 var data=JSON.parse(e.responseText);
                 if (data['isSuccessful']==='0'){
                     layer.msg("获取笔记列表失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /**从后台获取搜索的笔记*/
+    function getSearchList(keyword) {
+        $.ajax({
+            url:"/note/getListByTag",
+            data:{"tag":keyword},
+            success:function (data) {
+                if (data['isSuccessful']==='1'){
+                    var notesDiv=document.getElementById("search-noteList");
+                    notesDiv.innerHTML="";
+                    for (var i = 0; i < data['data'].length; i++) {
+                        var topDiv = document.createElement("div");
+                        topDiv.setAttribute("class","notebook-summary-and-operation-div");
+                        topDiv.setAttribute("name","over-leave");
+                        topDiv.setAttribute("operType","colorChange-div");
+                        $(topDiv).click({id:data['data'][i]['id']},notesClicked);
+                        var secondDiv = document.createElement("div");
+                        secondDiv.setAttribute("class","notebook-summary-div");
+                        topDiv.append(secondDiv);
+
+                        var thirdDiv = document.createElement("div");
+                        secondDiv.append(thirdDiv);
+
+                        var nameLabel = document.createElement("label");
+                        nameLabel.setAttribute("class","notebook-title-font");
+                        nameLabel.innerText=data['data'][i]['title'];
+                        var br = document.createElement("br");
+
+                        var fourthDiv = document.createElement("div");
+
+                        thirdDiv.append(nameLabel);
+                        thirdDiv.append(br);
+                        thirdDiv.append(fourthDiv);
+
+                        // var words=0;
+                        // for (var j = 0; j <data['data'][i]['noteTagList'].length ; j++) {
+                        //     words+=data['data']['noteList'][i]['noteTagList'][j]['tag'].length;
+                        //     var tagLabel = document.createElement("label");
+                        //     tagLabel.setAttribute("class","notebook-number-font");
+                        //     tagLabel.innerText=data['data']['noteList'][i]['noteTagList'][j]['tag']+' ';
+                        //     fourthDiv.append(tagLabel);
+                        //     if (words>=10) {
+                        //         tagLabel.innerText='...';
+                        //         break;
+                        //     }
+                        // }
+
+                        var secondDiv2 = document.createElement("div");
+                        secondDiv2.setAttribute("class","notebook-operation-div");
+                        topDiv.append(secondDiv2);
+
+                        var clockImg=document.createElement("img");
+                        clockImg.setAttribute("name","over-leave");
+                        clockImg.setAttribute("operType","icon");
+                        clockImg.setAttribute("class","center-icons");
+                        clockImg.setAttribute("src","../icon/un-clock.png");
+                        clockImg.setAttribute("icon","clock.png");
+                        clockImg.setAttribute("tips","设置提醒");
+                        secondDiv2.append(clockImg);
+
+                        if (data['data'][i]['ishaspwd']===0) {
+                            var lockImg = document.createElement("img");
+                            lockImg.setAttribute("name", "over-leave");
+                            lockImg.setAttribute("operType", "icon");
+                            lockImg.setAttribute("class", "center-icons");
+                            lockImg.setAttribute("src", "../icon/un-lock.png");
+                            lockImg.setAttribute("icon", "lock.png");
+                            lockImg.setAttribute("tips", "加密");
+                            secondDiv2.append(lockImg);
+                            $(lockImg).click({id:data['data'][i]['id']},lock);
+                        }else {
+                            var unlockImg = document.createElement("img");
+                            unlockImg.setAttribute("name", "over-leave");
+                            unlockImg.setAttribute("operType", "icon");
+                            unlockImg.setAttribute("class", "center-icons");
+                            unlockImg.setAttribute("src", "../icon/un-unlock.png");
+                            unlockImg.setAttribute("icon", "unlock.png");
+                            unlockImg.setAttribute("tips", "解除加密");
+                            secondDiv2.append(unlockImg);
+                            $(unlockImg).click({id:data['data'][i]['id']},unlock);
+                        }
+
+                        var deleteImg=document.createElement("img");
+                        deleteImg.setAttribute("name","over-leave");
+                        deleteImg.setAttribute("operType","icon");
+                        deleteImg.setAttribute("class","center-icons");
+                        deleteImg.setAttribute("src","../icon/un-delete.png");
+                        deleteImg.setAttribute("icon","delete.png");
+                        deleteImg.setAttribute("tips","删除");
+                        secondDiv2.append(deleteImg);
+                        $(deleteImg).click({id:data['data'][i]['id']},notesDelete);
+
+                        var shareImg=document.createElement("img");
+                        shareImg.setAttribute("name","over-leave");
+                        shareImg.setAttribute("operType","icon");
+                        shareImg.setAttribute("class","center-icons");
+                        shareImg.setAttribute("src","../icon/un-share.png");
+                        shareImg.setAttribute("icon","share.png");
+                        shareImg.setAttribute("tips","分享");
+                        $(shareImg).click({id:data['data'][i]['id']},showShare);
+
+                        secondDiv2.append(shareImg);
+
+                        var hr=document.createElement("HR");
+                        hr.setAttribute("class","notebook-hr");
+                        notesDiv.append(topDiv);
+                        notesDiv.append(hr);
+                    }
+                    document.getElementById("search-note-number-label").innerText=data['data'].length;
+                    document.getElementById("search-title-label").innerText=keyword;
+                    addMouseOverAndLeaveEvent();
+                }else{
+                    layer.msg("搜索失败！"+data['msg']);
+                }
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("搜索失败！"+data['msg']);
                 }else
                     layer.msg("发生错误！");
             }
@@ -939,6 +1110,66 @@
             }
         });
     }
+
+    /*l加密笔记*/
+    function lock(e) {
+        layer.prompt({title: '输入密码', formType: 1}, function(pass, index){
+            layer.close(index);
+            $.ajax({
+                type: 'post',
+                url: "/note/lock",
+                data: {
+                    'note_id':e.data.id,
+                    'pwd':pass
+                },
+                success: function (data) {
+                    if (data["isSuccessful"] === "1") {
+                        e.target.setAttribute("src", "../icon/un-unlock.png");
+                        e.target.setAttribute("icon", "unlock.png");
+                        e.target.setAttribute("tips", "解除加密");
+                        $(e.target).click({id:e.data.id},unlock);
+                        layer.msg('加密成功', {icon: 1, time: 2000});
+                    } else {
+                        layer.msg('加密失败!' + data["msg"], {icon: 2, time: 3500});
+                    }
+                },
+                error: function (data) {
+                    layer.msg('error!', {icon: 2, time: 3500});
+                }
+            });
+        });
+        stopDefault(e);
+    }
+    /*解锁笔记*/
+    function unlock(e) {
+        layer.prompt({title: '输入密码', formType: 1}, function(pass, index){
+            layer.close(index);
+            $.ajax({
+                type: 'post',
+                url: "/note/unlock",
+                data: {
+                    'note_id':e.data.id,
+                    'pwd':pass
+                },
+                success: function (data) {
+                    if (data["isSuccessful"] === "1") {
+                        e.target.setAttribute("src", "../icon/un-lock.png");
+                        e.target.setAttribute("icon", "lock.png");
+                        e.target.setAttribute("tips", "加密");
+                        $(e.target).click({id:e.data.id},lock);
+                        layer.msg('解锁成功', {icon: 1, time: 2000});
+                    } else {
+                        layer.msg('解锁失败!' + data["msg"], {icon: 2, time: 3500});
+                    }
+                },
+                error: function (data) {
+                    layer.msg('error!', {icon: 2, time: 3500});
+                }
+            });
+        });
+        stopDefault(e);
+    }
+
     //阻止浏览器的默认行为
     function stopDefault( e ) {
         e.stopPropagation();

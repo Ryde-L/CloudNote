@@ -16,27 +16,6 @@
 
 
 
-  <sql id="nick_name_columns">
-    nb.id note_book_id ,nb.user_id,nb.title,nb.deletable
-  </sql>
-  <sql id="Base_Columns_With_Namespace" >
-    nb.id, nb.user_id, nb.title, nb.deletable
-  </sql>
-
-
-  <select id="selectByIdContainsNoteList" resultMap="NoteBookResultMap">
-    select
-    <include refid="Base_Columns_With_Namespace"/> ,<include refid="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteMapper.nick_name_columns"/>
-    from note_book nb
-    left join note n on nb.id=n.note_book_id
-    where nb.id=#{param1}
-  </select>
-
-
-
-
-
-
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >

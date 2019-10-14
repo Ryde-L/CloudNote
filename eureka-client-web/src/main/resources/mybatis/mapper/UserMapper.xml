@@ -22,14 +22,6 @@
     u.id ,u.name,u.pwd,u.phone,u.email,u.gender,u.sculpture,u.status
   </sql>
 
-<!--  test-->
-  <select id="selectMany" resultMap="UserResultMap">
-    select
-        <include refid="user_columns"/> ,<include refid="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteBookMapper.nick_name_columns"/>
-    from user u
-    left join note_book nb on u.id=nb.user_id
-    where u.id=#{param1}
-  </select>
 
   <sql id="Example_Where_Clause" >
     <where >

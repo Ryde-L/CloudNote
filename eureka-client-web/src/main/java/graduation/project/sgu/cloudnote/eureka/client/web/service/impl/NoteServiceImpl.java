@@ -67,7 +67,7 @@ public class NoteServiceImpl implements NoteService {
         NoteBook noteBook = noteBookService.getNoteBook(noteBookId);
         if (noteBook == null) return ResultUtil.error("笔记本对象无效");
 
-        Note note = new Note(null, noteBookId, title);
+        Note note = new Note(null, noteBookId, title,0,null);
         noteMapper.insert(note);
         noteContentService.insert(new NoteContent(null, note.getId(), content));
         return ResultUtil.success("",String.valueOf(note.getId()));
@@ -126,25 +126,28 @@ public class NoteServiceImpl implements NoteService {
      * 通过笔记标签模糊匹配出笔记
      *
      * @param tag 标签
+     * @param userId 用户Id
      * @return ResponseDto
      */
-    public ResponseDto getNoteListByTag(String tag) {
+    public ResponseDto getNoteListByTag(String tag,Integer userId) {
         if (CheckerUtil.checkNulls(tag)) return ResultUtil.error("标签不为空");
-        return ResultUtil.success("", noteMapper.selectByTag(tag));
+        return ResultUtil.success("", noteMapper.selectByTag(tag,userId));
     }
 
     /**
      * 获取笔记详情
      * @param userId 用户id
      * @param id 笔记id
+     * @param pwd 笔记密码
      * @return ResponseDto
      */
-    public ResponseDto getNoteWithNoteBookAndContent(Integer userId, Integer id) {
+    public ResponseDto getNoteWithNoteBookAndContent(Integer userId, Integer id,String pwd) {
         if(CheckerUtil.checkNulls(id)) return ResultUtil.error("缺少参数");
         Note note = noteMapper.selectByIdWithNoteBookAndContent(id);
         if (note==null) return ResultUtil.error("笔记对象不存在");
         if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
         if (!userId.equals( note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
+        if (note.getIshaspwd()==1&&!note.getPwd().equals(pwd)) return ResultUtil.error("笔记密码错误");
         return ResultUtil.success("",note);
     }
 
@@ -163,4 +166,46 @@ public class NoteServiceImpl implements NoteService {
         if (!note.getNoteBook().getUserId().equals(userId)) return ResultUtil.success(null);
         return ResultUtil.success(note);
     }
+
+    /**
+     * 笔记加密
+     * @param userId 用户id
+     * @param noteId 笔记id
+     * @param pwd 笔记密码
+     * @return ResponseDto
+     */
+    public ResponseDto lock(Integer userId, Integer noteId,String pwd){
+        if(CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
+        Note note = noteMapper.selectWithNoteBook(noteId);
+        if (note==null) return ResultUtil.error("笔记对象不存在");
+        if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
+        if (!userId.equals( note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
+        if (note.getIshaspwd()==1) return ResultUtil.error("原先已加密过，请先解密");
+        note.setIshaspwd(1);
+        note.setPwd(pwd);
+        noteMapper.updateByPrimaryKey(note);
+        return ResultUtil.success();
+    }
+
+    /**
+     * 笔记解密
+     * @param userId 用户id
+     * @param noteId 笔记id
+     * @param pwd 笔记密码
+     * @return ResponseDto
+     */
+    public ResponseDto unlock(Integer userId, Integer noteId,String pwd){
+        if(CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
+        Note note = noteMapper.selectWithNoteBook(noteId);
+        if (note==null) return ResultUtil.error("笔记对象不存在");
+        if (!note.getPwd().equals(pwd)) return ResultUtil.error("笔记密码错误");
+        if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
+        if (!userId.equals( note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
+        note.setIshaspwd(0);
+        note.setPwd(null);
+        noteMapper.updateByPrimaryKey(note);
+        return ResultUtil.success();
+    }
+
+
 }

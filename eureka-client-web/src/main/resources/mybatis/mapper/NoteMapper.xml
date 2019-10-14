@@ -5,16 +5,9 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="note_book_id" property="noteBookId" jdbcType="INTEGER" />
     <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="isHasPwd" property="ishaspwd" jdbcType="INTEGER" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
   </resultMap>
-
-  <sql id="nick_name_columns">
-    n.id note_id ,n.note_book_id,n.title note_title
-  </sql>
-
-  <sql id="Base_Columns_With_Namespace" >
-    n.id, n.note_book_id, n.title
-  </sql>
-
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -74,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, note_book_id, title
+    id, note_book_id, title, isHasPwd, pwd
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteExample" >
     select
@@ -106,11 +99,11 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note" useGeneratedKeys="true" keyProperty="id">
-    insert into note (id, note_book_id, title
-      )
-    values (#{id,jdbcType=INTEGER}, #{noteBookId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note" useGeneratedKeys="true" keyProperty="id" >
+    insert into note (id, note_book_id, title, 
+      isHasPwd, pwd)
+    values (#{id,jdbcType=INTEGER}, #{noteBookId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{ishaspwd,jdbcType=INTEGER}, #{pwd,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note" >
     insert into note
@@ -124,6 +117,12 @@
       <if test="title != null" >
         title,
       </if>
+      <if test="ishaspwd != null" >
+        isHasPwd,
+      </if>
+      <if test="pwd != null" >
+        pwd,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -134,6 +133,12 @@
       </if>
       <if test="title != null" >
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="ishaspwd != null" >
+        #{ishaspwd,jdbcType=INTEGER},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -155,6 +160,12 @@
       <if test="record.title != null" >
         title = #{record.title,jdbcType=VARCHAR},
       </if>
+      <if test="record.ishaspwd != null" >
+        isHasPwd = #{record.ishaspwd,jdbcType=INTEGER},
+      </if>
+      <if test="record.pwd != null" >
+        pwd = #{record.pwd,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -164,7 +175,9 @@
     update note
     set id = #{record.id,jdbcType=INTEGER},
       note_book_id = #{record.noteBookId,jdbcType=INTEGER},
-      title = #{record.title,jdbcType=VARCHAR}
+      title = #{record.title,jdbcType=VARCHAR},
+      isHasPwd = #{record.ishaspwd,jdbcType=INTEGER},
+      pwd = #{record.pwd,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -178,13 +191,21 @@
       <if test="title != null" >
         title = #{title,jdbcType=VARCHAR},
       </if>
+      <if test="ishaspwd != null" >
+        isHasPwd = #{ishaspwd,jdbcType=INTEGER},
+      </if>
+      <if test="pwd != null" >
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note" >
     update note
     set note_book_id = #{noteBookId,jdbcType=INTEGER},
-      title = #{title,jdbcType=VARCHAR}
+      title = #{title,jdbcType=VARCHAR},
+      isHasPwd = #{ishaspwd,jdbcType=INTEGER},
+      pwd = #{pwd,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

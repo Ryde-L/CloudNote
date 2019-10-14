@@ -293,6 +293,136 @@ public class NoteExample {
             addCriterion("title not between", value1, value2, "title");
             return (Criteria) this;
         }
+
+        public Criteria andIshaspwdIsNull() {
+            addCriterion("isHasPwd is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdIsNotNull() {
+            addCriterion("isHasPwd is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdEqualTo(Integer value) {
+            addCriterion("isHasPwd =", value, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdNotEqualTo(Integer value) {
+            addCriterion("isHasPwd <>", value, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdGreaterThan(Integer value) {
+            addCriterion("isHasPwd >", value, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("isHasPwd >=", value, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdLessThan(Integer value) {
+            addCriterion("isHasPwd <", value, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdLessThanOrEqualTo(Integer value) {
+            addCriterion("isHasPwd <=", value, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdIn(List<Integer> values) {
+            addCriterion("isHasPwd in", values, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdNotIn(List<Integer> values) {
+            addCriterion("isHasPwd not in", values, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdBetween(Integer value1, Integer value2) {
+            addCriterion("isHasPwd between", value1, value2, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIshaspwdNotBetween(Integer value1, Integer value2) {
+            addCriterion("isHasPwd not between", value1, value2, "ishaspwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdIsNull() {
+            addCriterion("pwd is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdIsNotNull() {
+            addCriterion("pwd is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdEqualTo(String value) {
+            addCriterion("pwd =", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdNotEqualTo(String value) {
+            addCriterion("pwd <>", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdGreaterThan(String value) {
+            addCriterion("pwd >", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdGreaterThanOrEqualTo(String value) {
+            addCriterion("pwd >=", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdLessThan(String value) {
+            addCriterion("pwd <", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdLessThanOrEqualTo(String value) {
+            addCriterion("pwd <=", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdLike(String value) {
+            addCriterion("pwd like", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdNotLike(String value) {
+            addCriterion("pwd not like", value, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdIn(List<String> values) {
+            addCriterion("pwd in", values, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdNotIn(List<String> values) {
+            addCriterion("pwd not in", values, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdBetween(String value1, String value2) {
+            addCriterion("pwd between", value1, value2, "pwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPwdNotBetween(String value1, String value2) {
+            addCriterion("pwd not between", value1, value2, "pwd");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -31,7 +31,6 @@ public interface NoteBookMapper {
 
     int updateByPrimaryKey(NoteBook record);
 
-    NoteBook selectByIdContainsNoteList(Integer id);
 
     @Select("select * from note_book where id=#{param}")
     NoteBook get(Integer id);
