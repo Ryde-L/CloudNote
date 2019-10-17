@@ -255,7 +255,7 @@
     function drag() {
         arrow();
         var svg_chile_element = document.getElementById("svg_content").children;
-        for (var i = 2; i < svg_chile_element.length; i++) {
+        for (var i = 0; i < svg_chile_element.length; i++) {
             if (svg_chile_element[i].tagName !== 'defs') {
                 var e = SVG.adopt(svg_chile_element[i]);
                 e.draggable();//设置为可拖动
@@ -688,6 +688,8 @@
 
         var params=null;
         var noteOper=null;
+        if (note==null)
+            note=getUrlParam("note");
         //添加
         if (isFirstSave) {
             noteOper = '/note/add';

@@ -329,7 +329,7 @@
             <div class="right-top-left-div">
                 <img src="../icon/un-clock.png" name="over-leave" operType="icon" icon="clock.png" tips="设置提醒" class="right-icons">
                 <img src="../icon/un-delete.png" name="over-leave" operType="icon" icon="delete.png" tips="删除" class="right-icons" id="note-delete-img">
-                <img src="../icon/un-share.png" name="over-leave" operType="icon" icon="share.png" tips="分享" class="right-icons">
+                <img src="../icon/un-share.png" name="over-leave" operType="icon" icon="share.png" tips="分享" class="right-icons" id="note-share-img">
                 <div id="tags-div"></div>
                 <img src="../icon/un-tag.png" name="over-leave" operType="icon" icon="tag.png" tips="添加标签" class="right-icons" onclick="showTagAdd()">
 
@@ -440,6 +440,8 @@
         document.getElementById("right-top-div").style.display='';
         document.getElementById("right-note-content-div").style.height='94%';
         document.getElementById("note-show-iframe").setAttribute("src","show.html?note="+ e.data.id);
+        $("#note-delete-img").click({id:e.data.id},notesDelete);
+        $("#note-share-img").click({id:e.data.id},showShare);
         getTagList();
     }
 
@@ -533,17 +535,17 @@
                         var secondDiv2 = document.createElement("div");
                         secondDiv2.setAttribute("class","notebook-operation-div");
                         topDiv.append(secondDiv2);
-
-                        var deleteImg=document.createElement("img");
-                        deleteImg.setAttribute("src","../icon/un-delete.png");
-                        deleteImg.setAttribute("name","over-leave");
-                        deleteImg.setAttribute("operType","icon");
-                        deleteImg.setAttribute("icon","delete.png");
-                        deleteImg.setAttribute("tips","删除");
-                        deleteImg.setAttribute("class","center-icons");
-                        $(deleteImg).click({id:data['data'][i]['id']},noteBooksDelete);
-                        secondDiv2.append(deleteImg);
-
+                        if (data['data'][i]['title']!='默认') {
+                            var deleteImg = document.createElement("img");
+                            deleteImg.setAttribute("src", "../icon/un-delete.png");
+                            deleteImg.setAttribute("name", "over-leave");
+                            deleteImg.setAttribute("operType", "icon");
+                            deleteImg.setAttribute("icon", "delete.png");
+                            deleteImg.setAttribute("tips", "删除");
+                            deleteImg.setAttribute("class", "center-icons");
+                            $(deleteImg).click({id: data['data'][i]['id']}, noteBooksDelete);
+                            secondDiv2.append(deleteImg);
+                        }
                         var hr=document.createElement("HR");
                         hr.setAttribute("class","notebook-hr");
                         noteBooksDiv.append(topDiv);
@@ -1100,7 +1102,7 @@
                     if (data["data"]['isHasPwd'] == 1)
                         pwd = '<br>提取码为：' + data["data"]['pwd'];
                     document.getElementById("share-div").style.display='none';
-                    layer.alert('分享创建成功!链接为：<br>' + data["data"]['link'] + pwd);
+                    layer.alert('分享创建成功!链接为：<br>' + window.location.host+'/'+data["data"]['link'] + pwd);
                 } else {
                     layer.msg('分享创建失败!' + data["msg"], {icon: 2, time: 3500});
                 }
@@ -1111,7 +1113,7 @@
         });
     }
 
-    /*l加密笔记*/
+    /*加密笔记*/
     function lock(e) {
         layer.prompt({title: '输入密码', formType: 1}, function(pass, index){
             layer.close(index);
