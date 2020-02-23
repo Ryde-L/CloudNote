@@ -35,4 +35,22 @@ public class UserServiceImpl implements UserService {
     public User getUser(String username,String pwd){
          return userMapper.select(username, pwd);
     }
+
+    /**
+     * 用户名有效性检查
+     * @param username 用户名
+     * @return true有效；false无效
+     */
+    public boolean usernameValidate(String username){
+         return userMapper.isUsernameDuplicate(username)==null;
+    }
+
+    /**
+     * 用户名有效性检查
+     * @param user 用户
+     * @return 受影响行数
+     */
+    public int insert(User user){
+        return userMapper.insert(user);
+    }
 }

@@ -89,4 +89,15 @@ public class JedisClientPool {
         jedis.close();
         return result;
     }
+
+    /**
+     * 清空当前数据库缓存
+     * @return result
+     */
+    public String flushDB() {
+        Jedis jedis = jedisPool.getResource();
+        String result = jedis.flushDB();
+        jedis.close();
+        return result;
+    }
 }

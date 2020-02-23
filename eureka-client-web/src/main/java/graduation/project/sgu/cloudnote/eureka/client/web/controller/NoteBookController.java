@@ -28,19 +28,19 @@ public class NoteBookController {
 
     @RequestMapping(value = {"/add"})
     public ResponseDto add(@RequestParam("title") String title, HttpSession session){
-        Integer userId = (Integer) session.getAttribute("userId");
+        Integer userId = Integer.valueOf((String)session. getAttribute("userId"));
         return noteBookService.createNoteBook(userId,title);
     }
 
     @RequestMapping(value = {"/delete"})
     public ResponseDto del(@RequestParam("note_book_id") int noteBookId, HttpSession session){
-        Integer userId = (Integer) session. getAttribute("userId");
+        Integer userId = Integer.valueOf((String)session. getAttribute("userId"));
         return noteBookService.remove(userId,noteBookId);
     }
 
     @RequestMapping(value = {"/getNoteBooks"})
     public ResponseDto getNoteBooks(HttpSession session){
-        Integer userId = (Integer) session. getAttribute("userId");
+        Integer userId = Integer.valueOf((String)session. getAttribute("userId"));
         return noteBookService.getNoteBooks(userId);
     }
 
