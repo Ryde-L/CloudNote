@@ -82,7 +82,7 @@ form li{
 	background: url(../images/icons.png) no-repeat -22px 1px;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"],select {
 	font-family: 'Droid Sans', sans-serif;
 	width:70%;
 	padding: 0.5em 2em 0.5em 1em;
@@ -92,7 +92,7 @@ input[type="text"], input[type="password"] {
 	background: none;
 	border:none;
 }
-input[type="text"]:hover, input[type="password"]:hover{
+input[type="text"]:hover, input[type="password"],select:hover{
 	color:#9E61A3;
 	
 }

@@ -52,10 +52,17 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseDto register(@RequestParam("username")String username, @RequestParam("pwd")String pwd,@RequestParam("pwd_check")String pwdCheck, @RequestParam("phone")String phone,@RequestParam("email")String email,@RequestParam("gender")Integer gender, HttpServletResponse response) throws IOException {
+    public ResponseDto register(@RequestParam(value = "username",required=false)String username,
+                                @RequestParam(value = "pwd",required=false)String pwd,
+                                @RequestParam(value = "pwd_check",required=false)String pwdCheck,
+                                @RequestParam(value = "phone",required=false)String phone,
+                                @RequestParam(value = "email",required=false)String email,
+                                @RequestParam(value = "gender",required=false)Integer gender,
+                                HttpServletResponse response) throws IOException {
         if (CheckerUtil.checkNulls(username, pwd,pwdCheck)) return ResultUtil.error("用户名或密码不为空");
         if (!pwd.equals(pwdCheck)) return ResultUtil.error("两次密码不相同");
         if (!userService.usernameValidate(username)) return ResultUtil.error("用户名重复");
+        if (gender!=null&&gender!=1&&gender!=2) return ResultUtil.error("性别选项出错");
         User user = new User(null,username,pwd,phone,email,gender,null,1);
         userService.insert(user);
 

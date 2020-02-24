@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>登陆</title>
+    <title>注册</title>
     <link href="../lib/login/css/login.css" rel="stylesheet" type="text/css" media="all"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -32,7 +32,7 @@
 <div class="message warning">
     <div class="inset">
         <div class="login-head">
-            <h1>登陆页面</h1>
+            <h1>注册页面</h1>
             <div class="alert-close"></div>
         </div>
         <form id="form" onsubmit="return false" action="#" method="post">
@@ -42,11 +42,23 @@
             <div class="clear"></div>
             <li>
                 <input type="password" name="pwd"  placeholder="密码"> <a href="#" class="icon lock"></a>
-                <div class="clear"></div>
             </li>
+            <div class="clear"></div>
+            <li>
+                <input type="password" name="pwd_check" placeholder="确认密码"> <a href="#" class="icon lock"></a>
+            </li>
+            <div class="clear"></div>
+            <li>
+                <select type="select" name="gender" style="width: 100%">
+                    <option value="1" selected>男</option>
+                    <option value="2">女</option>
+                </select>
+            </li>
+            <div class="clear"></div>
+
             <div class="submit" style="display: flex;justify-content: space-between">
-                <input type="submit" onclick="login()" value="登陆" style="display: flex;justify-content: center;">
-                <input type="submit" value="去注册" onclick='location.href=("register.html")' style="display: flex;justify-content: center;">
+                <input type="submit" onclick="register()" value="注册" style="display: flex;justify-content: center;">
+                <input type="submit" value="去登陆" onclick='location.href=("login.html")' style="display: flex;justify-content: center;">
                 <div class="clear"></div>
             </div>
 
@@ -63,17 +75,18 @@
 <script type="text/javascript" src="../lib/jq/jquery.min.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
 <script>
-    function login() {
+    function register() {
         $.ajax({
             type: "POST",
             dataType: "json",//预期服务器返回的数据类型
-            url: "/user/login",
+            url: "/user/register",
             data: $('#form').serialize(),
             success: function (data) {
+                console.log(data);
                 if (data['isSuccessful'] === '1')
                     document.location.href=data['msg'];
                 else
-                    layer.msg('登陆失败!'+data['msg'],{icon:2,time:2000});
+                    layer.msg('注册失败!'+data['msg'],{icon:2,time:2000});
             },
             error: function () {
                 layer.msg('发生异常!',{icon:2,time:2000});
