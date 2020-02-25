@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: zuul
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8671/eureka/,http://localhost:8672/eureka/
+server:
+  port: 8800
