@@ -29,7 +29,7 @@ public class RecycleBinController {
      */
     @RequestMapping(value = {"/noteThrowAway"})
     public ResponseDto noteThrowAway(@RequestParam("note_id[]")Integer[] noteIds, HttpSession session) {
-        Integer  userId = (Integer) session.getAttribute("userId");
+        Integer  userId = Integer.valueOf ((String) session.getAttribute("userId"));
         return recycleBinService.throwNoteIntoRecycleBin(userId,noteIds);
     }
 
@@ -38,7 +38,7 @@ public class RecycleBinController {
      */
     @RequestMapping(value = {"/delete"})
     public ResponseDto removeNotes(@RequestParam("id[]")Integer[] ids, HttpSession session) {
-        Integer  userId = (Integer) session.getAttribute("userId");
+        Integer  userId = Integer.valueOf ((String) session.getAttribute("userId"));
         return recycleBinService.removeNotes(userId,ids);
     }
 
@@ -47,7 +47,7 @@ public class RecycleBinController {
      */
     @RequestMapping(value = {"/noteRecover"})
     public ResponseDto noteRecover(@RequestParam("note_id")Integer noteId, HttpSession session) {
-        Integer  userId = (Integer) session.getAttribute("userId");
+        Integer  userId = Integer.valueOf ((String) session.getAttribute("userId"));
         return recycleBinService.noteRecover(userId,noteId);
     }
 
@@ -56,7 +56,7 @@ public class RecycleBinController {
      */
     @RequestMapping(value = {"/getNoteWithNoteBookAndContent"})
     public ResponseDto getNoteWithNoteBookAndContent(@RequestParam("note")Integer binId, HttpSession session) {
-        Integer  userId = (Integer) session.getAttribute("userId");
+        Integer  userId = Integer.valueOf ((String) session.getAttribute("userId"));
         return recycleBinService.getNoteWithNoteBookAndContent(userId,binId);
     }
 
@@ -65,7 +65,7 @@ public class RecycleBinController {
      */
     @RequestMapping(value = {"/getNotes"})
     public ResponseDto getNoteListByUserId( HttpSession session) {
-        Integer  userId = (Integer) session.getAttribute("userId");
+        Integer  userId = Integer.valueOf ((String) session.getAttribute("userId"));
         return recycleBinService.getNotesByUserId(userId);
     }
 

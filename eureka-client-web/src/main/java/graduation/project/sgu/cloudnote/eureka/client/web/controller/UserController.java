@@ -22,19 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 @Transactional(rollbackFor = Exception.class)
 public class UserController {
 
-    @Autowired
-    UserService userService;
-
-//    @RequestMapping(value={"/register"})
-    @ResponseBody
-    public ResponseDto register(HttpServletRequest request) {
-        String username = request.getParameter("username");
-        String pwd = request.getParameter("pwd");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        String gender = request.getParameter("gender");
-        return userService.register(username, pwd, phone, email, gender);
-    }
 
 
 }

@@ -16,10 +16,6 @@ public class User {
 
     private String pwd;
 
-    private String phone;
-
-    private String email;
-
     private Integer gender;
 
     private String sculpture;

@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseDto handleMissingServletRequestParameterException(MissingServletRequestParameterException e){
         System.out.println("找不到参数");
+        e.printStackTrace();
         return ResultUtil.error(HttpStatus.BAD_REQUEST.toString(),"部分参数可能缺少，请检查参数");
     }
 
@@ -37,6 +38,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseDto handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
         System.out.println("抛出数据绑定异常");
+        e.printStackTrace();
         return ResultUtil.error(HttpStatus.BAD_REQUEST.toString(),"参数绑定异常，请检查参数格式");
     }
 
@@ -44,6 +46,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseDto handleNumberFormatException(NumberFormatException e){
         System.out.println("参数格式转换异常");
+        e.printStackTrace();
         return ResultUtil.error(HttpStatus.BAD_REQUEST.toString(),"参数格式转换异常，请检查参数格式");
     }
 

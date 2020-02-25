@@ -24,15 +24,4 @@ public interface UserService {
 
     User getUser(String username, String pwd);
     User getUser(Integer id);
-
-    /**
-     * 用户注册
-     * @param username 用户名 非空
-     * @param pwd 密码 非空
-     * @param phone 手机 非空
-     * @param email 邮箱
-     * @param gender 性别
-     * @return 返回ResponseDto
-     */
-    public ResponseDto register(String username, String pwd, String phone, String email, String gender);
 }

@@ -2,6 +2,8 @@ package graduation.project.sgu.cloudnote.eureka.client.web.controller;
 
 import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.ShareService;
+import graduation.project.sgu.cloudnote.eureka.client.web.utils.CheckerUtil;
+import graduation.project.sgu.cloudnote.eureka.client.web.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -37,17 +39,19 @@ public class ShareController {
      * 创建分享
      */
     @RequestMapping(value = {"/create"})
-    public ResponseDto add(HttpServletRequest request) {
-        Integer userId = (Integer) request.getSession().getAttribute("userId");
+    public ResponseDto add(HttpServletRequest request,
+                           @RequestParam(value = "is_has_pwd",required = false) Integer isHasPwd,
+                           @RequestParam(value = "days",required = false) Integer days) {
+        Integer userId = Integer.valueOf ((String) request.getSession().getAttribute("userId"));
         Integer noteId = Integer.valueOf(request.getParameter("note_id"));
-        int isHasPwd = Integer.parseInt(request.getParameter("is_has_pwd"));
-        String pwd = null;
+        if (CheckerUtil.checkNulls(isHasPwd,days))return ResultUtil.error("缺少参数");
+
+        String pwd;
         if (isHasPwd==1) pwd= UUID.randomUUID().toString().substring(0,4);
         else pwd=null;
 
         int limitType =0;
         int limitContent =0;
-        int days=Integer.parseInt(request.getParameter("days"));
         if (days!=0) {
             limitType = 1;
             limitContent = days;
@@ -68,7 +72,7 @@ public class ShareController {
      */
     @RequestMapping(value = {"/cancel"})
     public ResponseDto cancel( HttpSession session,@RequestParam("share_id") Integer shareId) {
-        return shareService.cancel((Integer) session.getAttribute("userId"),shareId);
+        return shareService.cancel(Integer.valueOf ((String) session.getAttribute("userId")),shareId);
     }
 
     /**
@@ -76,6 +80,6 @@ public class ShareController {
      */
     @RequestMapping(value = {"/save"})
     public ResponseDto save( HttpSession session,@RequestParam("note_book_id") Integer noteBookId,@RequestParam("pwd") String pwd, @RequestParam("link_suffix")String linkSuffix){
-        return shareService.save((Integer) session.getAttribute("userId"),noteBookId, shareLinkPrefix + linkSuffix,  pwd);
+        return shareService.save(Integer.valueOf ((String) session.getAttribute("userId")),noteBookId, shareLinkPrefix + linkSuffix,  pwd);
     }
 }

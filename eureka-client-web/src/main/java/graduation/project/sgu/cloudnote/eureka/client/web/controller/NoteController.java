@@ -89,7 +89,7 @@ public class NoteController {
             // 因为前台对参数进行了 url 编码, 在此进行解码
             params = URLDecoder.decode(params, "utf-8");
         }
-        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        Integer userId = Integer.valueOf ((String) request.getSession().getAttribute("userId"));
         HashMap map = JsonUtil.jsonToPojo(params, HashMap.class);
         return noteService.update(userId,Integer.valueOf((String) map.get("note")),(String) map.get("title"), (String) map.get("content"));
 

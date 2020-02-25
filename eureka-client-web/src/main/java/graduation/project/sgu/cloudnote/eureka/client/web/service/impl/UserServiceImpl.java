@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     UserMapper userMapper;
@@ -50,25 +49,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.select(username, pwd);
     }
 
-    /**
-     * 用户注册
-     * @param username 用户名 非空
-     * @param pwd 密码 非空
-     * @param phone 手机 非空
-     * @param email 邮箱
-     * @param gender 性别
-     * @return ResponseDto
-     */
-    public ResponseDto register(String username, String pwd, String phone, String email, String gender) {
-        if (CheckerUtil.checkNulls(username, pwd, phone)) return ResultUtil.error("缺少必填参数", null);
-        if (CheckerUtil.checkNull(gender)) gender = "0";
-        if (isValidLogin(username, pwd)) return ResultUtil.error("不要重复注册", null);
-
-        User user = new User(null, username, pwd, phone, email, Integer.valueOf(gender), null, 1);
-        userMapper.insert(user);
-        noteBookService.insert(new NoteBook(null, user.getId(), "默认", 0));
-        return ResultUtil.success("", null);
-    }
 
     public User getUser(Integer id){
         return userMapper.selectByPrimaryKey(id);

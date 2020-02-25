@@ -36,7 +36,7 @@ public class FileController {
             String dir = request.getParameter("dir");
             System.out.println(dir);
             System.out.println(imgFile.getOriginalFilename());
-            newName = Calendar.getInstance().getTime().getTime() + (Integer)request.getSession().getAttribute("userId") + imgFile.getOriginalFilename();
+            newName = Calendar.getInstance().getTime().getTime() + Integer.valueOf ((String) request.getSession().getAttribute("userId")) + imgFile.getOriginalFilename();
 
             if (dir.equals("image")) {
                 File realDir=new File(PathUtil.getContentImagePath());

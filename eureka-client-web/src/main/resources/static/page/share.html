@@ -147,7 +147,15 @@
     function svgViewBoxChange(type) {
         var svg = document.getElementById("svg_content");
         var backgroud_grid = document.getElementById("backgroud_grid");
-        var box=backgroud_grid.getBBox();
+        if (backgroud_grid==null){
+            var canvas_div = document.getElementById("canvas");
+            var box=new Array();
+            box['width']=canvas_div.offsetWidth;
+            box['height']=canvas_div.offsetHeight;
+            console.log(box['width']);
+            console.log(box['height']);
+        }else
+            var box=backgroud_grid.getBBox();
         if (svg.getAttribute("viewBox") == null)
             svg.setAttribute("viewBox", '0 0 ' + box['width'] + ' ' + box['height']);
 

@@ -1,6 +1,5 @@
 package graduation.project.sgu.cloudnote.sso.controller;
 
-import com.netflix.discovery.converters.Auto;
 import graduation.project.sgu.cloudnote.sso.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.sso.pojo.User;
 import graduation.project.sgu.cloudnote.sso.service.UserService;
@@ -55,15 +54,13 @@ public class UserController {
     public ResponseDto register(@RequestParam(value = "username",required=false)String username,
                                 @RequestParam(value = "pwd",required=false)String pwd,
                                 @RequestParam(value = "pwd_check",required=false)String pwdCheck,
-                                @RequestParam(value = "phone",required=false)String phone,
-                                @RequestParam(value = "email",required=false)String email,
                                 @RequestParam(value = "gender",required=false)Integer gender,
-                                HttpServletResponse response) throws IOException {
+                                HttpServletResponse response) {
         if (CheckerUtil.checkNulls(username, pwd,pwdCheck)) return ResultUtil.error("用户名或密码不为空");
         if (!pwd.equals(pwdCheck)) return ResultUtil.error("两次密码不相同");
         if (!userService.usernameValidate(username)) return ResultUtil.error("用户名重复");
         if (gender!=null&&gender!=1&&gender!=2) return ResultUtil.error("性别选项出错");
-        User user = new User(null,username,pwd,phone,email,gender,null,1);
+        User user = new User(null,username,pwd,gender,null,1);
         userService.insert(user);
 
         //生成token
