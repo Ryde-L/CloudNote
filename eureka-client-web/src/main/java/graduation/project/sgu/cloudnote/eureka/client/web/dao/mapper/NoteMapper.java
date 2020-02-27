@@ -43,6 +43,8 @@ public interface NoteMapper {
             "and nb.user_id=#{param2}")
     Set<Note> selectByTag(String tag, Integer userId);
 
+    @Select("select * from note where note_book_id=#{param}")
+    List<Note> selectByNoteBookId(Integer noteBookId);
 
     /**
      * 获取Note，包含笔记内容和笔记本相关的东西

@@ -40,6 +40,9 @@ public interface NoteBookMapper {
     })
     List<NoteBook>  selectUserNoteBooksWithNoteList(Integer userId);
 
+    @Select("select * from note_book where user_id=#{param}")
+    List<NoteBook>  selectUserNoteBooks(Integer userId);
+
     /**
      * 根据笔记本id获取包含标签的笔记集合
      * @param id 笔记本id
