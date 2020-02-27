@@ -2,8 +2,21 @@ spring:
   application:
     name: zuul
 eureka:
+  instance:
+    instance-id: cloudnote.com
+    prefer-ip-address: true
   client:
     service-url:
       defaultZone: http://localhost:8671/eureka/,http://localhost:8672/eureka/
+
 server:
   port: 8800
+
+zuul:
+  routes:
+    sso-api:
+      path: /sso/**
+      serviceId: SSO
+    main-api:
+      path: /**
+      serviceId: EUREKA-CLIENT-WEB

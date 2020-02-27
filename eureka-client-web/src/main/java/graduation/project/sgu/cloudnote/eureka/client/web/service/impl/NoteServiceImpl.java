@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-
 /**
  * <p>
  * 笔记表 Service 接口实现
@@ -147,7 +145,7 @@ public class NoteServiceImpl implements NoteService {
         if (note==null) return ResultUtil.error("笔记对象不存在");
         if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
         if (!userId.equals( note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
-        if (note.getIshaspwd()==1&&!note.getPwd().equals(pwd)) return ResultUtil.error("笔记密码错误");
+        if (note.getIsHasPwd()==1&&!note.getPwd().equals(pwd)) return ResultUtil.error("笔记密码错误");
         return ResultUtil.success("",note);
     }
 
@@ -180,8 +178,8 @@ public class NoteServiceImpl implements NoteService {
         if (note==null) return ResultUtil.error("笔记对象不存在");
         if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
         if (!userId.equals( note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
-        if (note.getIshaspwd()==1) return ResultUtil.error("原先已加密过，请先解密");
-        note.setIshaspwd(1);
+        if (note.getIsHasPwd()==1) return ResultUtil.error("原先已加密过，请先解密");
+        note.setIsHasPwd(1);
         note.setPwd(pwd);
         noteMapper.updateByPrimaryKey(note);
         return ResultUtil.success();
@@ -201,7 +199,7 @@ public class NoteServiceImpl implements NoteService {
         if (!note.getPwd().equals(pwd)) return ResultUtil.error("笔记密码错误");
         if (note.getNoteBook()==null) return ResultUtil.error("笔记本对象不存在");
         if (!userId.equals( note.getNoteBook().getUserId())) return ResultUtil.error("非法操作");
-        note.setIshaspwd(0);
+        note.setIsHasPwd(0);
         note.setPwd(null);
         noteMapper.updateByPrimaryKey(note);
         return ResultUtil.success();

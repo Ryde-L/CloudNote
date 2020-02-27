@@ -41,36 +41,38 @@ public class LoginFilter implements Filter {
             String uri = request.getRequestURI();
             if (uri.lastIndexOf('.')!=-1)
                 postfix=uri.substring(uri.lastIndexOf('.'));
-//            if (uri.contains("login"))
-//                filterChain.doFilter(servletRequest, servletResponse);
-//            else if (uri.contains("register"))
-//                filterChain.doFilter(servletRequest, servletResponse);
+            if (uri.contains("login"))
+                filterChain.doFilter(servletRequest, servletResponse);
+            else if (uri.contains("register"))
+                filterChain.doFilter(servletRequest, servletResponse);
             if (resourceSet.contains(postfix))//静态资源放行
                 filterChain.doFilter(servletRequest, servletResponse);
             else {
                 //token有效性检查
                 Cookie[] cookies = request.getCookies();
-                for (Cookie c:cookies){
-                    if (c.getName().equals("token")){
-                            String json = restTemplate.getForEntity("http://sso/user/checkToken?token="+c.getValue(), String.class).getBody();
-                        if (CheckerUtil.checkNulls(json))
-                            response.sendRedirect("http://localhost:9010/page/login.html");
-                        ResponseDto result = JsonUtil.jsonToPojo(json, ResponseDto.class);
-                        if (result!=null&&"1".equals(result.getIsSuccessful()) ) { //验证通过
-                            HttpSession session = request.getSession();
-                            session.setAttribute("userId", result.getData());
-                            session.setMaxInactiveInterval(3600);
-                            filterChain.doFilter(request, response);
-                            return;
-                        } else break;//验证不通过
+                if (cookies!=null) {
+                    for (Cookie c : cookies) {
+                        if (c.getName().equals("token")) {
+                            String json = restTemplate.getForEntity("http://sso/user/checkToken?token=" + c.getValue(), String.class).getBody();
+                            if (CheckerUtil.checkNulls(json))
+                                response.sendRedirect("http://cloudnote.com:9010/sso/page/login.html");
+                            ResponseDto result = JsonUtil.jsonToPojo(json, ResponseDto.class);
+                            if (result != null && "1".equals(result.getIsSuccessful())) { //验证通过
+                                HttpSession session = request.getSession();
+                                session.setAttribute("userId", result.getData());
+                                session.setMaxInactiveInterval(3600);
+                                filterChain.doFilter(request, response);
+                                return;
+                            } else break;//验证不通过
+                        }
                     }
                 }
                 //不放行，未找到cookie或验证不通过
-                response.sendRedirect("http://localhost:9010/page/login.html");
+                response.sendRedirect("http://cloudnote.com:9010/sso/page/login.html");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("http://localhost:9010/page/login.html");
+            response.sendRedirect("http://cloudnote.com:9010/sso/page/login.html");
         }
 
 

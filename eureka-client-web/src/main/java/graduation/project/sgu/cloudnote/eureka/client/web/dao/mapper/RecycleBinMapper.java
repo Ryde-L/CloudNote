@@ -1,8 +1,6 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper;
 
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin;
-import graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBinExample;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -10,9 +8,6 @@ import java.util.List;
 
 @Repository
 public interface RecycleBinMapper {
-    int countByExample(RecycleBinExample example);
-
-    int deleteByExample(RecycleBinExample example);
 
     int deleteByPrimaryKey(Integer id);
 
@@ -20,13 +15,7 @@ public interface RecycleBinMapper {
 
     int insertSelective(RecycleBin record);
 
-    List<RecycleBin> selectByExample(RecycleBinExample example);
-
     RecycleBin selectByPrimaryKey(Integer id);
-
-    int updateByExampleSelective(@Param("record") RecycleBin record, @Param("example") RecycleBinExample example);
-
-    int updateByExample(@Param("record") RecycleBin record, @Param("example") RecycleBinExample example);
 
     int updateByPrimaryKeySelective(RecycleBin record);
 

@@ -16,7 +16,7 @@ public class Note {
 
     private String title;
 
-    private Integer ishaspwd;
+    private Integer isHasPwd;
 
     private String pwd;
 
@@ -27,11 +27,11 @@ public class Note {
     private List<NoteTag> noteTagList;
 
 
-    public Note(Integer id, Integer noteBookId, String title, Integer ishaspwd, String pwd) {
+    public Note(Integer id, Integer noteBookId, String title, Integer isHasPwd, String pwd) {
         this.id = id;
         this.noteBookId = noteBookId;
         this.title = title;
-        this.ishaspwd = ishaspwd;
+        this.isHasPwd = isHasPwd;
         this.pwd = pwd;
     }
 }

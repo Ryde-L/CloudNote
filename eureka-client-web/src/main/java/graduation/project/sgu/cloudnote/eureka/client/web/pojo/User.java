@@ -16,7 +16,7 @@ public class User {
 
     private Integer gender;
 
-    private String sculpture;
+    private Integer isAdmin;
 
     private Integer status;
 

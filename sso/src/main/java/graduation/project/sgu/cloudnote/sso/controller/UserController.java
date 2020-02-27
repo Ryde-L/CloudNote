@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -39,14 +38,14 @@ public class UserController {
         String token = "token_" + user.getId() + "_" + UUID.randomUUID().toString();
         Cookie cookie = new Cookie("token",token);
         cookie.setPath("/");
-        cookie.setDomain("localhost");
+        cookie.setDomain("cloudnote.com");
         cookie.setMaxAge(7200);
         response.addCookie(cookie);
         //redis
         jedisClientPool.set(token, String.valueOf(user.getId()));
         jedisClientPool.expire(token,3600);
         //TODO 链接待改
-        return ResultUtil.success("http://localhost:9000/page/new.html");
+        return ResultUtil.success("http://cloudnote.com:9000/page/new.html");
     }
 
 
@@ -67,13 +66,13 @@ public class UserController {
         String token = "token_" + user.getId() + "_" + UUID.randomUUID().toString();
         Cookie cookie = new Cookie("token",token);
         cookie.setPath("/");
-        cookie.setDomain("localhost");
+        cookie.setDomain("cloudnote.com");
         cookie.setMaxAge(7200);
         response.addCookie(cookie);
         //redis
         jedisClientPool.set(token, String.valueOf(user.getId()));
         jedisClientPool.expire(token,3600);
-        return ResultUtil.success("http://localhost:9000/page/new.html");
+        return ResultUtil.success("http://cloudnote.com:9000/page/new.html");
 
     }
 

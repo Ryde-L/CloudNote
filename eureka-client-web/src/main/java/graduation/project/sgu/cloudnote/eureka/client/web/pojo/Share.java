@@ -18,7 +18,7 @@ public class Share {
 
     private String link;
 
-    private Integer ishaspwd;
+    private Integer isHasPwd;
 
     private String pwd;
 

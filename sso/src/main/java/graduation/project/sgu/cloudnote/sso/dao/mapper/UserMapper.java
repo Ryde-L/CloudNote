@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
 
-    @Insert("insert into user (id, name, pwd, gender, sculpture, status)\n" +
+    @Insert("insert into user (id, name, pwd, gender, is_admin, status)\n" +
             "    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, \n" +
-            "    #{gender,jdbcType=INTEGER}, #{sculpture,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})")
+            "    #{gender,jdbcType=INTEGER}, #{isAdmin,jdbcType=INTEGER}, #{status,jdbcType=INTEGER})")
     @Options(useGeneratedKeys = true)
     int insert(User record);
 

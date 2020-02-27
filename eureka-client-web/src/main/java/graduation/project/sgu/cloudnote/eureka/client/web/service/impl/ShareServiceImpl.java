@@ -6,10 +6,7 @@ import graduation.project.sgu.cloudnote.eureka.client.web.pojo.*;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.*;
 import graduation.project.sgu.cloudnote.eureka.client.web.utils.CheckerUtil;
 import graduation.project.sgu.cloudnote.eureka.client.web.utils.ResultUtil;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +72,7 @@ public class ShareServiceImpl implements ShareService {
         if (CheckerUtil.checkNulls(link)) return ResultUtil.error("链接不能为空");
         if (share == null) return ResultUtil.error("无效链接");
         if (share.getStatus() != 1) return ResultUtil.error("该分享链接已无效");
-        if (share.getIshaspwd() == 1) {//分享密码校验
+        if (share.getIsHasPwd() == 1) {//分享密码校验
             if (CheckerUtil.checkNulls(pwd)) return ResultUtil.error("请输入提取码");
             if (!pwd.equals(share.getPwd())) return ResultUtil.error("提取码不正确");//TODO 密码加密
         }
