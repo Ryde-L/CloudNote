@@ -59,7 +59,7 @@ public class UserController {
         if (!pwd.equals(pwdCheck)) return ResultUtil.error("两次密码不相同");
         if (!userService.usernameValidate(username)) return ResultUtil.error("用户名重复");
         if (gender!=null&&gender!=1&&gender!=2) return ResultUtil.error("性别选项出错");
-        User user = new User(null,username,pwd,gender,null,1);
+        User user = new User(null,username,pwd,gender,0,1);
         userService.insert(user);
 
         //生成token

@@ -18,5 +18,5 @@ zuul:
       path: /sso/**
       serviceId: SSO
     main-api:
-      path: /**
+      path: /note/**
       serviceId: EUREKA-CLIENT-WEB

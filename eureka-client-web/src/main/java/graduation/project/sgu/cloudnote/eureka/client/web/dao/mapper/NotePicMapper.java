@@ -11,11 +11,7 @@ public interface NotePicMapper {
 
     int insert(NotePic record);
 
-    int insertSelective(NotePic record);
-
     NotePic selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(NotePic record);
 
     int updateByPrimaryKey(NotePic record);
 }

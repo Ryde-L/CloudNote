@@ -55,7 +55,7 @@ public class LoginFilter implements Filter {
                         if (c.getName().equals("token")) {
                             String json = restTemplate.getForEntity("http://sso/user/checkToken?token=" + c.getValue(), String.class).getBody();
                             if (CheckerUtil.checkNulls(json))
-                                response.sendRedirect("http://cloudnote.com:9010/sso/page/login.html");
+                                response.sendRedirect("http://cloudnote.com:9010/page/login.html");
                             ResponseDto result = JsonUtil.jsonToPojo(json, ResponseDto.class);
                             if (result != null && "1".equals(result.getIsSuccessful())) { //验证通过
                                 HttpSession session = request.getSession();
@@ -68,11 +68,11 @@ public class LoginFilter implements Filter {
                     }
                 }
                 //不放行，未找到cookie或验证不通过
-                response.sendRedirect("http://cloudnote.com:9010/sso/page/login.html");
+                response.sendRedirect("http://cloudnote.com:9010/page/login.html");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("http://cloudnote.com:9010/sso/page/login.html");
+            response.sendRedirect("http://cloudnote.com:9010/page/login.html");
         }
 
 

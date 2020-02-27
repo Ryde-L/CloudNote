@@ -10,16 +10,24 @@ import java.util.Set;
 @Repository
 public interface NoteMapper {
 
+    @Delete("delete from note where id = #{id,jdbcType=INTEGER}")
     int deleteByPrimaryKey(Integer id);
 
+    @Insert(" insert into note (id, note_book_id, title, is_has_pwd, pwd)\n" +
+            "    values (#{id,jdbcType=INTEGER}, #{noteBookId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, \n" +
+            "      #{isHasPwd,jdbcType=INTEGER}, #{pwd,jdbcType=VARCHAR})")
+    @Options(useGeneratedKeys = true)
     int insert(Note record);
 
-    int insertSelective(Note record);
-
+    @Select(" select * from note where id = #{id,jdbcType=INTEGER}")
     Note selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Note record);
-
+    @Update("update note\n" +
+            "    set note_book_id = #{noteBookId,jdbcType=INTEGER},\n" +
+            "      title = #{title,jdbcType=VARCHAR},\n" +
+            "      isHasPwd = #{ishaspwd,jdbcType=INTEGER},\n" +
+            "      pwd = #{pwd,jdbcType=VARCHAR}\n" +
+            "    where id = #{id,jdbcType=INTEGER}")
     int updateByPrimaryKey(Note record);
 
     /**
@@ -35,8 +43,6 @@ public interface NoteMapper {
             "and nb.user_id=#{param2}")
     Set<Note> selectByTag(String tag, Integer userId);
 
-    @Select("select * from note where note_book_id=#{param}")
-    List<Note> selectByNoteBookId(Integer noteBookId);
 
     /**
      * 获取Note，包含笔记内容和笔记本相关的东西

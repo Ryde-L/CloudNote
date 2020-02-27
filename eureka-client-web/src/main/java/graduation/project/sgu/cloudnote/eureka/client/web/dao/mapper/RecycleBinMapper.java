@@ -1,6 +1,9 @@
 package graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper;
 
 import graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -9,15 +12,20 @@ import java.util.List;
 @Repository
 public interface RecycleBinMapper {
 
+    @Delete(" delete from recycle_bin where id = #{id,jdbcType=INTEGER}")
     int deleteByPrimaryKey(Integer id);
 
+    @Insert(" insert into recycle_bin (id, user_id, note_id, \n" +
+            "      note_book_id, note_title, throw_away_time, \n" +
+            "      clear_time)\n" +
+            "    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{noteId,jdbcType=INTEGER}, \n" +
+            "      #{noteBookId,jdbcType=INTEGER}, #{noteTitle,jdbcType=VARCHAR}, #{throwAwayTime,jdbcType=TIMESTAMP}, \n" +
+            "      #{clearTime,jdbcType=TIMESTAMP})")
+    @Options(useGeneratedKeys = true)
     int insert(RecycleBin record);
 
-    int insertSelective(RecycleBin record);
-
+    @Select("select * from recycle_bin where id = #{id,jdbcType=INTEGER}")
     RecycleBin selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(RecycleBin record);
 
     int updateByPrimaryKey(RecycleBin record);
 

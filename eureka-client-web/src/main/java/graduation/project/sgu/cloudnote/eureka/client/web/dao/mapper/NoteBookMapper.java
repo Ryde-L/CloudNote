@@ -8,18 +8,17 @@ import java.util.List;
 
 @Repository
 public interface NoteBookMapper {
+    @Delete("delete from note_book where id=#{param}")
     int deleteByPrimaryKey(Integer id);
 
+    @Insert("insert into note_book (id, user_id, title, deletable)\n" +
+            "    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, \n" +
+            "      #{deletable,jdbcType=INTEGER})")
+    @Options(useGeneratedKeys = true)
     int insert(NoteBook record);
 
-    int insertSelective(NoteBook record);
-
+    @Select("select * from note_book where id=#{param} limit 0,1")
     NoteBook selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(NoteBook record);
-
-    int updateByPrimaryKey(NoteBook record);
-
 
     @Select("select * from note_book where id=#{param}")
     NoteBook get(Integer id);
@@ -40,9 +39,6 @@ public interface NoteBookMapper {
             @Result(property = "noteList",column = "id",many = @Many(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteMapper.selectByNoteBookId"))
     })
     List<NoteBook>  selectUserNoteBooksWithNoteList(Integer userId);
-
-    @Select("select * from note_book where user_id=#{param}")
-    List<NoteBook>  selectUserNoteBooks(Integer userId);
 
     /**
      * 根据笔记本id获取包含标签的笔记集合
