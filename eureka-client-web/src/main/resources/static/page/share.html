@@ -102,12 +102,14 @@
 <script type="text/javascript" src="../lib/jquery-pretty-radio-checkbox/js/jquery-labelauty.js"></script>
 
 <script>
+    var password="";
     window.onload=function (ev) {
         openShare('');
 
     };
 
     function openShare(pwd) {
+        password=pwd;
         //分享页面
         if(getUrlParam("link_suffix")!=null){
             $.ajax({
@@ -267,14 +269,14 @@
             async: false,
             data: {
                 'link_suffix': getUrlParam("link_suffix"),
-                'pwd': '',
+                'pwd': password,
                 'note_book_id': noteBookId
             },
             success: function (data) {
                 if (data['isSuccessful'] == 1) {
                     layer.msg("保存成功。即将跳转");
                     setTimeout(function () {
-                        window.location.href='/page/index.html'
+                        window.location.href='/page/new.html'
                     },2000)
                 } else
                     layer.msg("保存失败！"+data['msg']);

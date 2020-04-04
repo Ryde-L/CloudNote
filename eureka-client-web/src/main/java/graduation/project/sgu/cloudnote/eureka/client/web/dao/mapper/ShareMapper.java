@@ -14,11 +14,11 @@ public interface ShareMapper {
     int deleteByPrimaryKey(Integer id);
 
     @Insert("insert into share (id, user_id, note_id, \n" +
-            "      link, isHasPwd, pwd, \n" +
+            "      link, is_has_pwd, pwd, \n" +
             "      limit_type, limit_content, create_time, \n" +
             "      status)\n" +
             "    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{noteId,jdbcType=INTEGER}, \n" +
-            "      #{link,jdbcType=VARCHAR}, #{ishaspwd,jdbcType=INTEGER}, #{pwd,jdbcType=VARCHAR}, \n" +
+            "      #{link,jdbcType=VARCHAR}, #{isHasPwd,jdbcType=INTEGER}, #{pwd,jdbcType=VARCHAR}, \n" +
             "      #{limitType,jdbcType=INTEGER}, #{limitContent,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, \n" +
             "      #{status,jdbcType=INTEGER})")
     @Options(useGeneratedKeys = true)
@@ -31,7 +31,7 @@ public interface ShareMapper {
             "    set user_id = #{userId,jdbcType=INTEGER},\n" +
             "      note_id = #{noteId,jdbcType=INTEGER},\n" +
             "      link = #{link,jdbcType=VARCHAR},\n" +
-            "      isHasPwd = #{ishaspwd,jdbcType=INTEGER},\n" +
+            "      isHasPwd = #{is_has_pwd,jdbcType=INTEGER},\n" +
             "      pwd = #{pwd,jdbcType=VARCHAR},\n" +
             "      limit_type = #{limitType,jdbcType=INTEGER},\n" +
             "      limit_content = #{limitContent,jdbcType=INTEGER},\n" +

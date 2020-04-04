@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -29,22 +28,24 @@ public class UserController {
     JedisClientPool jedisClientPool;
 
     @PostMapping("/login")
-    public ResponseDto login(@RequestParam("username")String username, @RequestParam("pwd")String pwd,  HttpServletResponse response) throws IOException {
-        if (CheckerUtil.checkNulls(username, pwd)) return ResultUtil.error("用户名或密码不为空", null);
+    public ResponseDto login(@RequestParam(value = "username",required = false)String username,
+                             @RequestParam(value = "pwd",required = false)String pwd,
+                             HttpServletResponse response)  {
+        if (CheckerUtil.checkNulls(username, pwd)) return ResultUtil.error("用户名或密码不为空");
         User user = userService.getUser(username, pwd);
         if (user == null) return ResultUtil.error("不正确的账号密码");
-
         //生成token
         String token = "token_" + user.getId() + "_" + UUID.randomUUID().toString();
+        //token写入cookie
         Cookie cookie = new Cookie("token",token);
         cookie.setPath("/");
         cookie.setDomain("cloudnote.com");
         cookie.setMaxAge(7200);
         response.addCookie(cookie);
-        //redis
+        //token写入redis
         jedisClientPool.set(token, String.valueOf(user.getId()));
         jedisClientPool.expire(token,3600);
-        //TODO 链接待改
+        //返回成功结果
         return ResultUtil.success("http://cloudnote.com:9000/page/new.html");
     }
 
@@ -55,25 +56,25 @@ public class UserController {
                                 @RequestParam(value = "pwd_check",required=false)String pwdCheck,
                                 @RequestParam(value = "gender",required=false)Integer gender,
                                 HttpServletResponse response) {
+        //数据校验
         if (CheckerUtil.checkNulls(username, pwd,pwdCheck)) return ResultUtil.error("用户名或密码不为空");
         if (!pwd.equals(pwdCheck)) return ResultUtil.error("两次密码不相同");
         if (!userService.usernameValidate(username)) return ResultUtil.error("用户名重复");
         if (gender!=null&&gender!=1&&gender!=2) return ResultUtil.error("性别选项出错");
         User user = new User(null,username,pwd,gender,0,1);
         userService.insert(user);
-
         //生成token
         String token = "token_" + user.getId() + "_" + UUID.randomUUID().toString();
+        //token写入cookie
         Cookie cookie = new Cookie("token",token);
         cookie.setPath("/");
         cookie.setDomain("cloudnote.com");
         cookie.setMaxAge(7200);
         response.addCookie(cookie);
-        //redis
+        //token写入redis
         jedisClientPool.set(token, String.valueOf(user.getId()));
         jedisClientPool.expire(token,3600);
         return ResultUtil.success("http://cloudnote.com:9000/page/new.html");
-
     }
 
 

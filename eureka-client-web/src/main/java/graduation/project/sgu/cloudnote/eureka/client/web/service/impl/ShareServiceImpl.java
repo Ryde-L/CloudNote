@@ -51,8 +51,10 @@ public class ShareServiceImpl implements ShareService {
     public ResponseDto create(String shareLinkPrefix,Integer userId, Integer noteId, int isHasPwd, String pwd, int limitType, int limitContent) {
         if (CheckerUtil.checkNulls(userId, noteId)) return ResultUtil.error("缺少参数");
         if (isHasPwd == 1 && CheckerUtil.checkNulls(pwd)) return ResultUtil.error("缺少分享密码");
-        String link = shareLinkPrefix+Calendar.getInstance().getTime().getTime() + UUID.randomUUID().toString()+"-"+userId;
+        //生成链接
+        String link = shareLinkPrefix+ Calendar.getInstance().getTime().getTime() + UUID.randomUUID().toString()+"-"+userId;
         shareMapper.insert(new Share(null, userId, noteId, link, isHasPwd, pwd, limitType, limitContent, Calendar.getInstance().getTime(), 1));
+        //返回消息
         Map<String,Object> map=new HashMap<String, Object>();
         map.put("link",link);
         map.put("isHasPwd",isHasPwd);
@@ -74,13 +76,12 @@ public class ShareServiceImpl implements ShareService {
         if (share.getStatus() != 1) return ResultUtil.error("该分享链接已无效");
         if (share.getIsHasPwd() == 1) {//分享密码校验
             if (CheckerUtil.checkNulls(pwd)) return ResultUtil.error("请输入提取码");
-            if (!pwd.equals(share.getPwd())) return ResultUtil.error("提取码不正确");//TODO 密码加密
+            if (!pwd.equals(share.getPwd())) return ResultUtil.error("提取码不正确");
         }
         if (share.getLimitType() == 1) {//分享天数校验
             Calendar ExpireTime = Calendar.getInstance();
             ExpireTime.setTime(share.getCreateTime());
             ExpireTime.add(Calendar.DAY_OF_MONTH,share.getLimitContent());
-
             if (Calendar.getInstance().getTime().getTime() > ExpireTime.getTime().getTime()) {
                 share.setStatus(0);
                 return ResultUtil.error("分享已过期");
@@ -88,7 +89,6 @@ public class ShareServiceImpl implements ShareService {
         }
         Note note = noteService.getNote(share.getNoteId());
         if (note==null) return ResultUtil.error("分享内容已被删除");
-
         NoteContent noteContent = noteContentService.getNoteContent(share.getNoteId());
         if (noteContent==null) return ResultUtil.error("分享内容已被删除");
         //有效
@@ -128,21 +128,18 @@ public class ShareServiceImpl implements ShareService {
      * @return ResponseDto
      */
     public ResponseDto save(Integer userId,Integer noteBookId,String link,String pwd) {
-
+        //数据校验
         ResponseDto shareMsg = getShareContent(link, pwd);
         if (shareMsg.getIsSuccessful().equals("0")) return ResultUtil.error(shareMsg.getMsg());
         Map<String, String> map = (Map<String, String>) shareMsg.getData();
-
         if (CheckerUtil.checkNulls(noteBookId)) return ResultUtil.error("缺少参数");
         NoteBook noteBook = noteBookService.getNoteBook(noteBookId);
         if (noteBook == null) return ResultUtil.error("笔记本对象无效");
-
         if (!userId.equals( noteBook.getUserId())) return ResultUtil.error("非法操作");
-
-        Note myNote = new Note(null, noteBookId, map.get("title"),0,null);
+        //转存给自己
+        Note myNote = new Note(null, noteBookId, map.get("title"),0,null,0,null);
         noteService.insert(myNote);
         noteContentService.insert(new NoteContent(null, myNote.getId(), map.get("content")));
-
         return ResultUtil.success("", myNote.getId());
     }
 }

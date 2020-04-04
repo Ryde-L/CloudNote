@@ -612,17 +612,30 @@
                         var secondDiv2 = document.createElement("div");
                         secondDiv2.setAttribute("class","notebook-operation-div");
                         topDiv.append(secondDiv2);
+                        if (data['data']['noteList'][i]['isHasRemind']===0) {
+                            var clockImg = document.createElement("img");
+                            // clockImg.setAttribute("name", "over-leave");
+                            // clockImg.setAttribute("operType", "icon");
+                            clockImg.setAttribute("class", "center-icons");
+                            clockImg.setAttribute("src", "../icon/un-clock.png");
+                            clockImg.setAttribute("icon", "clock.png");
+                            clockImg.setAttribute("tips", "设置定时提醒");
+                            secondDiv2.append(clockImg);
+                            $(clockImg).click({id:data['data']['noteList'][i]['id']},remind);
+                        }else{
+                            var clockImg = document.createElement("img");
+                            // clockImg.setAttribute("name", "over-leave");
+                            // clockImg.setAttribute("operType", "icon");
+                            clockImg.setAttribute("class", "center-icons");
+                            clockImg.setAttribute("src", "../icon/clock.png");
+                            clockImg.setAttribute("icon", "clock.png");
+                            clockImg.setAttribute("tips", "取消定时提醒");
+                            secondDiv2.append(clockImg);
+                            $(clockImg).click({id:data['data']['noteList'][i]['id']},cancelRemind);
 
-                        var clockImg=document.createElement("img");
-                        clockImg.setAttribute("name","over-leave");
-                        clockImg.setAttribute("operType","icon");
-                        clockImg.setAttribute("class","center-icons");
-                        clockImg.setAttribute("src","../icon/un-clock.png");
-                        clockImg.setAttribute("icon","clock.png");
-                        clockImg.setAttribute("tips","设置提醒");
-                        secondDiv2.append(clockImg);
+                        }
 
-                        if (data['data']['noteList'][i]['ishaspwd']===0) {
+                        if (data['data']['noteList'][i]['isHasPwd']===0) {
                             var lockImg = document.createElement("img");
                             lockImg.setAttribute("name", "over-leave");
                             lockImg.setAttribute("operType", "icon");
@@ -746,7 +759,7 @@
                         clockImg.setAttribute("tips","设置提醒");
                         secondDiv2.append(clockImg);
 
-                        if (data['data'][i]['ishaspwd']===0) {
+                        if (data['data'][i]['isHasPwd']===0) {
                             var lockImg = document.createElement("img");
                             lockImg.setAttribute("name", "over-leave");
                             lockImg.setAttribute("operType", "icon");
@@ -1168,6 +1181,60 @@
                     layer.msg('error!', {icon: 2, time: 3500});
                 }
             });
+        });
+        stopDefault(e);
+    }
+
+    /*添加定时提醒*/
+    function remind(e) {
+        $.ajax({
+            type: 'post',
+            url: "/note/remind",
+            data: {
+                'note_id': e.data.id,
+                'remind': "内容待添加"
+            },
+            success: function (data) {
+                if (data["isSuccessful"] === "1") {
+                    e.target.setAttribute("src", "../icon/clock.png");
+                    e.target.setAttribute("icon", "clock.png");
+                    e.target.setAttribute("tips", "取消定时提醒");
+                    $(e.target).click({id: e.data.id}, cancelRemind);
+                    layer.msg('定时提醒设置成功', {icon: 1, time: 2000});
+                } else {
+                    layer.msg('定时提醒设置失败!' + data["msg"], {icon: 2, time: 3500});
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
+        });
+        stopDefault(e);
+    }
+
+    /*添加定时提醒*/
+    function cancelRemind(e) {
+        $.ajax({
+            type: 'post',
+            url: "/note/cancelRemind",
+            data: {
+                'note_id': e.data.id,
+                '内容待添加': "内容待添加"
+            },
+            success: function (data) {
+                if (data["isSuccessful"] === "1") {
+                    e.target.setAttribute("src", "../icon/un-clock.png");
+                    e.target.setAttribute("icon", "clock.png");
+                    e.target.setAttribute("tips", "设置定时提醒");
+                    $(e.target).click({id: e.data.id}, remind);
+                    layer.msg('定时提醒撤销成功', {icon: 1, time: 2000});
+                } else {
+                    layer.msg('定时提醒撤销失败!' + data["msg"], {icon: 2, time: 3500});
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
         });
         stopDefault(e);
     }

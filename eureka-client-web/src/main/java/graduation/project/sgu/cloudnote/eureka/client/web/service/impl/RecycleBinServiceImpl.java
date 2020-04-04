@@ -114,7 +114,7 @@ public class RecycleBinServiceImpl implements RecycleBinService {
                 recycleBin.setNoteBookId(defaultNoteBook.getId());
             }
             //插回note表
-            noteService.insert(new Note(recycleBin.getNoteId(), recycleBin.getNoteBookId(), recycleBin.getNoteTitle(),0,null));
+            noteService.insert(new Note(recycleBin.getNoteId(), recycleBin.getNoteBookId(), recycleBin.getNoteTitle(),0,null,0,null));
             //回收站删除
             recycleBinMapper.deleteByPrimaryKey(recycleBin.getId());
         }

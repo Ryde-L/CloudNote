@@ -23,7 +23,7 @@ public interface NoteService {
     int insert(Note note);
 
     /**
-     * 创建笔记本
+     * 创建笔记
      *
      * @param noteBookId 笔记本id
      * @param title      笔记标题

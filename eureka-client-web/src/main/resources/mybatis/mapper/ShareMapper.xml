@@ -105,16 +105,6 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share" >
-    insert into share (id, user_id, note_id, 
-      link, isHasPwd, pwd, 
-      limit_type, limit_content, create_time, 
-      status)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{noteId,jdbcType=INTEGER}, 
-      #{link,jdbcType=VARCHAR}, #{ishaspwd,jdbcType=INTEGER}, #{pwd,jdbcType=VARCHAR}, 
-      #{limitType,jdbcType=INTEGER}, #{limitContent,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=INTEGER})
-  </insert>
   <insert id="insertSelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share" >
     insert into share
     <trim prefix="(" suffix=")" suffixOverrides="," >

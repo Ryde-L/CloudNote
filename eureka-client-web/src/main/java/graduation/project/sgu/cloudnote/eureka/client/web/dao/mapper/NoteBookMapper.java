@@ -51,7 +51,9 @@ public interface NoteBookMapper {
     @Select("select * from note_book where id=#{param}")
     @Results({
             @Result(property = "id",column = "id"),
-            @Result(property = "noteList",column = "id",many = @Many(select = "graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteMapper.selectByNoteBookIdWithTags"))
+            @Result(property = "noteList",column = "id",
+                    many = @Many(select = "graduation.project.sgu.cloudnote.eureka.client." +
+                            "web.dao.mapper.NoteMapper.selectByNoteBookIdWithTags"))
     })
     NoteBook selectByIdContainsNoteListWithTags(Integer id);
 

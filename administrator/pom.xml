@@ -7,15 +7,15 @@
         <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <groupId>graduation-project.sgu.cloud-note</groupId>
+    <packaging>war</packaging>
     <artifactId>administrator</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>administrator</name>
     <description>Demo project for Spring Boot</description>
 
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

@@ -45,11 +45,9 @@ public class ShareController {
         Integer userId = Integer.valueOf ((String) request.getSession().getAttribute("userId"));
         Integer noteId = Integer.valueOf(request.getParameter("note_id"));
         if (CheckerUtil.checkNulls(isHasPwd,days))return ResultUtil.error("缺少参数");
-
         String pwd;
-        if (isHasPwd==1) pwd= UUID.randomUUID().toString().substring(0,4);
+        if (isHasPwd==1) pwd= UUID.randomUUID().toString().substring(0,4);//创建随机提取码
         else pwd=null;
-
         int limitType =0;
         int limitContent =0;
         if (days!=0) {

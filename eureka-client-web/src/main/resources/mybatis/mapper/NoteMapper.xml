@@ -200,12 +200,4 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Note" >
-    update note
-    set note_book_id = #{noteBookId,jdbcType=INTEGER},
-      title = #{title,jdbcType=VARCHAR},
-      isHasPwd = #{ishaspwd,jdbcType=INTEGER},
-      pwd = #{pwd,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

@@ -4,6 +4,7 @@ import graduation.project.sgu.cloudnote.eureka.client.web.dto.ResponseDto;
 import graduation.project.sgu.cloudnote.eureka.client.web.service.NoteService;
 import graduation.project.sgu.cloudnote.eureka.client.web.utils.GzipUtil;
 import graduation.project.sgu.cloudnote.eureka.client.web.utils.JsonUtil;
+import graduation.project.sgu.cloudnote.eureka.client.web.utils.ResultUtil;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,6 +72,7 @@ public class NoteController {
 
     @RequestMapping(value = {"/update"})
     public ResponseDto update(HttpServletRequest request) throws IOException {
+
         String params = "";
         // 获取 Content-Encoding 请求头
         String contentEncoding = request.getHeader("Content-Encoding");
@@ -91,6 +93,9 @@ public class NoteController {
         }
         Integer userId = Integer.valueOf ((String) request.getSession().getAttribute("userId"));
         HashMap map = JsonUtil.jsonToPojo(params, HashMap.class);
+        //TODO 直接点编辑按钮无法添加
+        if (map.get("note_book_id")!=null)
+           return add(request);//是添加，不是更新的情况
         return noteService.update(userId,Integer.valueOf((String) map.get("note")),(String) map.get("title"), (String) map.get("content"));
 
     }
@@ -126,4 +131,21 @@ public class NoteController {
         return noteService.lock(Integer.valueOf ((String) session.getAttribute("userId")),noteId,pwd);
     }
 
+    /**
+     *设置定时提醒
+     */
+    @RequestMapping(value = {"/remind"})
+    public ResponseDto remind(HttpSession session, @RequestParam("note_id") Integer noteId,String remind){
+        //TODO 内容待添加
+        return ResultUtil.success();
+    }
+
+    /**
+     * 取消定时提醒
+     */
+    @RequestMapping(value = {"/cancelRemind"})
+    public ResponseDto cancelRemind(HttpSession session){
+        //TODO 内容待添加
+        return ResultUtil.success();
+    }
 }

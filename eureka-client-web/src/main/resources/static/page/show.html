@@ -149,18 +149,22 @@
     function svgViewBoxChange(type) {
         var svg = document.getElementById("svg_content");
         var backgroud_grid = document.getElementById("backgroud_grid");
-        var width=document.getElementById("canvas").clientWidth;
-        var height=document.getElementById("canvas").clientHeight;
+        var canvas_div = document.getElementById("canvas");
+        if (backgroud_grid==null){
+            var box=new Array();
+            box['width']=canvas_div.offsetWidth;
+            box['height']=canvas_div.offsetHeight;
+            console.log(box['width']);
+            console.log(box['height']);
+        }else
+            var box=backgroud_grid.getBBox();
         if (svg.getAttribute("viewBox") == null)
-            svg.setAttribute("viewBox", '0 0 ' + width + ' ' + height);
+            svg.setAttribute("viewBox", '0 0 ' + box['width'] + ' ' + box['height']);
 
         var viewBoxArr = svg.getAttribute("viewBox").split(' ');
-        if (type===0) {
-            viewBoxArr[0]=0;
-            viewBoxArr[1]=0;
-            viewBoxArr[2]=width;
-            viewBoxArr[3]=height;
-        }
+
+        if (type===0)
+            svg.setAttribute("viewBox", '0 0 ' + box['width'] + ' ' + box['height']);
         else if (type === 1)
             viewBoxArr[1]= parseInt(viewBoxArr[1]) - 100;//上
         else if (type === 2)
@@ -170,9 +174,16 @@
         else if (type === 4)
             viewBoxArr[0]=parseInt(viewBoxArr[0]) + 100;//右
 
+
         svg.setAttribute("viewBox", viewBoxArr[0] + ' ' + viewBoxArr[1] + ' ' + viewBoxArr[2] + ' ' + viewBoxArr[3]);
-        backgroud_grid.setAttribute("x",viewBoxArr[0]);
-        backgroud_grid.setAttribute("y",viewBoxArr[1]);
+        if (backgroud_grid!=null){
+            backgroud_grid.setAttribute("x", viewBoxArr[0]);
+            backgroud_grid.setAttribute("y", viewBoxArr[1]);
+        }else{
+            canvas_div.setAttribute("x", viewBoxArr[0]);
+            canvas_div.setAttribute("y", viewBoxArr[1]);
+        }
+
     }
 
 

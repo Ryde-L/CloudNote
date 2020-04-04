@@ -54,7 +54,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     /**
-     * 创建笔记本
+     * 创建笔记
      *
      * @param noteBookId 笔记本id
      * @param title      笔记标题
@@ -65,7 +65,7 @@ public class NoteServiceImpl implements NoteService {
         NoteBook noteBook = noteBookService.getNoteBook(noteBookId);
         if (noteBook == null) return ResultUtil.error("笔记本对象无效");
 
-        Note note = new Note(null, noteBookId, title,0,null);
+        Note note = new Note(null, noteBookId, title,0,null,0,null);
         noteMapper.insert(note);
         noteContentService.insert(new NoteContent(null, note.getId(), content));
         return ResultUtil.success("",String.valueOf(note.getId()));
