@@ -172,6 +172,10 @@
             <a href="edit.html" ><img src="../icon/un-add.png" name="over-leave" operType="icon" icon="add.png" tips="新建笔记" class="left-icons"></a>
             <img src="../icon/un-search.png" name="over-leave" operType="icon" icon="search.png" tips="搜索" class="left-icons" onclick="showShare()">
             <img src="../icon/un-notebook.png" name="over-leave" operType="icon" icon="notebook.png" tips="笔记本" class="left-icons" onclick="showNoteBooks()">
+            <img src="../icon/un-clock.png" name="over-leave" operType="icon" icon="clock.png" tips="定时提醒" class="left-icons" onclick="remind()">
+<!--            <img src="../icon/un-notebook.png" name="over-leave" tips="开始录音" class="left-icons" id="record_start">-->
+<!--            <img src="../icon/un-notebook.png" name="over-leave" tips="结束录音" class="left-icons" id="record_end">-->
+<!--            <img src="../icon/un-notebook.png" name="over-leave" tips="播放录音" class="left-icons" id="record_play">-->
 <!--            <img src="../icon/un-notebook.png" name="over-leave" operType="icon" icon="notebook.png" tips="笔记本" class="left-icons" onclick="showNotes(null,1)">-->
         </div>
 <!--        头像                      -->
@@ -327,7 +331,6 @@
     <div class="right-div" id="right-div">
         <div class="right-top-div" id="right-top-div">
             <div class="right-top-left-div">
-                <img src="../icon/un-clock.png" name="over-leave" operType="icon" icon="clock.png" tips="设置提醒" class="right-icons">
                 <img src="../icon/un-delete.png" name="over-leave" operType="icon" icon="delete.png" tips="删除" class="right-icons" id="note-delete-img">
                 <img src="../icon/un-share.png" name="over-leave" operType="icon" icon="share.png" tips="分享" class="right-icons" id="note-share-img">
                 <div id="tags-div"></div>
@@ -384,6 +387,24 @@
     var iconSuffix = "../icon/";
 
     $(function () {
+        var button2 = document.getElementById('record_start')
+        button2.addEventListener('click',function(){
+            android.record();
+        },false);
+
+        var button3 = document.getElementById('record_end')
+        button3.addEventListener('click',function(){
+            android.endrecord();
+
+        },false);
+        var button4 = document.getElementById('record_play')
+        button4.addEventListener('click',function(){
+            android.playrecord();
+
+        },false);
+
+
+
         addMouseOverAndLeaveEvent();
         noteBooksAddClickEvent();
         showNoteBooks();
@@ -612,28 +633,28 @@
                         var secondDiv2 = document.createElement("div");
                         secondDiv2.setAttribute("class","notebook-operation-div");
                         topDiv.append(secondDiv2);
-                        if (data['data']['noteList'][i]['isHasRemind']===0) {
-                            var clockImg = document.createElement("img");
-                            // clockImg.setAttribute("name", "over-leave");
-                            // clockImg.setAttribute("operType", "icon");
-                            clockImg.setAttribute("class", "center-icons");
-                            clockImg.setAttribute("src", "../icon/un-clock.png");
-                            clockImg.setAttribute("icon", "clock.png");
-                            clockImg.setAttribute("tips", "设置定时提醒");
-                            secondDiv2.append(clockImg);
-                            $(clockImg).click({id:data['data']['noteList'][i]['id']},remind);
-                        }else{
-                            var clockImg = document.createElement("img");
-                            // clockImg.setAttribute("name", "over-leave");
-                            // clockImg.setAttribute("operType", "icon");
-                            clockImg.setAttribute("class", "center-icons");
-                            clockImg.setAttribute("src", "../icon/clock.png");
-                            clockImg.setAttribute("icon", "clock.png");
-                            clockImg.setAttribute("tips", "取消定时提醒");
-                            secondDiv2.append(clockImg);
-                            $(clockImg).click({id:data['data']['noteList'][i]['id']},cancelRemind);
-
-                        }
+                        // if (data['data']['noteList'][i]['isHasRemind']===0) {
+                        //     var clockImg = document.createElement("img");
+                        //     // clockImg.setAttribute("name", "over-leave");
+                        //     // clockImg.setAttribute("operType", "icon");
+                        //     clockImg.setAttribute("class", "center-icons");
+                        //     clockImg.setAttribute("src", "../icon/un-clock.png");
+                        //     clockImg.setAttribute("icon", "clock.png");
+                        //     clockImg.setAttribute("tips", "设置定时提醒");
+                        //     secondDiv2.append(clockImg);
+                        //     $(clockImg).click({id:data['data']['noteList'][i]['id']},remind);
+                        // }else{
+                        //     var clockImg = document.createElement("img");
+                        //     // clockImg.setAttribute("name", "over-leave");
+                        //     // clockImg.setAttribute("operType", "icon");
+                        //     clockImg.setAttribute("class", "center-icons");
+                        //     clockImg.setAttribute("src", "../icon/clock.png");
+                        //     clockImg.setAttribute("icon", "clock.png");
+                        //     clockImg.setAttribute("tips", "取消定时提醒");
+                        //     secondDiv2.append(clockImg);
+                        //     $(clockImg).click({id:data['data']['noteList'][i]['id']},cancelRemind);
+                        //
+                        // }
 
                         if (data['data']['noteList'][i]['isHasPwd']===0) {
                             var lockImg = document.createElement("img");
@@ -1187,6 +1208,7 @@
 
     /*添加定时提醒*/
     function remind(e) {
+        android.notification();
         $.ajax({
             type: 'post',
             url: "/note/remind",

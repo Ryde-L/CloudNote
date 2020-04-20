@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: administrator
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8671/eureka/,http://localhost:8672/eureka/
-server:
-  port: 8700

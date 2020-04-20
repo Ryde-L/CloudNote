@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.ShareMapper" >
-  <resultMap id="BaseResultMap" type="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share" >
+<mapper namespace="com.cloudnote.eureka.client.web.dao.mapper.ShareMapper" >
+  <resultMap id="BaseResultMap" type="com.cloudnote.eureka.client.web.pojo.Share" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="note_id" property="noteId" jdbcType="INTEGER" />
@@ -75,7 +75,7 @@
     id, user_id, note_id, link, isHasPwd, pwd, limit_type, limit_content, create_time, 
     status
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.ShareExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cloudnote.eureka.client.web.pojo.ShareExample" >
     select
     <if test="distinct" >
       distinct
@@ -99,13 +99,13 @@
     delete from share
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.ShareExample" >
+  <delete id="deleteByExample" parameterType="com.cloudnote.eureka.client.web.pojo.ShareExample" >
     delete from share
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share" >
+  <insert id="insertSelective" parameterType="com.cloudnote.eureka.client.web.pojo.Share" >
     insert into share
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -172,7 +172,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.ShareExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.cloudnote.eureka.client.web.pojo.ShareExample" resultType="java.lang.Integer" >
     select count(*) from share
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -232,7 +232,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cloudnote.eureka.client.web.pojo.Share" >
     update share
     <set >
       <if test="userId != null" >
@@ -265,7 +265,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.Share" >
+  <update id="updateByPrimaryKey" parameterType="com.cloudnote.eureka.client.web.pojo.Share" >
     update share
     set user_id = #{userId,jdbcType=INTEGER},
       note_id = #{noteId,jdbcType=INTEGER},

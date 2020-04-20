@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NotePicMapper" >
-  <resultMap id="BaseResultMap" type="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePic" >
+<mapper namespace="com.cloudnote.eureka.client.web.dao.mapper.NotePicMapper" >
+  <resultMap id="BaseResultMap" type="com.cloudnote.eureka.client.web.pojo.NotePic" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="note_id" property="noteId" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List" >
     id, note_id, name, postfix, size, uri, status
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePicExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cloudnote.eureka.client.web.pojo.NotePicExample" >
     select
     <if test="distinct" >
       distinct
@@ -95,13 +95,13 @@
     delete from note_pic
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePicExample" >
+  <delete id="deleteByExample" parameterType="com.cloudnote.eureka.client.web.pojo.NotePicExample" >
     delete from note_pic
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePic" >
+  <insert id="insert" parameterType="com.cloudnote.eureka.client.web.pojo.NotePic" >
     insert into note_pic (id, note_id, name, 
       postfix, size, uri, status
       )
@@ -109,7 +109,7 @@
       #{postfix,jdbcType=VARCHAR}, #{size,jdbcType=REAL}, #{uri,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePic" >
+  <insert id="insertSelective" parameterType="com.cloudnote.eureka.client.web.pojo.NotePic" >
     insert into note_pic
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -158,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePicExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.cloudnote.eureka.client.web.pojo.NotePicExample" resultType="java.lang.Integer" >
     select count(*) from note_pic
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -206,7 +206,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePic" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cloudnote.eureka.client.web.pojo.NotePic" >
     update note_pic
     <set >
       <if test="noteId != null" >
@@ -230,7 +230,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NotePic" >
+  <update id="updateByPrimaryKey" parameterType="com.cloudnote.eureka.client.web.pojo.NotePic" >
     update note_pic
     set note_id = #{noteId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},

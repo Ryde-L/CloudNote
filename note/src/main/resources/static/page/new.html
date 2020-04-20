@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>云笔记-dev-v1</title>
+    <style>
+        .title_div {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: green;
+        }
+
+        .left-div {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 7%;
+            height: 100%;
+            background-color: gray;
+        }
+
+        .lef-div-inner-top {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80%;
+            text-align: center;
+        }
+
+        .lef-div-inner-bottom {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 18%;
+            border: solid 1px black;
+            text-align: center;
+        }
+
+        .left-icons {
+            width: 50%;
+            margin: 10px 0 0 0;
+        }
+
+        .center-div {
+            left: 7%;
+            height: 100%;
+            width: 25%;
+        }
+
+        .center-notebook-div {
+            position: absolute;
+            left: 7%;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 25%;
+            overflow-y: auto;
+            /*background-color: gainsboro;*/
+            /*display: none;*/
+        }
+
+        .notebook-summary-and-operation-div,.recycle-bin{
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0 0 0;
+            /*margin: 10px 0 0 0;*/
+            margin: 0;
+            /*padding: 100px 0 0 10px;*/
+        }
+
+        .notebook-summary-div {
+            display: flex;
+            margin: 0 0 0 10px;
+            /*padding: 0 0 0 10px*/
+        }
+
+        .notebook-operation-div {
+            display: flex;
+            padding: 10px 0 0 0;
+            height: 30%;
+            width: 35%;
+            /*text-align: right;*/
+        }
+
+        .notebook-title-font {
+            font-size: 16px
+        }
+
+        .notebook-number-font {
+            font-size: 12px
+        }
+
+        .notebook-hr {
+            /*text-align: center  ;*/
+            width: 100%;
+            size: 1px;
+            top: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center-note-div ,.center-search-div{
+            position: absolute;
+            left: 7%;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 25%;
+            /*background-color: beige;*/
+            display: none;
+            overflow-y: auto;
+        }
+        .center-icons{
+            display: flex;
+            width: 20%;
+            height: 20%;
+            padding: 0 10px 0 0;
+        }
+
+        .right-div{
+            position: absolute;
+            left: 32%;
+            bottom: 0;
+            height: 100%;
+            width: 67%;
+            /*background-color: yellow;*/
+        }
+        .right-top-div{
+            top: 0;
+            width: 100%;
+            height:5%;
+            display: flex;
+            justify-content: space-between;
+            /*background-color: black;             */
+        }
+        .right-note-content-div{
+            width: 100%;
+            height:94%;
+            bottom: 0;
+            /*background-color: white;             */
+        }
+        .right-top-left-div{
+            display: flex;
+            margin: 10px;
+        }
+        .full-screen-img{
+            display: flex;
+            margin: 10px;
+            width: 8%;
+            height: 80%;
+        }
+        .right-icons{
+            width: 10%;
+            height: 100%;
+            padding: 0 10px 0 0;
+        }
+
+        /*.Hui-tags{border:solid 1px #dedede; padding:0 10px;width: 100%}*/
+        .Hui-tags-editor{position:relative; padding:10px 0 10px 24px}
+        .Hui-tags-editor .Hui-tags-icon{position:absolute; left:0; top:11px; font-size:14px; color:#666}
+        .Hui-tags-token{color:#aaa; float:left; font-size:12px; height:20px; line-height:20px; margin-right:8px; padding:0 1px; white-space:nowrap; cursor:pointer}
+        .Hui-tags-token:before{content:"#"}
+        .Hui-tags-token:hover{text-decoration:line-through}
+        .Hui-tags-iptwrap{position:relative; float:left}
+        .Hui-tags-input{position:relative;height:20px;min-width:60px; border:0 none; vertical-align:top;line-height:20px; color:#333;z-index:2;background: url(../images/empty.png) repeat scroll 0 0; display:inline-block; width:100%}
+        .Hui-tags-label{position:absolute; top:0; left:2px; width:240px; height:20px; line-height:20px; font-size:14px; overflow:hidden; z-index:1; color:#ccc}
+        .Hui-tags-list{padding:0 0 10px 0; display:none}
+        .Hui-notag{font-size:12px}
+        .Hui-tags-has span{cursor:pointer; font-size:12px; white-space:nowrap; margin-right:10px}
+    </style>
+    <link href="../lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css">
+
+</head>
+<div class="top-div">
+
+    <!--  左  -->
+    <div class="left-div">
+        <div class="lef-div-inner-top">
+            <a href="edit.html" ><img src="../icon/un-add.png" name="over-leave" operType="icon" icon="add.png" tips="新建笔记" class="left-icons"></a>
+<!--            <img src="../icon/un-search.png" name="over-leave" operType="icon" icon="search.png" tips="搜索" class="left-icons" onclick="showShare()">-->
+            <img src="../icon/un-notebook.png" name="over-leave" operType="icon" icon="notebook.png" tips="笔记本" class="left-icons" onclick="showNoteBooks()">
+            <img src="../icon/un-clock.png" name="over-leave" operType="icon" icon="clock.png" tips="定时提醒" class="left-icons" onclick="remind()">
+
+            <!--            <img src="../icon/un-notebook.png" name="over-leave" operType="icon" icon="notebook.png" tips="笔记本" class="left-icons" onclick="showNotes(null,1)">-->
+        </div>
+<!--        头像                      -->
+<!--        <div class="lef-div-inner-bottom">-->
+<!--            <img src="../icon/head.jpg" width="50%"-->
+<!--                 style="border-radius: 100px;margin: auto;top: 50%;position: relative">-->
+<!--        </div>-->
+    </div>
+
+    <!--  中  -->
+    <div class="center-div" id="center-div">
+        <!--    笔记本相关页面    -->
+        <div class="center-notebook-div" id="center-notebook-div">
+            <div style="background-color: #393d41">
+                <div class="center-notebook-div-top" style="display: flex; justify-content:space-between;height: 5%; padding: 10px;">
+                    <label style="padding: 10px 10px;width: 80%; display: flex;font-size: 20px;color: white">笔记本</label>
+                    <img src="../icon/bookAdd.png" style="width: 10%;height: 10%;display: flex;" onclick="showCreateNoteBook()"/>
+                </div>
+                <div style="text-align: center;padding: 10px">
+                    <input type="text" id="search-input" placeholder="🔍标签查找笔记" style="width:90%;height:30px;text-align: center" onfocusout="showSearch()">
+                </div>
+            </div>
+            <div id="noteBookList">
+<!--                <div class="notebook-summary-and-operation-div" name="over-leave" operType="colorChange-div">-->
+<!--                    <div class="notebook-summary-div">-->
+<!--                        <div>-->
+<!--                            <label class="notebook-title-font">默认笔记本</label><br>-->
+<!--                            <label class="notebook-number-font">两条笔记</label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="notebook-operation-div">-->
+<!--                        <img src="../icon/un-delete.png" name="over-leave" operType="icon" icon="delete.png" tips="删除" class="center-icons">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <HR class="notebook-hr">-->
+            </div>
+
+            <!--     废纸篓       -->
+            <div class="recycle-bin" name="over-leave" operType="colorChange-div" onclick="showRecycleBin()">
+                <div class="notebook-summary-div">
+                    <div>
+                        <label class="notebook-title-font" style="font-size: 14px">废纸篓</label><br>
+                    </div>
+                </div>
+                <div class="notebook-operation-div">
+                    <label class="notebook-number-font"></label>
+                </div>
+            </div>
+        </div>
+
+        <!--    笔记相关页面    -->
+        <div class="center-note-div" id="center-note-div">
+
+            <!--     标题       -->
+            <div style="height: 20%; padding: 10px 10px;display:flex;text-align: center; background-color:#393d41">
+                <label style="padding: 10px 10px;font-size: 26px;width: 100%;color: white;align-self: center" id="notebook-title-label">笔记本标题</label>
+            </div>
+            <div style="margin: 5px">
+                <label style="font-size: 14px;padding: 10px" ><label id="note-number-label"></label> 条笔记</label>
+            </div>
+            <HR style="margin: 0;size: 1px;width: 100%" >
+
+            <div id="noteList">
+<!--                <div class="notebook-summary-and-operation-div" name="over-leave" operType="colorChange-div" onclick="noteClicked(1)">-->
+<!--                    <div class="notebook-summary-div" >-->
+<!--                        <div >-->
+<!--                            <label class="notebook-title-font">笔记A</label><br>-->
+<!--                            <div>-->
+<!--                                <label class="notebook-number-font">标签XXXX</label>-->
+<!--                                <label class="notebook-number-font">标签YYYY</label>-->
+<!--                                <label class="notebook-number-font">标签Z</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="notebook-operation-div">-->
+<!--                        <img src="../icon/un-clock.png" name="over-leave" operType="icon" icon="clock.png" tips="设置提醒" class="center-icons">-->
+<!--                        <img src="../icon/un-lock.png" name="over-leave" operType="icon" icon="lock.png" tips="加密" class="center-icons">-->
+<!--                        <img src="../icon/un-delete.png" name="over-leave" operType="icon" icon="delete.png" tips="删除" class="center-icons">-->
+<!--                        <img src="../icon/un-share.png" name="over-leave" operType="icon" icon="share.png" tips="分享" class="center-icons">-->
+<!--                        &lt;!&ndash;                    <label>加密</label>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <HR class="notebook-hr">-->
+            </div>
+
+
+
+
+        </div>
+
+        <!--    废纸篓    -->
+        <div class="center-note-div" id="center-bin-div">
+
+            <div style="height: 20%; padding: 10px 10px;display:flex;text-align: center; background-color:#393d41">
+                <label style="padding: 10px 10px;font-size: 26px;width: 100%;color: white;align-self: center">废纸篓</label>
+            </div>
+            <div style="margin: 5px">
+                <label style="font-size: 14px;padding: 10px" ><label id="bin-note-number-label"></label>条笔记</label>
+            </div>
+            <HR style="margin: 0;size: 1px;width: 100%" >
+
+            <div id="bin-noteList"></div>
+
+        </div>
+
+
+        <!--    搜索    -->
+        <div class="center-search-div" id="center-search-div">
+
+            <!--     标题       -->
+            <div style="height: 20%; padding: 10px 10px;display:flex;text-align: center; background-color:#393d41">
+                <label style="padding: 10px 10px;font-size: 26px;width: 100%;color: white;align-self: center" id="search-title-label">搜索关键字</label>
+            </div>
+            <div style="margin: 5px">
+                <label style="font-size: 14px;padding: 10px" ><label id="search-note-number-label"></label> 条笔记</label>
+            </div>
+            <HR style="margin: 0;size: 1px;width: 100%" >
+
+            <div id="search-noteList">
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+
+    <!--  右  -->
+    <div class="right-div" id="right-div">
+        <div class="right-top-div" id="right-top-div">
+<!--            <div class="right-top-left-div">-->
+<!--                <img src="../icon/un-delete.png" name="over-leave" operType="icon" icon="delete.png" tips="删除" class="right-icons" id="note-delete-img">-->
+<!--                <img src="../icon/un-share.png" name="over-leave" operType="icon" icon="share.png" tips="分享" class="right-icons" id="note-share-img">-->
+<!--                <div id="tags-div"></div>-->
+<!--                <img src="../icon/un-tag.png" name="over-leave" operType="icon" icon="tag.png" tips="添加标签" class="right-icons" onclick="showTagAdd()">-->
+
+                <div class="Hui-tags">
+                    <div class="Hui-tags-editor cl" id="tag-list-div">
+                        <i class="Hui-tags-icon Hui-iconfont">&#xe64b;</i>
+                        <div class="Hui-tags-iptwrap" id="tag-input-div">
+                            <input type="text" class="Hui-tags-input" maxlength="30" value="" id="tag-input">
+                            <label class="Hui-tags-label">添加相关标签，用空格或回车分隔</label>
+                        </div>
+                    </div>
+                    <input type="hidden" class="Hui-tags-val" name="" value="">
+                </div>
+
+<!--            </div>-->
+<!--            <img src="../icon/un-edit.png" name="over-leave" operType="icon" icon="edit.png" tips="编辑" class="full-screen-img" onclick="editNote()">-->
+        </div>
+        <div class="right-note-content-div" id="right-note-content-div">
+            <iframe src="show.html" width="100%" height="99%" id="note-show-iframe">
+
+            </iframe>
+        </div>
+    </div>
+
+</div>
+
+<div id="share-div" style="display: none">
+    <form id="share-form" onsubmit=" return false">
+        <table>
+            <tr>
+                <td>是否需要提取码</td>
+                <td><input type="text" name="note_id" id="share-hidden-note-id" style="display: none"></td>
+            </tr>
+            <tr>
+                <td><input type="radio" name="is_has_pwd" value="1">是</td>
+                <td><input type="radio" name="is_has_pwd" value="0">否</td>
+            </tr>
+            <tr>
+                <td>分享天数</td>
+            </tr>
+            <tr>
+                <td><input type="radio" name="days" value="1">1</td>
+                <td><input type="radio" name="days" value="7">7</td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="分享" onclick="shareSubmit()"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../lib/h-ui/js/H-ui.js"></script>
+
+<script>
+
+    var currentNotebook='0';//当前笔记本id
+    var currentNote='0';//当前笔记id
+    var currentShareNote='0';
+    var iconSuffix = "../icon/";
+
+    $(function () {
+        // var button2 = document.getElementById('record_start')
+        // button2.addEventListener('click',function(){
+        //     android.record();
+        // },false);
+        //
+        // var button3 = document.getElementById('record_end')
+        // button3.addEventListener('click',function(){
+        //     android.endrecord();
+        //
+        // },false);
+        // var button4 = document.getElementById('record_play')
+        // button4.addEventListener('click',function(){
+        //     android.playrecord();
+        //
+        // },false);
+
+        addMouseOverAndLeaveEvent();
+        noteBooksAddClickEvent();
+        showNoteBooks();
+    });
+
+    /*鼠标移入移出事件*/
+    function addMouseOverAndLeaveEvent() {
+        var elements = document.getElementsByName("over-leave");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener("mouseover", overs);
+            elements[i].addEventListener("mouseleave", leaves);
+        }
+    }
+
+    /*鼠标移入*/
+    function overs(e) {
+        var type = this.getAttribute("operType");
+        if (type === 'icon') {
+            this.setAttribute("src", iconSuffix + this.getAttribute("icon"));
+            layer.tips(this.getAttribute("tips"), this);
+        } else if (type === 'colorChange-div') {
+            this.style.backgroundColor = "rgba(43,181,92,0.9)";
+        }
+
+    }
+
+    /*鼠标移出*/
+    function leaves(e) {
+        var type = this.getAttribute("operType");
+        if (type === 'icon')
+            this.setAttribute("src", iconSuffix + "un-" + this.getAttribute("icon"));
+        else if (type === 'colorChange-div') {
+            this.style.backgroundColor = "white";
+        }
+    }
+
+
+    function noteBooksAddClickEvent() {
+        var notebooks = document.getElementsByClassName("notebook-summary-and-operation-div");
+        for (var i = 0; i < notebooks.length; i++) {
+            notebooks[i].addEventListener("click", noteBooksClick)
+        }
+    }
+
+    /*点击笔记本*/
+    function noteBooksClick(e) {
+        console.log("笔记本点击:"+e.data.id);
+        showNotes(e.data.id);
+        currentNotebook=e.data.id;
+    }
+
+    function notesClicked(e){
+        currentNote=e.data.id;
+        document.getElementById("right-top-div").style.display='';
+        document.getElementById("right-note-content-div").style.height='94%';
+        document.getElementById("note-show-iframe").setAttribute("src","show.html?note="+ e.data.id);
+        $("#note-delete-img").click({id:e.data.id},notesDelete);
+        $("#note-share-img").click({id:e.data.id},showShare);
+        getTagList();
+    }
+
+    function binNotesClicked(e){
+        console.log("废纸篓笔记点击："+e.data.id);
+        document.getElementById("right-top-div").style.display='none';
+        document.getElementById("right-note-content-div").style.height='99%';
+        document.getElementById("note-show-iframe").setAttribute("src","show.html?bin="+ e.data.id);
+    }
+
+    /*编辑笔记*/
+    function editNote() {
+        window.location.href="edit.html?note="+currentNote;
+    }
+
+    /*展示笔记本列表*/
+    function showNoteBooks() {
+        document.getElementById("center-bin-div").style.display="none";
+        document.getElementById("center-note-div").style.display="none";
+        document.getElementById("center-search-div").style.display="none";
+        document.getElementById("center-notebook-div").style.display="block";
+        getNoteBookList();
+    }
+
+    /*展示笔记列表*/
+    function showNotes(id) {
+        document.getElementById("center-notebook-div").style.display="none";
+        document.getElementById("center-bin-div").style.display="none";
+        document.getElementById("center-search-div").style.display="none";
+        document.getElementById("center-note-div").style.display="block";
+        getNoteList(id);
+    }
+
+    function showSearch(){
+        console.log("search");
+        var search=$("#search-input").val();
+        if (search!=null&&search!=''){
+            document.getElementById("center-bin-div").style.display="none";
+            document.getElementById("center-note-div").style.display="none";
+            document.getElementById("center-notebook-div").style.display="none";
+            document.getElementById("center-search-div").style.display="block";
+            getSearchList(search);
+        }
+
+    }
+
+    /*显示废纸篓*/
+    function showRecycleBin() {
+        document.getElementById("center-note-div").style.display="none";
+        document.getElementById("center-notebook-div").style.display="none";
+        document.getElementById("center-search-div").style.display="none";
+        document.getElementById("center-bin-div").style.display="block";
+        getBinNoteList();
+    }
+
+    /**从后台获取用户笔记本*/
+    function getNoteBookList() {
+        $.ajax({
+            url:"http://cloudnote.com:9002/noteBook/getNoteBooks",
+            success:function (data) {
+                if (data['isSuccessful']==='1'){
+                    var noteBooksDiv=document.getElementById("noteBookList");
+                    noteBooksDiv.innerHTML="";
+                    for (var i = 0; i < data['data'].length; i++) {
+                        var topDiv = document.createElement("div");
+                        topDiv.setAttribute("class","notebook-summary-and-operation-div");
+                        topDiv.setAttribute("name","over-leave");
+                        topDiv.setAttribute("operType","colorChange-div");
+                        $(topDiv).click({id:data['data'][i]['id']},noteBooksClick);
+                        var secondDiv = document.createElement("div");
+                        secondDiv.setAttribute("class","notebook-summary-div");
+                        topDiv.append(secondDiv);
+
+                        var thirdDiv = document.createElement("div");
+                        secondDiv.append(thirdDiv);
+
+                        var nameLabel = document.createElement("label");
+                        nameLabel.setAttribute("class","notebook-title-font");
+                        nameLabel.innerText=data['data'][i]['title'];
+
+                        var br = document.createElement("br");
+
+                        var numberLabel = document.createElement("label");
+                        numberLabel.setAttribute("class","notebook-number-font");
+                        numberLabel.innerText=data['data'][i]['noteList'].length;
+
+                        thirdDiv.append(nameLabel);
+                        thirdDiv.append(br);
+                        thirdDiv.append(numberLabel);
+
+                        var secondDiv2 = document.createElement("div");
+                        secondDiv2.setAttribute("class","notebook-operation-div");
+                        topDiv.append(secondDiv2);
+                        if (data['data'][i]['title']!='默认') {
+                            var deleteImg = document.createElement("img");
+                            deleteImg.setAttribute("src", "../icon/un-delete.png");
+                            deleteImg.setAttribute("name", "over-leave");
+                            deleteImg.setAttribute("operType", "icon");
+                            deleteImg.setAttribute("icon", "delete.png");
+                            deleteImg.setAttribute("tips", "删除");
+                            deleteImg.setAttribute("class", "center-icons");
+                            $(deleteImg).click({id: data['data'][i]['id']}, noteBooksDelete);
+                            secondDiv2.append(deleteImg);
+                        }
+                        var hr=document.createElement("HR");
+                        hr.setAttribute("class","notebook-hr");
+                        noteBooksDiv.append(topDiv);
+                        noteBooksDiv.append(hr);
+                    }
+                    addMouseOverAndLeaveEvent();
+                }else{
+                    layer.msg("获取失败！"+data['msg']);
+                }
+            },
+            error:function () {
+                layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /**从后台获取用户笔记*/
+    function getNoteList(noteBookId) {
+        $.ajax({
+            url:"http://cloudnote.com:9002/noteBook/getNotesWithTags",
+            data:{"note_book_id":noteBookId},
+            success:function (data) {
+                if (data['isSuccessful']==='1'){
+                    var notesDiv=document.getElementById("noteList");
+                    notesDiv.innerHTML="";
+                    for (var i = 0; i < data['data']['noteList'].length; i++) {
+                        console.log(i);
+                        var topDiv = document.createElement("div");
+                        topDiv.setAttribute("class","notebook-summary-and-operation-div");
+                        topDiv.setAttribute("name","over-leave");
+                        topDiv.setAttribute("operType","colorChange-div");
+                        $(topDiv).click({id:data['data']['noteList'][i]['id']},notesClicked);
+                        var secondDiv = document.createElement("div");
+                        secondDiv.setAttribute("class","notebook-summary-div");
+                        topDiv.append(secondDiv);
+
+                        var thirdDiv = document.createElement("div");
+                        secondDiv.append(thirdDiv);
+
+                        var nameLabel = document.createElement("label");
+                        nameLabel.setAttribute("class","notebook-title-font");
+                        nameLabel.innerText=data['data']['noteList'][i]['title'];
+                        var br = document.createElement("br");
+
+                        var fourthDiv = document.createElement("div");
+
+                        thirdDiv.append(nameLabel);
+                        thirdDiv.append(br);
+                        thirdDiv.append(fourthDiv);
+
+                        var words=0;
+                        for (var j = 0; j <data['data']['noteList'][i]['noteTagList'].length ; j++) {
+                            words+=data['data']['noteList'][i]['noteTagList'][j]['tag'].length;
+                            var tagLabel = document.createElement("label");
+                            tagLabel.setAttribute("class","notebook-number-font");
+                            tagLabel.innerText=data['data']['noteList'][i]['noteTagList'][j]['tag']+' ';
+                            fourthDiv.append(tagLabel);
+                            if (words>=10) {
+                                tagLabel.innerText='...';
+                                break;
+                            }
+                        }
+
+                        var secondDiv2 = document.createElement("div");
+                        secondDiv2.setAttribute("class","notebook-operation-div");
+                        topDiv.append(secondDiv2);
+
+                        if (data['data']['noteList'][i]['isHasPwd']===0) {
+                            var lockImg = document.createElement("img");
+                            lockImg.setAttribute("name", "over-leave");
+                            lockImg.setAttribute("operType", "icon");
+                            lockImg.setAttribute("class", "center-icons");
+                            lockImg.setAttribute("src", "../icon/un-lock.png");
+                            lockImg.setAttribute("icon", "lock.png");
+                            lockImg.setAttribute("tips", "加密");
+                            secondDiv2.append(lockImg);
+                            $(lockImg).click({id:data['data']['noteList'][i]['id']},lock);
+                        }else {
+                            var unlockImg = document.createElement("img");
+                            unlockImg.setAttribute("name", "over-leave");
+                            unlockImg.setAttribute("operType", "icon");
+                            unlockImg.setAttribute("class", "center-icons");
+                            unlockImg.setAttribute("src", "../icon/un-unlock.png");
+                            unlockImg.setAttribute("icon", "unlock.png");
+                            unlockImg.setAttribute("tips", "解除加密");
+                            secondDiv2.append(unlockImg);
+                            $(unlockImg).click({id:data['data']['noteList'][i]['id']},unlock);
+                        }
+
+                        var deleteImg=document.createElement("img");
+                        deleteImg.setAttribute("name","over-leave");
+                        deleteImg.setAttribute("operType","icon");
+                        deleteImg.setAttribute("class","center-icons");
+                        deleteImg.setAttribute("src","../icon/un-delete.png");
+                        deleteImg.setAttribute("icon","delete.png");
+                        deleteImg.setAttribute("tips","删除");
+                        secondDiv2.append(deleteImg);
+                        $(deleteImg).click({id:data['data']['noteList'][i]['id']},notesDelete);
+
+                        var shareImg=document.createElement("img");
+                        shareImg.setAttribute("name","over-leave");
+                        shareImg.setAttribute("operType","icon");
+                        shareImg.setAttribute("class","center-icons");
+                        shareImg.setAttribute("src","../icon/un-share.png");
+                        shareImg.setAttribute("icon","share.png");
+                        shareImg.setAttribute("tips","分享");
+                        $(shareImg).click({id:data['data']['noteList'][i]['id']},showShare);
+
+                        secondDiv2.append(shareImg);
+
+                        var hr=document.createElement("HR");
+                        hr.setAttribute("class","notebook-hr");
+                        notesDiv.append(topDiv);
+                        notesDiv.append(hr);
+                    }
+                    document.getElementById("note-number-label").innerText=data['data']['noteList'].length;
+                    document.getElementById("notebook-title-label").innerText=data['data']['title'];
+                    addMouseOverAndLeaveEvent();
+                }else{
+                    layer.msg("获取笔记列表失败！"+data['msg']);
+                }
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("获取笔记列表失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /**从后台获取搜索的笔记*/
+    function getSearchList(keyword) {
+        $.ajax({
+            url:"/note/getListByTag",
+            data:{"tag":keyword},
+            success:function (data) {
+                if (data['isSuccessful']==='1'){
+                    var notesDiv=document.getElementById("search-noteList");
+                    notesDiv.innerHTML="";
+                    for (var i = 0; i < data['data'].length; i++) {
+                        var topDiv = document.createElement("div");
+                        topDiv.setAttribute("class","notebook-summary-and-operation-div");
+                        topDiv.setAttribute("name","over-leave");
+                        topDiv.setAttribute("operType","colorChange-div");
+                        $(topDiv).click({id:data['data'][i]['id']},notesClicked);
+                        var secondDiv = document.createElement("div");
+                        secondDiv.setAttribute("class","notebook-summary-div");
+                        topDiv.append(secondDiv);
+
+                        var thirdDiv = document.createElement("div");
+                        secondDiv.append(thirdDiv);
+
+                        var nameLabel = document.createElement("label");
+                        nameLabel.setAttribute("class","notebook-title-font");
+                        nameLabel.innerText=data['data'][i]['title'];
+                        var br = document.createElement("br");
+
+                        var fourthDiv = document.createElement("div");
+
+                        thirdDiv.append(nameLabel);
+                        thirdDiv.append(br);
+                        thirdDiv.append(fourthDiv);
+
+                        // var words=0;
+                        // for (var j = 0; j <data['data'][i]['noteTagList'].length ; j++) {
+                        //     words+=data['data']['noteList'][i]['noteTagList'][j]['tag'].length;
+                        //     var tagLabel = document.createElement("label");
+                        //     tagLabel.setAttribute("class","notebook-number-font");
+                        //     tagLabel.innerText=data['data']['noteList'][i]['noteTagList'][j]['tag']+' ';
+                        //     fourthDiv.append(tagLabel);
+                        //     if (words>=10) {
+                        //         tagLabel.innerText='...';
+                        //         break;
+                        //     }
+                        // }
+
+                        var secondDiv2 = document.createElement("div");
+                        secondDiv2.setAttribute("class","notebook-operation-div");
+                        topDiv.append(secondDiv2);
+
+                        // var clockImg=document.createElement("img");
+                        // clockImg.setAttribute("name","over-leave");
+                        // clockImg.setAttribute("operType","icon");
+                        // clockImg.setAttribute("class","center-icons");
+                        // clockImg.setAttribute("src","../icon/un-clock.png");
+                        // clockImg.setAttribute("icon","clock.png");
+                        // clockImg.setAttribute("tips","设置提醒");
+                        // secondDiv2.append(clockImg);
+
+                        if (data['data'][i]['isHasPwd']===0) {
+                            var lockImg = document.createElement("img");
+                            lockImg.setAttribute("name", "over-leave");
+                            lockImg.setAttribute("operType", "icon");
+                            lockImg.setAttribute("class", "center-icons");
+                            lockImg.setAttribute("src", "../icon/un-lock.png");
+                            lockImg.setAttribute("icon", "lock.png");
+                            lockImg.setAttribute("tips", "加密");
+                            secondDiv2.append(lockImg);
+                            $(lockImg).click({id:data['data'][i]['id']},lock);
+                        }else {
+                            var unlockImg = document.createElement("img");
+                            unlockImg.setAttribute("name", "over-leave");
+                            unlockImg.setAttribute("operType", "icon");
+                            unlockImg.setAttribute("class", "center-icons");
+                            unlockImg.setAttribute("src", "../icon/un-unlock.png");
+                            unlockImg.setAttribute("icon", "unlock.png");
+                            unlockImg.setAttribute("tips", "解除加密");
+                            secondDiv2.append(unlockImg);
+                            $(unlockImg).click({id:data['data'][i]['id']},unlock);
+                        }
+
+                        var deleteImg=document.createElement("img");
+                        deleteImg.setAttribute("name","over-leave");
+                        deleteImg.setAttribute("operType","icon");
+                        deleteImg.setAttribute("class","center-icons");
+                        deleteImg.setAttribute("src","../icon/un-delete.png");
+                        deleteImg.setAttribute("icon","delete.png");
+                        deleteImg.setAttribute("tips","删除");
+                        secondDiv2.append(deleteImg);
+                        $(deleteImg).click({id:data['data'][i]['id']},notesDelete);
+
+                        var shareImg=document.createElement("img");
+                        shareImg.setAttribute("name","over-leave");
+                        shareImg.setAttribute("operType","icon");
+                        shareImg.setAttribute("class","center-icons");
+                        shareImg.setAttribute("src","../icon/un-share.png");
+                        shareImg.setAttribute("icon","share.png");
+                        shareImg.setAttribute("tips","分享");
+                        $(shareImg).click({id:data['data'][i]['id']},showShare);
+
+                        secondDiv2.append(shareImg);
+
+                        var hr=document.createElement("HR");
+                        hr.setAttribute("class","notebook-hr");
+                        notesDiv.append(topDiv);
+                        notesDiv.append(hr);
+                    }
+                    document.getElementById("search-note-number-label").innerText=data['data'].length;
+                    document.getElementById("search-title-label").innerText=keyword;
+                    addMouseOverAndLeaveEvent();
+                }else{
+                    layer.msg("搜索失败！"+data['msg']);
+                }
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("搜索失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /**从后台获取用户废纸篓笔记*/
+    function getBinNoteList() {
+        $.ajax({
+            url:"http://cloudnote.com:9003/recycleBin/getNotes",
+            success:function (data) {
+                if (data['isSuccessful']==='1'){
+                    var notesDiv=document.getElementById("bin-noteList");
+                    notesDiv.innerHTML="";
+                    for (var i = 0; i < data['data'].length; i++) {
+                        var topDiv = document.createElement("div");
+                        topDiv.setAttribute("class","notebook-summary-and-operation-div");
+                        topDiv.setAttribute("name","over-leave");
+                        topDiv.setAttribute("operType","colorChange-div");
+                        $(topDiv).click({id:data['data'][i]['id']},binNotesClicked);
+
+                        var secondDiv = document.createElement("div");
+                        secondDiv.setAttribute("class","notebook-summary-div");
+                        topDiv.append(secondDiv);
+
+                        var nameLabel = document.createElement("label");
+                        nameLabel.setAttribute("class","notebook-title-font");
+                        nameLabel.innerText=data['data'][i]['noteTitle'];
+                        secondDiv.append(nameLabel);
+
+                        var secondDiv2 = document.createElement("div");
+                        secondDiv2.setAttribute("class","notebook-operation-div");
+                        topDiv.append(secondDiv2);
+
+                        var recoverImg=document.createElement("img");
+                        recoverImg.setAttribute("name","over-leave");
+                        recoverImg.setAttribute("operType","icon");
+                        recoverImg.setAttribute("class","center-icons");
+                        recoverImg.setAttribute("src","../icon/un-recover.png");
+                        recoverImg.setAttribute("icon","recover.png");
+                        recoverImg.setAttribute("tips","恢复");
+                        secondDiv2.append(recoverImg);
+                        $(recoverImg).click({id:data['data'][i]['id']},noteRecover);
+
+                        var deleteImg=document.createElement("img");
+                        deleteImg.setAttribute("name","over-leave");
+                        deleteImg.setAttribute("operType","icon");
+                        deleteImg.setAttribute("class","center-icons");
+                        deleteImg.setAttribute("src","../icon/un-delete.png");
+                        deleteImg.setAttribute("icon","delete.png");
+                        deleteImg.setAttribute("tips","删除");
+                        secondDiv2.append(deleteImg);
+                        $(deleteImg).click({id:data['data'][i]['id']},binNotesDelete);
+
+                        var hr=document.createElement("HR");
+                        hr.setAttribute("class","notebook-hr");
+                        notesDiv.append(topDiv);
+                        notesDiv.append(hr);
+                    }
+                    document.getElementById("bin-note-number-label").innerText=data['data'].length;
+                    addMouseOverAndLeaveEvent();
+                }else{
+                    layer.msg("获取废纸篓笔记列表失败！"+data['msg']);
+                }
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("获取废纸篓笔记列表失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /*从后台获取用户标签*/
+    function getTagList() {
+        // $(".Hui-tags-lable").show();
+        // $(".Hui-tags-input").val("");
+        // $("#tag-input-div").val("");
+        $("#tag-list-div").html('<i class="Hui-tags-icon Hui-iconfont">&#xe64b;</i> ' +
+            '                        <div class="Hui-tags-iptwrap" id="tag-input-div">' +
+            '                            <input type="text" class="Hui-tags-input" maxlength="30" value="" id="tag-input">' +
+            '                            <label class="Hui-tags-label">添加相关标签，用空格或回车分隔</label>' +
+            '                        </div>');
+        if (currentNote==='0') return false;
+        $.ajax({
+            type: 'get',
+            url: "/noteTag/getTags",
+            data: {
+                'note_id':currentNote
+            },
+            success: function (data) {
+                if (data["isSuccessful"] === "1") {
+                    for (var i = 0; i < data['data'].length; i++) {
+                        $('<span class="Hui-tags-token">'+data['data'][i]['tag']+'</span>').insertBefore($("#tag-input").parents(".Hui-tags").find(".Hui-tags-iptwrap"));
+                        gettagval(this);
+                    }
+
+                }
+            },
+            error: function (data) {
+            }
+        });
+    }
+
+    /*笔记本删除*/
+    function noteBooksDelete(e) {
+        console.log("笔记本删除");
+        $.ajax({
+            url:"http://cloudnote.com:9002/noteBook/delete",
+            data:{"note_book_id":e.data.id},
+            async:false,
+            success:function (data) {
+                if (data['isSuccessful']==='1') {
+                    //删除    节点
+                    $(e.target.parentElement.parentElement).next().remove();
+                    e.target.parentElement.parentElement.remove();
+                    layer.msg("删除成功！");
+                    e.stopImmediatePropagation();
+                }
+                else
+                    layer.msg("删除失败！"+data['msg']);
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("删除失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /*笔记删除*/
+    function notesDelete(e) {
+        console.log("笔记删除："+e.data.id)
+        $.ajax({
+            url:"http://cloudnote.com:9003/recycleBin/noteThrowAway",
+            data:{"note_id[]":e.data.id},
+            success:function (data) {
+                if (data['isSuccessful']==='1') {
+                    // getNoteList(currentNotebook);
+                    //删除    节点
+                    $(e.target.parentElement.parentElement).next().remove();
+                    e.target.parentElement.parentElement.remove();
+                    //修改笔记数
+                    var noteNumber = document.getElementById("note-number-label");
+                    noteNumber.innerText= parseInt(noteNumber.innerText)-1;
+                    document.getElementById("note-show-iframe").setAttribute("src","show.html");
+
+
+                    layer.msg("删除成功！");
+                }
+                else
+                    layer.msg("删除失败！"+data['msg']);
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("删除失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /*删除废纸篓的笔记*/
+    function binNotesDelete(e) {
+        $.ajax({
+            url:"http://cloudnote.com:9003/recycleBin/delete",
+            data:{"id[]":e.data.id},
+            success:function (data) {
+                if (data['isSuccessful']==='1') {
+                    //删除    节点
+                    $(e.target.parentElement.parentElement).next().remove();
+                    e.target.parentElement.parentElement.remove();
+                    //修改笔记数
+                    var noteNumber = document.getElementById("bin-note-number-label");
+                    noteNumber.innerText= parseInt(noteNumber.innerText)-1;
+                    layer.msg("删除成功！");
+                }
+                else
+                    layer.msg("删除失败！"+data['msg']);
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("删除失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /*笔记恢复*/
+    function noteRecover(e) {
+        $.ajax({
+            url:"http://cloudnote.com:9003/recycleBin/noteRecover",
+            data:{"note_id":e.data.id},
+            success:function (data) {
+                if (data['isSuccessful']==='1') {
+                    //删除    节点
+                    $(e.target.parentElement.parentElement).next().remove();
+                    e.target.parentElement.parentElement.remove();
+                    //修改笔记数
+                    var noteNumber = document.getElementById("bin-note-number-label");
+                    noteNumber.innerText= parseInt(noteNumber.innerText)-1;
+                    layer.msg("恢复成功！");
+                }
+                else
+                    layer.msg("恢复失败！"+data['msg']);
+            },
+            error:function (e) {
+                var data=JSON.parse(e.responseText);
+                if (data['isSuccessful']==='0'){
+                    layer.msg("恢复失败！"+data['msg']);
+                }else
+                    layer.msg("发生错误！");
+            }
+        })
+    }
+
+    /*显示笔记本添加窗口*/
+    function showCreateNoteBook() {
+        layer.prompt({title: '请输入笔记本名', formType: 0}, function(text, index){
+            $.ajax({
+                url:'http://cloudnote.com:9002/noteBook/add',
+                async:false,
+                data:{'title':text},
+                success: function(data){
+                    if (data['isSuccessful'] == 1){
+                        layer.msg("创建成功");
+                        showNoteBooks();
+                    } else
+                        layer.msg("失败！"+data['msg']);
+                    layer.close(index);
+                },
+                error:function(data) {
+                    layer.msg("error!");
+                    layer.close(index);
+                }
+            });
+        });
+    }
+
+    /*显示分享窗口*/
+    function showShare(e) {
+        $("#share-hidden-note-id").val(e.data.id);
+        layer.open({
+            type: 1,
+            shade: false,
+            title: '分享选项',
+            content: $('#share-div')
+        });
+    }
+
+    /*提交分享*/
+    function shareSubmit() {
+        $.ajax({
+            type: 'post',
+            url: "/share/create",
+            data: $('#share-form').serialize(),
+            success: function (data) {
+                if (data["isSuccessful"] === "1") {
+
+
+                    $.cookie('shareLink',window.location.host+'/'+data["data"]['link'],{expires:7,path:'/'});
+                    $.cookie('sharePwd',data["data"]['pwd'],{expires:7,path:'/'});
+                    localStorage.setItem("shareLink", window.location.host+'/'+data["data"]['link']);
+                    localStorage.setItem("sharePwd", data["data"]['pwd']);
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['420px', '240px'], //宽高
+                        content: 'html内容'
+                    });
+                    // var pwd = '';
+                    // if (data["data"]['isHasPwd'] == 1)
+                    //     pwd = '<br>提取码为：' + data["data"]['pwd'];
+                    // document.getElementById("share-div").style.display='none';
+                    // layer.alert('分享创建成功!链接为：<br>' + window.location.host+'/'+data["data"]['link'] + pwd);
+                } else {
+                    layer.msg('分享创建失败!' + data["msg"], {icon: 2, time: 3500});
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
+        });
+    }
+
+    /*加密笔记*/
+    function lock(e) {
+        layer.prompt({title: '输入密码', formType: 1}, function(pass, index){
+            layer.close(index);
+            $.ajax({
+                type: 'post',
+                url: "/note/lock",
+                data: {
+                    'note_id':e.data.id,
+                    'pwd':pass
+                },
+                success: function (data) {
+                    if (data["isSuccessful"] === "1") {
+                        e.target.setAttribute("src", "../icon/un-unlock.png");
+                        e.target.setAttribute("icon", "unlock.png");
+                        e.target.setAttribute("tips", "解除加密");
+                        $(e.target).click({id:e.data.id},unlock);
+                        layer.msg('加密成功', {icon: 1, time: 2000});
+                    } else {
+                        layer.msg('加密失败!' + data["msg"], {icon: 2, time: 3500});
+                    }
+                },
+                error: function (data) {
+                    layer.msg('error!', {icon: 2, time: 3500});
+                }
+            });
+        });
+        stopDefault(e);
+    }
+    /*解锁笔记*/
+    function unlock(e) {
+        layer.prompt({title: '输入密码', formType: 1}, function(pass, index){
+            layer.close(index);
+            $.ajax({
+                type: 'post',
+                url: "/note/unlock",
+                data: {
+                    'note_id':e.data.id,
+                    'pwd':pass
+                },
+                success: function (data) {
+                    if (data["isSuccessful"] === "1") {
+                        e.target.setAttribute("src", "../icon/un-lock.png");
+                        e.target.setAttribute("icon", "lock.png");
+                        e.target.setAttribute("tips", "加密");
+                        $(e.target).click({id:e.data.id},lock);
+                        layer.msg('解锁成功', {icon: 1, time: 2000});
+                    } else {
+                        layer.msg('解锁失败!' + data["msg"], {icon: 2, time: 3500});
+                    }
+                },
+                error: function (data) {
+                    layer.msg('error!', {icon: 2, time: 3500});
+                }
+            });
+        });
+        stopDefault(e);
+    }
+
+    /*添加定时提醒*/
+    function remind(e) {
+        android.notification();
+        $.ajax({
+            type: 'post',
+            url: "/note/remind",
+            data: {
+                'note_id': e.data.id,
+                'remind': "内容待添加"
+            },
+            success: function (data) {
+                if (data["isSuccessful"] === "1") {
+                    e.target.setAttribute("src", "../icon/clock.png");
+                    e.target.setAttribute("icon", "clock.png");
+                    e.target.setAttribute("tips", "取消定时提醒");
+                    $(e.target).click({id: e.data.id}, cancelRemind);
+                    layer.msg('定时提醒设置成功', {icon: 1, time: 2000});
+                } else {
+                    layer.msg('定时提醒设置失败!' + data["msg"], {icon: 2, time: 3500});
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
+        });
+        stopDefault(e);
+    }
+
+    /*添加定时提醒*/
+    function cancelRemind(e) {
+        $.ajax({
+            type: 'post',
+            url: "/note/cancelRemind",
+            data: {
+                'note_id': e.data.id,
+                '内容待添加': "内容待添加"
+            },
+            success: function (data) {
+                if (data["isSuccessful"] === "1") {
+                    e.target.setAttribute("src", "../icon/un-clock.png");
+                    e.target.setAttribute("icon", "clock.png");
+                    e.target.setAttribute("tips", "设置定时提醒");
+                    $(e.target).click({id: e.data.id}, remind);
+                    layer.msg('定时提醒撤销成功', {icon: 1, time: 2000});
+                } else {
+                    layer.msg('定时提醒撤销失败!' + data["msg"], {icon: 2, time: 3500});
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
+        });
+        stopDefault(e);
+    }
+
+    /*阻止浏览器的默认行为*/
+    function stopDefault( e ) {
+        e.stopPropagation();
+    }
+
+    //标签相关
+
+    /*显示标签添加界面*/
+    function showTagAdd() {
+        if (currentNote==='0') return false;
+        layer.prompt({title: '添加标签', formType: 0}, function(text, index){
+            layer.close(index);
+            tagSubmit(text);
+        });
+    }
+
+    /*提交标签*/
+    function tagSubmit(tag) {
+        $.ajax({
+            type: 'post',
+            url: "/noteTag/addTags",
+            data: {
+                'note_id':currentNote,
+                'tags[]':tag
+            },
+            success: function (data) {
+                if (data["isSuccessful"] != "1") {
+                    layer.msg('标签添加失败!' + data["msg"], {icon: 2, time: 3500});
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
+        });
+    }
+
+    /*标签删除*/
+    function tagDelete(tag) {
+        if (currentNote=='0') return;
+        $.ajax({
+            type: 'post',
+            url: "/noteTag/delTag",
+            data: {
+                'note_id':currentNote,
+                'tag':tag
+            },
+            success: function (data) {
+                if (data["isSuccessful"] != "1") {
+                    layer.msg('标签删除失败!' + data["msg"], {icon: 2, time: 3500});
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
+        });
+    }
+
+
+    var time1;
+    $(".Hui-tags-lable").show();
+    $(".Hui-tags-input").val("");
+    $(document).on("blur",".Hui-tags-input",function(){
+        time1 = setTimeout(function(){
+            $(this).parents(".Hui-tags").find(".Hui-tags-list").slideUp();
+        }, 400);
+    });
+    $(document).on("focus",".Hui-tags-input",function(){
+        clearTimeout(time1);
+    });
+    $(document).on("click",".Hui-tags-input",function(){
+        $(this).find(".Hui-tags-input").focus();
+        $(this).find(".Hui-tags-list").slideDown();
+    });
+    function gettagval(obj){
+        var str ="";
+        var token =$(obj).parents(".Hui-tags").find(".Hui-tags-token");
+        //alert(token.length)
+        if(token.length<1){
+            $(obj).parents(".Hui-tags").find(".Hui-tags-val").val("");
+            return false;
+        }
+        for(var i = 0;i< token.length;i++){
+            str += token.eq(i).text() + ",";
+            $(obj).parents(".Hui-tags").find(".Hui-tags-val").val(str);
+        }
+    }
+    //标签添加
+    $(document).on("keydown",".Hui-tags-input",function(event){
+        $(this).next().hide();
+        var v = $(this).val().replace(/\s+/g, "");
+        var reg=/^,|,$/gi;
+        v=v.replace(reg,"");
+        v=$.trim(v);
+        var token =$(this).parents(".Hui-tags").find(".Hui-tags-token");
+        if(v!=''){
+            if(event.keyCode==13||event.keyCode==108||event.keyCode==32){
+                $('<span class="Hui-tags-token">'+v+'</span>').insertBefore($(this).parents(".Hui-tags").find(".Hui-tags-iptwrap"));
+                $(this).val("");
+                gettagval(this);
+                tagSubmit(v);
+            }
+        }else{
+            if(event.keyCode==8){
+                alert("2"+v);
+                if(token.length>=1){
+                    $(this).parents(".Hui-tags").find(".Hui-tags-token:last").remove();
+                    gettagval(this);
+                }
+                else{
+                    $(this).parents(".Hui-tags").find(".Hui-tags-lable").show();
+                    return false;
+                }
+
+            }
+        }
+    });
+
+
+    $(document).on("click",".Hui-tags-has span",function(){
+        var taghasV = $(this).text();
+        taghasV=taghasV.replace(/(^\s*)|(\s*$)/g,"");
+        $('<span class="Hui-tags-token">'+taghasV+'</span>').insertBefore($(this).parents(".Hui-tags").find(".Hui-tags-iptwrap"));
+        gettagval(this);
+        $(this).parents(".Hui-tags").find(".Hui-tags-input").focus();
+    });
+    //标签删除
+    $(document).on("click",".Hui-tags-token",function(){
+        var token =$(this).parents(".Hui-tags").find(".Hui-tags-token");
+        var it = $(this).parents(".Hui-tags");
+        if (currentNote=='0') return;
+        $.ajax({
+            type: 'post',
+            url: "/noteTag/delTag",
+            data: {
+                'note_id':currentNote,
+                'tag':$(this).text()
+            },
+            success: function (data) {
+                if (data["isSuccessful"] != "1") {
+                    layer.msg('标签删除失败!' + data["msg"], {icon: 2, time: 3500});
+                    return;
+                }
+            },
+            error: function (data) {
+                layer.msg('error!', {icon: 2, time: 3500});
+            }
+        });
+        $(this).remove();
+        switch(token.length){
+            case 1 : it.find(".Hui-tags-lable").show();
+                break;
+        }
+        var str ="";
+        var token =it.find(".Hui-tags-token");
+        //alert(token.length)
+        if(token.length<1){
+            it.find(".Hui-tags-val").val("");
+            return false;
+        }
+        for(var i = 0;i< token.length;i++){
+            str += token.eq(i).text() + ",";
+            it.find(".Hui-tags-val").val(str);
+        }
+    });
+
+
+</script>
+</html>

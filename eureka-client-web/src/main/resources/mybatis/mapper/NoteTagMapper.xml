@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.NoteTagMapper" >
-  <resultMap id="BaseResultMap" type="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTag" >
+<mapper namespace="com.cloudnote.eureka.client.web.dao.mapper.NoteTagMapper" >
+  <resultMap id="BaseResultMap" type="com.cloudnote.eureka.client.web.pojo.NoteTag" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="note_id" property="noteId" jdbcType="INTEGER" />
     <result column="tag" property="tag" jdbcType="VARCHAR" />
@@ -67,7 +67,7 @@
   <sql id="Base_Column_List" >
     id, note_id, tag
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTagExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cloudnote.eureka.client.web.pojo.NoteTagExample" >
     select
     <if test="distinct" >
       distinct
@@ -91,19 +91,19 @@
     delete from note_tag
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTagExample" >
+  <delete id="deleteByExample" parameterType="com.cloudnote.eureka.client.web.pojo.NoteTagExample" >
     delete from note_tag
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTag" >
+  <insert id="insert" parameterType="com.cloudnote.eureka.client.web.pojo.NoteTag" >
     insert into note_tag (id, note_id, tag
       )
     values (#{id,jdbcType=INTEGER}, #{noteId,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTag" >
+  <insert id="insertSelective" parameterType="com.cloudnote.eureka.client.web.pojo.NoteTag" >
     insert into note_tag
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -128,7 +128,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTagExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.cloudnote.eureka.client.web.pojo.NoteTagExample" resultType="java.lang.Integer" >
     select count(*) from note_tag
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -160,7 +160,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTag" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cloudnote.eureka.client.web.pojo.NoteTag" >
     update note_tag
     <set >
       <if test="noteId != null" >
@@ -172,7 +172,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.NoteTag" >
+  <update id="updateByPrimaryKey" parameterType="com.cloudnote.eureka.client.web.pojo.NoteTag" >
     update note_tag
     set note_id = #{noteId,jdbcType=INTEGER},
       tag = #{tag,jdbcType=VARCHAR}

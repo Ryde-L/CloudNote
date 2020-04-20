@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="graduation.project.sgu.cloudnote.eureka.client.web.dao.mapper.RecycleBinMapper" >
-  <resultMap id="BaseResultMap" type="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin" >
+<mapper namespace="com.cloudnote.eureka.client.web.dao.mapper.RecycleBinMapper" >
+  <resultMap id="BaseResultMap" type="com.cloudnote.eureka.client.web.pojo.RecycleBin" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="note_id" property="noteId" jdbcType="INTEGER" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List" >
     id, user_id, note_id, note_book_id, note_title, throw_away_time, clear_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBinExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cloudnote.eureka.client.web.pojo.RecycleBinExample" >
     select
     <if test="distinct" >
       distinct
@@ -95,13 +95,13 @@
     delete from recycle_bin
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBinExample" >
+  <delete id="deleteByExample" parameterType="com.cloudnote.eureka.client.web.pojo.RecycleBinExample" >
     delete from recycle_bin
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin" >
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.cloudnote.eureka.client.web.pojo.RecycleBin" >
     insert into recycle_bin (id, user_id, note_id, 
       note_book_id, note_title, throw_away_time, 
       clear_time)
@@ -109,7 +109,7 @@
       #{noteBookId,jdbcType=INTEGER}, #{noteTitle,jdbcType=VARCHAR}, #{throwAwayTime,jdbcType=TIMESTAMP}, 
       #{clearTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin" >
+  <insert id="insertSelective" parameterType="com.cloudnote.eureka.client.web.pojo.RecycleBin" >
     insert into recycle_bin
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -158,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBinExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.cloudnote.eureka.client.web.pojo.RecycleBinExample" resultType="java.lang.Integer" >
     select count(*) from recycle_bin
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -206,7 +206,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cloudnote.eureka.client.web.pojo.RecycleBin" >
     update recycle_bin
     <set >
       <if test="userId != null" >
@@ -230,7 +230,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="graduation.project.sgu.cloudnote.eureka.client.web.pojo.RecycleBin" >
+  <update id="updateByPrimaryKey" parameterType="com.cloudnote.eureka.client.web.pojo.RecycleBin" >
     update recycle_bin
     set user_id = #{userId,jdbcType=INTEGER},
       note_id = #{noteId,jdbcType=INTEGER},

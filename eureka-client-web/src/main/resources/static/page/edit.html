@@ -520,7 +520,6 @@
         pencil_div.setAttribute("id", "pencil_div");
 
         var device=phoneOrPc();
-        testExec(device);
         if (device==='pc'){
             pencil_div.addEventListener("mousedown", pencilDownEvent,false);
             pencil_div.addEventListener("mousemove", pencilMoveEvent,false);
@@ -550,7 +549,6 @@
         path_d+="M"+(parseInt(touche.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(touche.pageY)-parseInt(document.getElementById("title_div").clientHeight)+parseInt(viewBoxArr[1]));
         path.setAttribute("d",path_d);
         path_moving=true;
-        testExec('h5鼠标按下'+path_d)
     }
 
     function pencilMoveEvent(e) {

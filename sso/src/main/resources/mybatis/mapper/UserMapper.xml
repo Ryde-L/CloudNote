@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="graduation.project.sgu.cloudnote.sso.dao.mapper.UserMapper" >
-  <resultMap id="UserResultMap" type="graduation.project.sgu.cloudnote.sso.pojo.User" >
+<mapper namespace="com.cloudnote.sso.dao.mapper.UserMapper" >
+  <resultMap id="UserResultMap" type="com.cloudnote.sso.pojo.User" >
     <id column="id" property="id" jdbcType="INTEGER"/>
     <result column="name" property="name" jdbcType="VARCHAR"/>
     <result column="pwd" property="pwd" jdbcType="VARCHAR"/>
@@ -78,7 +78,7 @@
   <sql id="Base_Column_List" >
     id, name, pwd, phone, email, gender, sculpture, status
   </sql>
-  <select id="selectByExample" resultMap="UserResultMap" parameterType="graduation.project.sgu.cloudnote.sso.pojo.UserExample" >
+  <select id="selectByExample" resultMap="UserResultMap" parameterType="com.cloudnote.sso.pojo.UserExample" >
     select
     <if test="distinct" >
       distinct
@@ -102,13 +102,13 @@
     delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="graduation.project.sgu.cloudnote.sso.pojo.UserExample" >
+  <delete id="deleteByExample" parameterType="com.cloudnote.sso.pojo.UserExample" >
     delete from user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="graduation.project.sgu.cloudnote.sso.pojo.User" useGeneratedKeys="true" keyProperty="id" >
+  <insert id="insert" parameterType="com.cloudnote.sso.pojo.User" useGeneratedKeys="true" keyProperty="id" >
     insert into user (id, name, pwd, 
       phone, email, gender, 
       sculpture, status)
@@ -116,7 +116,7 @@
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
       #{sculpture,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="graduation.project.sgu.cloudnote.sso.pojo.User" >
+  <insert id="insertSelective" parameterType="com.cloudnote.sso.pojo.User" >
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -171,7 +171,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="graduation.project.sgu.cloudnote.sso.pojo.UserExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.cloudnote.sso.pojo.UserExample" resultType="java.lang.Integer" >
     select count(*) from user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -223,7 +223,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="graduation.project.sgu.cloudnote.sso.pojo.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cloudnote.sso.pojo.User" >
     update user
     <set >
       <if test="name != null" >
@@ -250,7 +250,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="graduation.project.sgu.cloudnote.sso.pojo.User" >
+  <update id="updateByPrimaryKey" parameterType="com.cloudnote.sso.pojo.User" >
     update user
     set name = #{name,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},

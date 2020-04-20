@@ -17,6 +17,18 @@ zuul:
     sso-api:
       path: /sso/**
       serviceId: SSO
+    note-api:
+      path: /noteServices/**
+      serviceId: note
+    bin-api:
+      path: /binServices/**
+      serviceId: binServices
+    notebook-api:
+      path: /notebookServices/**
+      serviceId: notebookServices
+    usr-api:
+      path: /userServices/**
+      serviceId: userServices
     main-api:
-      path: /note/**
+      path: /mainService/**
       serviceId: EUREKA-CLIENT-WEB
