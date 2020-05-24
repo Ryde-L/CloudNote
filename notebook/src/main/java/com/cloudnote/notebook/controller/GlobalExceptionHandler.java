@@ -1,7 +1,7 @@
 package com.cloudnote.notebook.controller;
 
-import com.cloudnote.notebook.dto.ResponseDto;
-import com.cloudnote.notebook.utils.ResultUtil;
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

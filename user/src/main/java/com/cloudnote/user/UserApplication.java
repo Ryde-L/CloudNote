@@ -3,15 +3,19 @@ package com.cloudnote.user;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @SpringBootApplication
 @EnableEurekaClient
+@EnableRedisHttpSession
 @MapperScan("com.cloudnote.user.dao.mapper")
+@ServletComponentScan("com.cloudnote.user.filter")
 
 public class UserApplication {
 

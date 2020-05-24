@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>分享条件</title>
+	<link href="../lib/h-ui/css/H-ui.css" rel='stylesheet' type='text/css' />
+	<link href="../lib/share/css/style.css" rel='stylesheet' type='text/css' />
+	<link href="../lib/share/css/font-awesome.css" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="share-form" name="forma">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>提取码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select class="select" size="1" name="is_has_pwd" id="is_has_pwd">
+						<option class="option" value="1" selected>要求</option>
+						<option class="option" value="0">不要求</option>
+					</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分享天数：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select class="select" size="1" name="days" id="days">
+						<option class="option" value="1" selected>1天</option>
+						<option class="option" value="7">7天</option>
+					</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="right-grid-w3ls text-center"  style="display: none;width: auto;height: auto" id="shareResult">
+	<h3>分享给你朋友吧</h3>
+	<form >
+		<div class="img-grid1">
+			<svg t="1587240458054" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2408" width="64" height="64"><path d="M994.305 166.16c-39.945-40.917-104.706-40.917-144.652 0L391.586 635.504 174.61 413.192c-39.946-40.936-104.706-40.936-144.643 0-39.956 40.918-39.956 107.283 0 148.214l289.296 296.42c39.946 40.936 104.7 40.936 144.647 0l530.395-543.451c39.947-40.927 39.947-107.283 0-148.215z" p-id="2409" fill="#1afa29"></path></svg>
+		</div>
+		<div class="w3ls-icon">
+			<i class="fa fa-envelope" aria-hidden="true"></i>
+			<input type="email" class="user" name="email" placeholder="" required="" id="link"/>
+		</div>
+		<div class="w3ls-icon">
+			<i class="fa fa-lock" aria-hidden="true"></i>
+			<input type="email" class="lock" name="password" placeholder="" required="" id="pwd"/>
+		</div>
+		<input type="submit" value="复制链接和提取码" onclick="copyLinkAndPwd()">
+	</form>
+</div>
+
+<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/additional-methods.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/requestInterceptor.js"></script>
+<script>
+	var shareLink='';
+	var sharePwd='';
+	$(function(){
+		$("#share-form").validate({
+			rules:{
+				is_has_pwd:{
+					required:true,
+					digits:true
+				},
+				days:{
+					required:true,
+					digits:true
+				}
+			},
+			onkeyup:false,
+			focusCleanup:true,
+			success:"valid",
+			submitHandler:function(form){
+				$.ajax({
+					type: 'post',
+					url: "/share/create" ,
+					data:{
+						"is_has_pwd":$("#is_has_pwd").val(),
+						"days":$("#days").val(),
+						"note_id":getUrlParam("note_id")
+					},
+					success: function(data){
+						if(data["isSuccessful"]=="1") {
+							shareLink=window.location.host+'/'+data["data"]['link'];
+							sharePwd=data["data"]['pwd'];
+							$("#link").val(shareLink);
+							$("#pwd").val(sharePwd);
+							layer.open({
+								type: 1,
+								shade: false,
+								title: '分享结果',
+								content: $('#shareResult')
+							});
+						}else {
+							layer.msg('失败!',{icon:2,time:3500});
+						}
+					},
+					error: function(XmlHttpRequest, textStatus, errorThrown){
+						layer.msg('error!请重试或联系管理员',{icon:2,time:3500});
+					}
+				});
+			}
+
+		});
+	});
+
+	function copyLinkAndPwd() {
+		copyText('链接：'+shareLink+'\r\n'+(sharePwd==null?'':'；提取码：'+sharePwd));
+	}
+
+	/*复制文本*/
+	function copyText(text) {
+		var textarea = document.createElement("input");//创建input对象
+		var currentFocus = document.activeElement;//当前获得焦点的元素
+		document.body.appendChild(textarea);//添加元素
+		textarea.value = text;
+		textarea.focus();
+		if(textarea.setSelectionRange)
+			textarea.setSelectionRange(0, textarea.value.length);//获取光标起始位置到结束位置
+		else
+			textarea.select();
+		try {
+			var flag = document.execCommand("copy");//执行复制
+		} catch(eo) {
+			var flag = false;
+		}
+		document.body.removeChild(textarea);//删除元素
+		currentFocus.focus();
+		alert("复制成功")
+	}
+
+	//获取url中的参数
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var r = decodeURI(decodeURI(window.location.search.substr(1))).match(reg);  //匹配目标参数
+		if (r != null) return unescape(r[2]); return null; //返回参数值
+	}
+</script>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 package com.cloudnote.sso.dao.mapper;
 
-import com.cloudnote.sso.pojo.Administrator;
+import com.cloudnote.common.pojo.Administrator;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdministratorMapper {
 
-    @Insert("insert into user (id, name, pwd)\n" +
+    @Insert("insert into administrator (id, name, pwd)\n" +
             "    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR})")
     @Options(useGeneratedKeys = true)
     int insert(Administrator record);
@@ -29,6 +29,6 @@ public interface AdministratorMapper {
      * @param pwd 密码
      * @return 单个Administrator对象或null
      */
-    @Select("select * from user where name=#{param1} and pwd=#{param2} limit 0,1")
+    @Select("select * from administrator where name=#{param1} and pwd=#{param2} limit 0,1")
     Administrator selectByNameAndPwd(String username, String pwd);
 }

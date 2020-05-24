@@ -37,8 +37,10 @@
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
-<script type="text/javascript" src="../lib/h-ui/js/H-ui.min.js"></script> 
-<script type="text/javascript" src="../lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../lib/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/requestInterceptor.js"></script>
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="../lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
@@ -53,7 +55,7 @@ $(function(){
 		// ],
 		"processing" : true,
 		"serverSide" : true,
-        "ajax" : "http://cloudnote.com:9001/note/datatable",
+        "ajax" : "http://localhost:8800/noteServices/note/datatableByAdministrator",
         "columns": [
             {"data": "id"},
             {"data": "name"},
@@ -62,7 +64,7 @@ $(function(){
             {
             	"data": "id",
 				"render":function (data,type,full,meta) {
-					return "<a target='_blank' style='color: #0e90d2' href='http://cloudnote.com:9001/page/show.html?note="+data+"'>点击查看笔记内容</a>";
+					return "<a target='_blank' style='color: #0e90d2' href='http://localhost:8800/noteServices/path/show.html?note="+data+"&use_admin_filter=true'>点击查看笔记内容</a>";
 				}
 			},
             { "data":  "id",
@@ -82,12 +84,13 @@ function del(obj,id){
 	layer.confirm('确认要删除吗？',function(index){
 		$.ajax({
 			type: 'POST',
-            url : "http://cloudnote.com:9001/note/delByAdministrator",
+            url : "http://localhost:8800/noteServices/note/delByAdministrator",
             data:{"note_id":id},
 			success: function(data){
 				$(obj).parents("tr").remove();
 				layer.msg('操作成功!', {icon: 1, time: 2000});
 				$('.table-sort').DataTable().draw(false);
+				isRedirect(data);
 			},
 			error:function(data) {
                 layer.msg('error!',{icon:2,time:2500});

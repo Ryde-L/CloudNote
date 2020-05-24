@@ -1,13 +1,12 @@
 package com.cloudnote.note.service.impl;
 
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.pojo.Note;
+import com.cloudnote.common.pojo.NoteContent;
+import com.cloudnote.common.utils.CheckerUtil;
+import com.cloudnote.common.utils.ResultUtil;
 import com.cloudnote.note.dao.mapper.NoteMapper;
-import com.cloudnote.note.dto.ResponseDto;
-import com.cloudnote.note.pojo.Note;
-import com.cloudnote.note.pojo.NoteBook;
-import com.cloudnote.note.pojo.NoteContent;
 import com.cloudnote.note.service.*;
-import com.cloudnote.note.utils.CheckerUtil;
-import com.cloudnote.note.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +45,6 @@ public class NoteServiceImpl implements NoteService {
     ShareService shareService;
 
     @Autowired
-    NotePicService notePicService;
-
-    @Autowired
-    NoteAttachmentService noteAttachmentService;
-
-    @Autowired
     NoteMapper noteMapper;
 
 
@@ -74,9 +67,9 @@ public class NoteServiceImpl implements NoteService {
      * @return ResponseDto
      */
     public ResponseDto createNote(Integer noteBookId, String title, String content) {
-        ResponseDto responseDto = restTemplate.getForObject("http://NOTEBOOK/noteBook/getNoteBookByNoteBookId?note_book_id=" + noteBookId, ResponseDto.class);
+        ResponseDto responseDto = restTemplate.getForObject("http://notebookServices/noteBook/getNoteBookByNoteBookId?note_book_id=" + noteBookId, ResponseDto.class);
         if ("1".equals(responseDto.getIsSuccessful())&&responseDto.getData()==null) return ResultUtil.error("笔记本对象无效");
-        Note note = new Note(null, noteBookId, title,0,null,0,null);
+        Note note = new Note(null, noteBookId, title,0,null);
         noteMapper.insert(note);
         noteContentService.insert(new NoteContent(null, note.getId(), content));
         return ResultUtil.success("",String.valueOf(note.getId()));
@@ -116,7 +109,7 @@ public class NoteServiceImpl implements NoteService {
      * @return json格式字符串： {"msg":"","isSuccessful":"1","data":{"id":1,"userId":4,"title":"","deletable":0,"noteList":[{"id":1,"noteBookId":1,"title":""},]}}
      */
     public ResponseDto getNoteBookList(Integer noteBookId) {
-        if (CheckerUtil.checkNull(noteBookId)) return ResultUtil.error("缺少参数");
+        if (CheckerUtil.checkNulls(noteBookId)) return ResultUtil.error("缺少参数");
         //TODO Test
         ResponseDto responseDto = restTemplate.getForObject("http://notebookServices/noteBook/getNoteBookByNoteBookId?note_book_id=" + noteBookId, ResponseDto.class);
         return ResultUtil.success("", responseDto.getData());
@@ -171,13 +164,13 @@ public class NoteServiceImpl implements NoteService {
      * @param noteId 笔记id
      * @return ResponseDto
      */
-    public ResponseDto getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId){
+    public ResponseDto<Note> getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId){
         if(CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
         Note note = noteMapper.selectWithNoteBook(noteId);
         if (note==null) return ResultUtil.success(null);
         if (note.getNoteBook()==null) return ResultUtil.success(null);
         if (!note.getNoteBook().getUserId().equals(userId)) return ResultUtil.success(null);
-        return ResultUtil.success(note);
+        return ResultUtil.success("",note);
     }
 
     /**
@@ -221,7 +214,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public ResponseDto deleteForever(Integer userId, Integer noteId) {
+    public ResponseDto deleteForever(Integer noteId) {
         if(CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
         Note note = noteMapper.selectByIdWithNoteBookAndContent(noteId);
         if (note!=null) noteMapper.deleteByPrimaryKey(noteId);

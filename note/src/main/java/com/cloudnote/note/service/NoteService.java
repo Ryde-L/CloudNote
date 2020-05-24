@@ -1,7 +1,7 @@
 package com.cloudnote.note.service;
 
-import com.cloudnote.note.dto.ResponseDto;
-import com.cloudnote.note.pojo.Note;
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.pojo.Note;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -89,7 +89,7 @@ public interface NoteService {
      * @param noteId 笔记id
      * @return ResponseDto
      */
-    ResponseDto getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId);
+    ResponseDto<Note> getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId);
 
     /**
      * 笔记解密
@@ -111,11 +111,10 @@ public interface NoteService {
 
     /**
      * 永久删除
-     * @param userId 用户id
      * @param noteId 笔记id
      * @return ResponseDto
      */
-    ResponseDto deleteForever(Integer userId, Integer noteId);
+    ResponseDto deleteForever(Integer noteId);
 
     List<Map> selectList(int start, int length);
 

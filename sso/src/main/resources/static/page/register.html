@@ -84,7 +84,7 @@
             success: function (data) {
                 console.log(data);
                 if (data['isSuccessful'] === '1')
-                    document.location.href=data['msg'];
+                    location.href = 'http://localhost:8800/noteServices/path/new.html';
                 else
                     layer.msg('注册失败!'+data['msg'],{icon:2,time:2000});
             },

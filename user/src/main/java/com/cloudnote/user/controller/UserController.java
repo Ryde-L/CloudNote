@@ -1,10 +1,10 @@
 package com.cloudnote.user.controller;
 
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.utils.JsonUtil;
 import com.cloudnote.user.dto.DatatablePage;
-import com.cloudnote.user.dto.ResponseDto;
-import com.cloudnote.user.pojo.User;
+import com.cloudnote.common.pojo.User;
 import com.cloudnote.user.service.UserService;
-import com.cloudnote.user.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +21,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("datatable")
+    @RequestMapping("datatableByAdministrator")
     public String datatable(HttpServletRequest request) {
         List<User> list = new ArrayList<>();
         String start = request.getParameter("start");
@@ -32,16 +32,16 @@ public class UserController {
         data.setRecordsFiltered(userService.countAll());//过滤后的总记录数
         data.setDraw(Integer.parseInt(request.getParameter("draw")) + 1);
         data.setData(list);
-        return JsonUtils.objectToJson(data);
+        return JsonUtil.objectToJson(data);
     }
 
 
-    @RequestMapping("lock")
+    @RequestMapping("lockByAdministrator")
     ResponseDto lock(@RequestParam("user")Integer userId){
         return userService.lock(userId);
     }
 
-    @RequestMapping("unlock")
+    @RequestMapping("unlockByAdministrator")
     ResponseDto unlock(@RequestParam("user")Integer userId){
         return userService.unlock(userId);
     }

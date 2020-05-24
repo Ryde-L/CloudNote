@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>SVG 编辑器</title>
     <style>
@@ -76,6 +77,9 @@
         /*li { display: inline-block;}*/
         li { margin: 10px 0;}
         input.labelauty + label { font: 12px "Microsoft Yahei";}
+        .svg-icon{pointer-events: none;}
+
+
     </style>
     <link rel="stylesheet" href="../lib/jquery-pretty-radio-checkbox/css/jquery-labelauty.css">
 
@@ -84,22 +88,26 @@
 <div id="toolbox">
     <h2>操作</h2>
     <form id="operation">
-        <button type="button" oper="arrow">arrow</button>
-        <button type="button" oper="drag">drag</button>
-        <button type="button" oper="svgDelete">del</button>
-        <button type="button" view="turn_up" onclick="svgViewBoxChange(1)">↑</button>
-        <button type="button" view="turn_down" onclick="svgViewBoxChange(2)">↓</button>
-        <button type="button" view="turn_left" onclick="svgViewBoxChange(3)">←</button>
-        <button type="button" view="turn_right" onclick="svgViewBoxChange(4)">→</button>
+        <button type="button" oper="arrow"><svg t="1587668979376" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1885" width="16" height="16"><path d="M726.9 158.1C677.8 109 612.5 82 543.1 82h-29.6c-0.5 0-1-0.1-1.5-0.1s-1 0-1.5 0.1h-29.6c-69.4 0-134.7 27-183.8 76.2S220.9 272.5 220.9 342v340.1c0 69.4 27 134.7 76.2 183.8s114.4 76.2 183.8 76.2h62.2c69.4 0 134.7-27 183.8-76.2s76.2-114.4 76.2-183.8V342c0-69.5-27.1-134.8-76.2-183.9z m-28.2 28.3c41.6 41.6 64.4 96.8 64.4 155.6v94.7c-31.5 20-67.8 35.8-108.2 47.2-39.1 11.1-80.4 17.4-122.9 19V122h11.1c58.8 0 114 22.9 155.6 64.4z m-373.4 0c41.6-41.6 96.8-64.4 155.6-64.4H492v381c-86.9-2.9-168-25.6-231.1-64.9V342c0-58.8 22.9-114 64.4-155.6z m373.4 651.3c-41.6 41.6-96.8 64.4-155.6 64.4h-62.2c-58.8 0-114-22.9-155.6-64.4-41.6-41.6-64.4-96.8-64.4-155.6V484.3c70.6 38.2 158 59 250 59h1.4c92.6-0.2 180.2-21.4 250.9-60.2v199c-0.1 58.8-23 114-64.5 155.6z" fill="#565656" p-id="1886"></path></svg></button>
+        <button type="button" oper="drag"><svg t="1587669112638" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5551" width="16" height="16"><path d="M870.4 204.8c-18.6368 0-36.1472 5.0176-51.2 13.7728V153.6a102.5024 102.5024 0 0 0-159.3856-85.0432C645.7856 28.672 607.7952 0 563.2 0S480.5632 28.672 466.5856 68.5568A102.5024 102.5024 0 0 0 307.2 153.6v377.4976L238.2848 411.648a99.6864 99.6864 0 0 0-61.3888-48.7936 95.5392 95.5392 0 0 0-74.8544 10.3424c-46.4384 27.8528-64.1536 90.8288-39.424 140.3904 1.536 3.1232 34.2016 70.0416 136.192 273.92 48.0256 96 100.7104 164.6592 156.6208 203.9808 43.8784 30.8736 74.1888 32.4608 79.8208 32.4608h256c43.5712 0 84.0704-14.1824 120.4224-42.0864 34.1504-26.2656 63.7952-64.256 88.064-112.8448 47.8208-95.6416 73.1136-227.9424 73.1136-382.6688v-179.2c0-56.4736-45.9264-102.4-102.4-102.4z m51.2 281.6c0 146.7904-23.3984 271.1552-67.6864 359.7312C825.0368 903.8848 773.3248 972.8 691.2 972.8H435.712c-1.9968-0.1536-23.552-2.56-56.064-26.88-32.4096-24.2688-82.176-75.3664-135.0656-181.248-103.7824-207.5648-135.68-272.9472-135.9872-273.5616l-0.1024-0.2048c-12.8512-25.7536-3.7376-59.4944 19.9168-73.6768a44.8512 44.8512 0 0 1 35.072-4.864 48.9472 48.9472 0 0 1 30.0544 24.1664l0.3072 0.512 79.9232 138.496c16.3328 29.8496 34.7136 42.3936 54.6304 37.3248 19.968-5.0688 30.0544-25.0368 30.0544-59.2384V153.6c0-28.2112 22.9888-51.2 51.2-51.2s51.2 22.9888 51.2 51.2v332.8a25.6 25.6 0 0 0 51.2 0V102.4c0-28.2112 22.9888-51.2 51.2-51.2s51.2 22.9888 51.2 51.2v384a25.6 25.6 0 0 0 51.2 0V153.6c0-28.2112 22.9888-51.2 51.2-51.2s51.2 22.9888 51.2 51.2v384a25.6 25.6 0 0 0 51.2 0V307.2c0-28.2112 22.9888-51.2 51.2-51.2s51.2 22.9888 51.2 51.2v179.2z" fill="" p-id="5552"></path></svg></button>
+        <button type="button" oper="svgDelete"><svg t="1587669487485" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6414" width="16" height="16"><path d="M817.968553 215.897142l-169.357176 0 0-58.869782c0-25.391297-20.657482-46.048779-46.048779-46.048779l-181.125197 0c-25.391297 0-46.048779 20.657482-46.048779 46.048779l0 58.869782-169.357176 0c-25.391297 0-46.048779 20.657482-46.048779 46.048779l0 71.631434c0 25.391297 20.657482 46.048779 46.048779 46.048779l28.321022 0 0 425.947112c0 59.246359 48.200792 107.447151 107.447151 107.447151l340.40076 0c59.246359 0 107.447151-48.200792 107.447151-107.447151L789.647531 379.626133l28.321022 0c25.391297 0 46.048779-20.657482 46.048779-46.048779l0-71.631434C864.017332 236.554624 843.35985 215.897142 817.968553 215.897142zM426.553932 162.14389l170.892135 0 0 53.753251-170.892135 0L426.553932 162.14389zM738.482221 805.574269c0 31.033807-25.248034 56.281841-56.281841 56.281841L341.79962 861.85611c-31.033807 0-56.281841-25.248034-56.281841-56.281841L285.517779 379.626133l452.964442 0L738.482221 805.574269zM812.852022 328.460824l-601.704045 0 0-61.398372 203.227588 0c2.302439 0.356111 4.66116 0.542352 7.061836 0.542352l181.125197 0c2.400676 0 4.759397-0.186242 7.062859-0.542352l203.226564 0L812.852022 328.460824zM513.023306 783.320429c14.128789 0 25.582655-11.453866 25.582655-25.582655l0-288.572348c0-14.128789-11.453866-25.582655-25.582655-25.582655-14.128789 0-25.582655 11.453866-25.582655 25.582655l0 288.572348C487.440651 771.866562 498.894518 783.320429 513.023306 783.320429zM645.541459 783.320429c14.128789 0 25.582655-11.453866 25.582655-25.582655l0-288.572348c0-14.128789-11.453866-25.582655-25.582655-25.582655s-25.582655 11.453866-25.582655 25.582655l0 288.572348C619.958804 771.866562 631.41267 783.320429 645.541459 783.320429zM380.505154 783.320429c14.128789 0 25.582655-11.453866 25.582655-25.582655l0-288.572348c0-14.128789-11.453866-25.582655-25.582655-25.582655s-25.582655 11.453866-25.582655 25.582655l0 288.572348C354.922499 771.866562 366.376365 783.320429 380.505154 783.320429z" p-id="6415"></path></svg></button>
+        <div>
+            <button type="button" view="turn_up" onclick="svgViewBoxChange(1)"><svg t="1587669617706" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7251" width="16" height="16"><path d="M522.256 227.487c2.355 1.137 4.57 2.659 6.523 4.611l453.191 453.193c9.357 9.357 9.357 24.527 0 33.883l-72.001 72.001c-9.357 9.357-24.527 9.357-33.883 0l-17.227-17.227c0 0 0 0 0 0l-329.794-329.793c-9.514-9.514-24.941-9.514-34.454 0l-347.022 347.022c-9.357 9.357-24.528 9.357-33.884 0l-72.002-72.002c-9.357-9.357-9.356-24.527 0.001-33.883l17.227-17.227c0 0 0 0 0 0l363.958-363.959c0.001-0.001 0.002-0.001 0.002-0.002l72.001-72.001c0.585-0.585 1.193-1.133 1.821-1.645 7.316-5.968 17.326-6.942 25.542-2.97z" p-id="7252"></path></svg></button>
+            <button type="button" view="turn_down" onclick="svgViewBoxChange(2)"><svg t="1587669679836" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8284" width="16" height="16"><path d="M52.335 261.072c-31.269 30.397-31.269 79.722 0 110.194l403.212 391.718c31.325 30.382 82.114 30.382 113.377 0l403.197-391.718c31.325-30.466 31.325-79.793 0-110.194-31.28-30.449-82.058-30.449-113.39 0l-346.497 336.64-346.457-336.64c-31.325-30.448-82.105-30.448-113.446 0l0 0z" p-id="8285"></path></svg></button>
+            <button type="button" view="turn_left" onclick="svgViewBoxChange(3)"><svg t="1587669723120" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9073" width="16" height="16"><path d="M229.98144 501.65888c1.12896-2.33728 2.63936-4.53504 4.57728-6.47424L684.33664 45.40928c9.28768-9.2864 24.34304-9.2864 33.62816 0l71.45984 71.45856c9.28512 9.2864 9.28512 24.34176 0 33.62816L427.92064 512l361.50528 361.504c9.2864 9.2864 9.2864 24.34432 0 33.62944l-71.45856 71.45856c-9.2864 9.2864-24.34176 9.28512-33.62816-0.00128L306.0224 600.27648c-0.00128-0.00128-0.00128-0.00256-0.00256-0.00256l-71.45856-71.45856c-0.58112-0.58112-1.12512-1.184-1.63328-1.80736C227.00544 519.74912 226.04032 509.81504 229.98144 501.65888L229.98144 501.65888z" p-id="9074"></path></svg></button>
+            <button type="button" view="turn_right" onclick="svgViewBoxChange(4)"><svg t="1587669748705" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9910" width="16" height="16"><path d="M294.4 908.8 684.8 512 294.4 115.2c-25.6-25.6-25.6-70.4 0-96 25.6-25.6 70.4-25.6 96 0L832 460.8c12.8 12.8 19.2 32 19.2 51.2S844.8 544 832 563.2l-441.6 441.6c-25.6 25.6-70.4 25.6-96 0C262.4 979.2 262.4 934.4 294.4 908.8z" p-id="9911"></path></svg></button>
+        </div>
     </form>
     <h2>创建</h2>
     <form id="create-shape">
-        <button type="button" create="rect">Rect</button>
-        <button type="button" create="circle">Circle</button>
-        <button type="button" create="ellipse">Ellipse</button>
-        <button type="button" create="line">Line</button>
-        <button type="button" my="text" onclick="useText()">Text</button>
-        <button type="button" my="pencil" onclick="usePencil()">Pencil</button>
+        <button type="button" create="rect"><svg t="1587669992977" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10762" width="16" height="16"><path d="M141.074286 906.496h741.851428c89.581714 0 134.582857-44.562286 134.582857-132.845714V250.331429c0-88.283429-45.001143-132.845714-134.582857-132.845715H141.074286C51.931429 117.504 6.491429 161.645714 6.491429 250.331429V773.668571c0 88.704 45.44 132.845714 134.582857 132.845715z m1.28-68.992c-42.861714 0-66.852571-22.710857-66.852572-67.291429V253.805714c0-44.580571 23.990857-67.291429 66.852572-67.291428h739.291428c42.422857 0 66.852571 22.710857 66.852572 67.291428V770.194286c0 44.580571-24.429714 67.291429-66.852572 67.291428z" p-id="10763"></path></svg></button>
+        <button type="button" create="circle"><svg t="1587669977685" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1741" width="16" height="16"><path d="M512 928C282.624 928 96 741.376 96 512S282.624 96 512 96s416 186.624 416 416-186.624 416-416 416z m0-768C317.92 160 160 317.92 160 512s157.92 352 352 352 352-157.92 352-352S706.08 160 512 160z" p-id="1742"></path></svg></button>
+        <button type="button" create="ellipse"><svg t="1587669952464" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1555" width="16" height="16"><path d="M512 199.6c53.5 0 105.3 8.7 153.9 25.8 46.4 16.4 88 39.7 123.5 69.3 70.5 58.7 109.3 135.9 109.3 217.3s-38.8 158.5-109.3 217.3c-35.5 29.6-77.1 52.9-123.5 69.3-48.6 17.1-100.4 25.8-153.9 25.8s-105.3-8.7-153.9-25.8c-46.4-16.4-88-39.7-123.5-69.3-70.5-58.8-109.4-135.9-109.4-217.3S164 353.5 234.5 294.7c35.5-29.6 77.1-52.9 123.5-69.3 48.7-17.1 100.5-25.8 154-25.8m0-59.5C265.5 140.1 65.7 306.6 65.7 512c0 205.4 199.8 371.9 446.3 371.9S958.3 717.4 958.3 512c0-205.4-199.8-371.9-446.3-371.9z" p-id="1556"></path></svg></button>
+        <button type="button" create="line"><svg t="1587670077636" class="svg-icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13246" width="16" height="16"><path d="M930.263 61.981l31.756 31.756-868.272 868.272-31.756-31.756 868.272-868.272z" p-id="13247"></path></svg></button>
+        <button type="button" my="text" onclick="useText()"><svg t="1587670219181" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="22788" width="16" height="16"><path d="M818.176 797.696c-3.072-41.984-4.096-84.992-4.096-126.976 0-21.504 0-41.984 1.024-63.488 0-19.456 2.048-38.912-5.12-57.344-16.384-41.984-71.68-50.176-111.616-50.176-20.48 0-40.96 3.072-61.44 8.192-14.336 4.096-28.672 9.216-40.96 15.36l13.312 32.768c3.072 6.144 4.096 13.312 5.12 19.456 26.624-12.288 53.248-19.456 79.872-19.456 41.984 0 62.464 16.384 62.464 49.152v15.36c-6.144 0-16.384-1.024-29.696-1.024-53.248 0-93.184 8.192-121.856 23.552-27.648 16.384-41.984 44.032-41.984 83.968 0 29.696 9.216 53.248 27.648 69.632 18.432 16.384 41.984 24.576 69.632 24.576 24.576 0 45.056-3.072 60.416-10.24s28.672-17.408 38.912-31.744h2.048c1.024 7.168 2.048 18.432 5.12 34.816 0 1.024 46.08 0 51.2 0 1.024-7.168 0-11.264 0-16.384zM757.76 694.272c0 7.168-1.024 14.336-4.096 21.504-2.048 5.12-4.096 10.24-8.192 15.36-12.288 17.408-33.792 26.624-54.272 30.72-13.312 2.048-25.6 1.024-38.912-1.024-10.24-2.048-20.48-7.168-25.6-16.384-9.216-14.336-7.168-36.864 3.072-50.176 6.144-8.192 15.36-13.312 24.576-16.384 25.6-8.192 55.296-8.192 80.896-8.192l22.528 1.024v23.552zM562.176 576.512L416.768 216.064c-2.048-7.168-8.192-11.264-15.36-11.264h-46.08c-7.168 0-14.336 5.12-16.384 11.264l-133.12 360.448c-3.072 7.168 2.048 15.36 9.216 15.36h51.2c7.168 0 14.336-6.144 16.384-13.312l33.792-94.208h131.072l37.888 94.208c2.048 7.168 9.216 13.312 16.384 13.312h50.176c8.192 0 14.336-8.192 10.24-15.36zM343.04 413.696l37.888-98.304 41.984 98.304h-79.872z" p-id="22789"></path></svg></button>
+        <button type="button" my="pencil" onclick="usePencil()"><svg t="1587670179385" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="21923" width="16" height="16"><path d="M258.56 916.48c-30.72 0-64-5.12-92.16-15.36-64-23.04-97.28-69.12-99.84-128-2.56-89.6 66.56-120.32 120.32-143.36 51.2-23.04 79.36-35.84 79.36-74.24 0-46.08-79.36-84.48-112.64-89.6-12.8-5.12-20.48-17.92-20.48-30.72 2.56-12.8 15.36-23.04 28.16-20.48 46.08 7.68 156.16 56.32 156.16 140.8 0 74.24-61.44 99.84-110.08 120.32-56.32 25.6-92.16 43.52-89.6 97.28 0 38.4 23.04 66.56 64 81.92 66.56 25.6 166.4 7.68 192-23.04 10.24-10.24 25.6-12.8 35.84-2.56 10.24 10.24 12.8 25.6 2.56 35.84-25.6 30.72-89.6 51.2-153.6 51.2z" fill="#858E9E" p-id="21924"></path><path d="M435.2 757.76c-5.12 5.12 2.56 17.92 12.8 25.6s23.04 10.24 28.16 5.12l107.52-81.92-102.4-74.24-46.08 125.44zM929.28 120.32c-28.16-20.48-69.12-15.36-89.6 15.36L509.44 591.36l102.4 74.24 332.8-455.68c20.48-28.16 12.8-69.12-15.36-89.6z" fill="#525C6A" p-id="21925"></path></svg></button>
+        <button type="button"  id="recorder" onclick="startRecord()" style="display: none"><svg t="1587670307624" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="25081" width="16" height="16"><path d="M512 640a170.858667 170.858667 0 0 0 170.666667-170.666667V256a170.666667 170.666667 0 0 0-341.333334 0v213.333333a170.858667 170.858667 0 0 0 170.666667 170.666667z m-128-384a128 128 0 0 1 256 0v213.333333a128 128 0 0 1-256 0z" fill="#646464" p-id="25082"></path><path d="M789.333333 426.666667a21.333333 21.333333 0 0 0-21.333333 21.333333v21.333333a256 256 0 0 1-512 0v-21.333333a21.333333 21.333333 0 0 0-42.666667 0v21.333333a298.837333 298.837333 0 0 0 277.333334 297.6V896h-128a21.333333 21.333333 0 0 0 0 42.666667h298.666666a21.333333 21.333333 0 0 0 0-42.666667h-128v-129.066667A298.837333 298.837333 0 0 0 810.666667 469.333333v-21.333333a21.333333 21.333333 0 0 0-21.333334-21.333333z" fill="#646464" p-id="25083"></path></svg></button>
+
         <button type="button" my="foreignObject" disabled style="display: none">foreignObject</button>
         <button type="button" create="foreignObject" disabled style="display: none">text</button>
         <button type="button" create="path" disabled style="display: none">path</button>
@@ -116,7 +124,7 @@
         </p>
         <p>
             <label style="display: inline;">描边</label>
-            <input id="stroke" type="color" value="#ff0000" />
+            <input id="stroke" type="color" value="#000" />
             <input id="strokeWidth" type="range" value="1" />
         </p>
     </form>
@@ -162,6 +170,7 @@
 <script type="text/javascript" src="../lib/pako/pako.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/requestInterceptor.js"></script>
 <script type="text/javascript" src="../lib/jquery-pretty-radio-checkbox/js/jquery-labelauty.js"></script>
 <script>
 
@@ -202,7 +211,7 @@
     // 默认公共属性
     var defaultAttrs = {
         fill: '#ffffff',
-        stroke: '#ff0000'
+        stroke: '#000'
     };
 
     var createForm = document.getElementById('create-shape');
@@ -238,6 +247,8 @@
     lookForm.addEventListener('input', function(e) {
         if (e.target.tagName.toLowerCase() != 'input') return;
         if (!getCurrentSvgElement()) return;
+        console.log("lookForm.addEventListener");
+        console.log(getCurrentSvgElement());
         getCurrentSvgElement().setAttribute('fill', fill.value);
         getCurrentSvgElement().setAttribute('stroke', stroke.value);
         getCurrentSvgElement().setAttribute('stroke-width', strokeWidth.value);
@@ -253,6 +264,7 @@
 
     //为绘图区所有元素添加拖动事件
     function drag() {
+        console.log("拖拽");
         arrow();
         var svg_chile_element = document.getElementById("svg_content").children;
         for (var i = 0; i < svg_chile_element.length; i++) {
@@ -276,6 +288,8 @@
             if (svg_chile_element[i].tagName !== 'defs') {
                 //设置为不可拖动
                 var e = SVG.adopt(svg_chile_element[i]);
+                console.log(svg_chile_element[i]);
+                console.log(e);
                 e.draggable(false);
                 svg_chile_element[i].setAttribute("style","cursor:default");
             }
@@ -293,9 +307,7 @@
     function select(shape) {
         var attrs = shapeInfo[shape.tagName].split(',');
         var attr, name, value;
-
         attrForm.innerHTML = "";
-
         while(attrs.length) {
             attr = attrs.shift().split(':');
             name = attr[0];
@@ -319,8 +331,6 @@
      * @param value 属性值
      */
     function createHandle(shape, name, value) {
-
-
         var label = document.createElement('label');
         label.textContent = name;
 
@@ -331,8 +341,12 @@
         handle.setAttribute('min', -500);
         handle.setAttribute('max', 800);
         $(handle).prop("value", value);//js转jq修改进度条
-        attrForm.appendChild(label);
-        attrForm.appendChild(handle);
+
+        var div = document.createElement("div");
+        div.appendChild(label);
+        div.appendChild(handle);
+
+        attrForm.appendChild(div);
     }
 
     function updateLookHandle() {
@@ -399,8 +413,7 @@
             isFirstSave=false;
             //获取笔记内容
             $.ajax({
-                url: '/note/getNoteWithNoteBookAndContent',
-                async: false,
+                url: 'http://localhost:8800/noteServices/note/getNoteWithNoteBookAndContent',
                 data: {'note': note},
                 success: function (data) {
                     if (data['isSuccessful'] == 1) {
@@ -408,7 +421,8 @@
                         document.getElementById("title").value=data['data']['title'];
                         document.getElementById("toolboxSaveButton").setAttribute("onclick",'save('+data['data']['noteBook']['id']+')');
                         // svgViewBoxChange(0);
-                    }
+                    }else
+                        isRedirect(data);
                 },
                 error: function (data) {
                     layer.msg("error！");
@@ -418,7 +432,7 @@
         svg = document.getElementById("svg_content");
         svgAddClickEvent();
         svgViewBoxChange(0);
-
+        if(phoneOrPc()==='phone') document.getElementById("recorder").setAttribute("style","display:block");
         //文本添加双击事件
         for (var i = 0; i < svg.children.length; i++) {
             if(svg.children[i].getAttribute("name")==='text')
@@ -507,14 +521,16 @@
         arrow();//清除事件
         // document.getElementById("backgroud_grid").setAttribute("style","cursor:crosshair");//鼠标样式    --备份
         document.getElementById("svg_content").setAttribute("style","cursor:crosshair");
+        path_d='';
         path = document.createElementNS(SVG_NS,"path");
         path.setAttribute("d",'');
         path.setAttribute("fill",'none');
-
+        path.setAttribute("stroke", $("#stroke").val());
+        path.setAttribute("stroke-width",$("#strokeWidth").val());
+        //TODO 当前是g还是path
+        currentSvgElement=path;
 
         var g = document.createElementNS(SVG_NS,"g");
-        g.setAttribute("stroke","#ff0000");
-        g.setAttribute("strokeWidth","0");
         g.append(path);
 
         var canvas_div = $("#canvas");
@@ -542,7 +558,7 @@
         path_d+="M"+(parseInt(e.pageX)-parseInt(toolboxWidth)+parseInt(viewBoxArr[0]))+","+(parseInt(e.pageY)-parseInt(document.getElementById("title_div").clientHeight)+parseInt(viewBoxArr[1]));
         path.setAttribute("d",path_d);
         path_moving=true;
-        console.log("鼠标按下"+path_d);
+        // console.log("鼠标按下"+path_d);
     }
     function h5TouchStart(e) {
         var toolboxWidth= document.getElementById("toolbox").offsetWidth;
@@ -598,76 +614,16 @@
             return;
         }
 
-        if (firstLoadNoteBook) {
-            $.ajax({
-                type: 'post',
-                url: 'http://cloudnote.com:9002/noteBook/getNoteBooks',
-                async:false,
-                success: function (data) {
-                    if (data['isSuccessful'] == 1) {
-                        for (var i = 0; i < data['data'].length; i++)
-                            addNoteBookLi(data['data'][i]['id'], data['data'][i]['title']);
-                        showNoteBooks();
-                    } else {
-                        console.log("失败！" + data['msg'])
-                    }
-                },
-                error: function (data) {
-                    alert("失败");
-                }
-            });
-            //初始化笔记本保存位置的单选按钮组
-            $(':input').labelauty();
-            //获取单选的值
-            $('input[name="noteBook"]').click(function(){
-                toNoteBook =$(this).context.value;
-            });
-            firstLoadNoteBook=false;
-        }else
-            showNoteBooks();
-    }
-
-    function addNoteBookLi(value, title) {
-        var noteBooks = document.getElementById("noteBooks");
-        var li = document.createElement("li");
-        var input = document.createElement("input");
-        input.setAttribute("type","radio");
-        input.setAttribute("name","noteBook");
-        input.setAttribute("value",value);
-        input.setAttribute("data-labelauty",title);
-        li.append(input);
-        noteBooks.append(li);
-    }
-
-    function showNoteBooks() {
-        noteBookLayerIndex=layer.open({
-            type: 1,
-            shade: false,
-            title: '请选择保存到的笔记本',
-            content: $('#savePosition')
+        layer.open({
+            type: 2,
+            area: ['400px', '200px'],
+            fix: false, //不固定
+            maxmin: true,
+            shade:0.4,
+            title: '保存笔记',
+            content: 'noteBookSelectedDialog.html'
         });
-    }
 
-    /*创建新的笔记本并转存*/
-    function showCreateNoteBook() {
-        layer.prompt({title: '请输入笔记本名', formType: 0}, function(text, index){
-            $.ajax({
-                url:'http://cloudnote.com:9002/noteBook/add',
-                async:false,
-                data:{'title':text},
-                success: function(data){
-                    if (data['isSuccessful'] == 1)
-                        save(data['data']['id']);
-                    else
-                        layer.msg("失败！"+data['msg']);
-                    layer.close(index);
-                },
-                error:function(data) {
-                    layer.msg("error!");
-                    layer.close(index);
-                }
-            });
-        });
     }
 
     /*
@@ -681,7 +637,6 @@
             return;
         }
         noteBookId=noteBookId==null?toNoteBook:noteBookId;
-        console.log("noteBookId:"+noteBookId);
         if (noteBookId == null){
             layer.msg("请选择要保存到的笔记本");
             return;
@@ -693,14 +648,14 @@
             note=getUrlParam("note");
         //添加
         if (isFirstSave) {
-            noteOper = '/note/add';
+            noteOper = 'http://localhost:8800/noteServices/note/add';
             params = encodeURIComponent(JSON.stringify({
                 "content": document.getElementById("svg_content").outerHTML,
                 "title": title,
                 "note_book_id": noteBookId
             }));
         } else {//更新
-            noteOper='/note/update';
+            noteOper='http://localhost:8800/noteServices/note/update';
             params = encodeURIComponent(JSON.stringify({
                 "content": document.getElementById("svg_content").outerHTML,
                 "title": title,
@@ -727,13 +682,39 @@
                         document.getElementById("toolboxSaveButton").setAttribute("onclick",'save('+noteBookId+')');
                     }
                     layer.close(noteBookLayerIndex);
-                } else
+                } else{
+                    isRedirect(data);
                     layer.msg("失败！"+data['msg']);
+                }
             },
             error:function(data) {
                 alert("失败");
             }
         });
     }
+
+    //录音开始
+    function startRecord() {
+        android.record();
+        $("#recorder").html('<svg t="1587670893265" class="icon" viewBox="0 0 1030 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="26523" width="16" height="16"><path d="M512 0C229.26 0 0 229.239 0 512c0 282.783 229.239 512 512 512 282.783 0 512-229.217 512-512 0.021-282.761-229.196-512-512-512z m0 958.843C265.213 958.843 65.178 758.787 65.178 512S265.235 65.178 512 65.178c246.83 0 446.843 200.035 446.843 446.822C958.864 758.787 758.83 958.843 512 958.843z" p-id="26524"></path><path d="M365.102 328.528h85.705v385.67h-85.705v-385.67zM536.512 328.528h107.13v385.67h-107.13v-385.67z" p-id="26525"></path></svg>')
+        document.getElementById("recorder").onclick = endRecord;
+    }
+
+    //录音结束
+    function endRecord() {
+        var temp= android.endrecord();
+        if (temp==null) alert("录音失败！");
+        else {
+            useText();
+            $("span[title='视音频']")[0].click();
+            $("#keUrl").val(temp);
+            $("input[value='确定']")[0].click();
+            $("#recorder").html('<svg t="1587670307624" class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="25081" width="16" height="16"><path d="M512 640a170.858667 170.858667 0 0 0 170.666667-170.666667V256a170.666667 170.666667 0 0 0-341.333334 0v213.333333a170.858667 170.858667 0 0 0 170.666667 170.666667z m-128-384a128 128 0 0 1 256 0v213.333333a128 128 0 0 1-256 0z" fill="#646464" p-id="25082"></path><path d="M789.333333 426.666667a21.333333 21.333333 0 0 0-21.333333 21.333333v21.333333a256 256 0 0 1-512 0v-21.333333a21.333333 21.333333 0 0 0-42.666667 0v21.333333a298.837333 298.837333 0 0 0 277.333334 297.6V896h-128a21.333333 21.333333 0 0 0 0 42.666667h298.666666a21.333333 21.333333 0 0 0 0-42.666667h-128v-129.066667A298.837333 298.837333 0 0 0 810.666667 469.333333v-21.333333a21.333333 21.333333 0 0 0-21.333334-21.333333z" fill="#646464" p-id="25083"></path></svg>');
+            // $("#recorder").click(function () {startRecord();})
+            document.getElementById("recorder").onclick = startRecord;
+        }
+
+    }
+    
 </script>
 </html>

@@ -1,7 +1,7 @@
 package com.cloudnote.user.service;
 
-import com.cloudnote.user.dto.ResponseDto;
-import com.cloudnote.user.pojo.User;
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.pojo.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

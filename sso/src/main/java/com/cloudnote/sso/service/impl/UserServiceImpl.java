@@ -1,7 +1,7 @@
 package com.cloudnote.sso.service.impl;
 
 import com.cloudnote.sso.dao.mapper.UserMapper;
-import com.cloudnote.sso.pojo.User;
+import com.cloudnote.common.pojo.User;
 import com.cloudnote.sso.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

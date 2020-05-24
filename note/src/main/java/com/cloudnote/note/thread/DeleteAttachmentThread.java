@@ -19,6 +19,8 @@ public class DeleteAttachmentThread implements InitializingBean,Runnable {
     private NoteContentService noteContentService;
     //30分钟执行一次
     private static final long sleepTime=1800000;
+    //临时文件存活最短时间1小时
+    private static final long aliveTime=3600000;
 
     public DeleteAttachmentThread() { }
     public DeleteAttachmentThread(NoteContentService noteContentService) {
@@ -33,6 +35,7 @@ public class DeleteAttachmentThread implements InitializingBean,Runnable {
 
     @Override
     public void run() {
+        System.out.println("定时线程启动");
         while (true) {
             try {
                  del(new  File(PathUtil.getContentAttachmentPath()));
@@ -51,9 +54,12 @@ public class DeleteAttachmentThread implements InitializingBean,Runnable {
             File[] files = dir.listFiles();
             for (File file : files) {
                 String fileName =file.getName();
-                //根据文件名查找笔记内容，没找到即删除
-                if (file.exists()&&noteContentService.isContainTarget(fileName)==null)
+                //根据文件名比对存活时间、检测是否被使用，满足删除条件即删除
+                if ((System.currentTimeMillis()- Long.parseLong(fileName.substring(0,13)))>aliveTime&&
+                        file.exists()&&noteContentService.isContainTarget(fileName)==null) {
+                    System.out.println("删除文件："+fileName);
                     file.delete();
+                }
             }
         }
     }

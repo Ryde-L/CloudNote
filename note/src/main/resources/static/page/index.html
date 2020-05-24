@@ -372,7 +372,7 @@
         if (getUrlParam("note") != null) {
             //获取笔记内容
             $.ajax({
-                url: '/note/getNote',
+                url: 'http://localhost:8800/noteServices/note/getNote',
                 async: false,
                 data: {'note': getUrlParam("note")},
                 success: function (data) {
@@ -549,7 +549,7 @@
         params=pako.gzip(params, {to: "string"});
         $.ajax({
             type: 'post',
-            url: '/note/add',
+            url: 'http://localhost:8800/noteServices/note/add',
             data:params,
             contentType:"",
             headers: {

@@ -1,13 +1,13 @@
 package com.cloudnote.note.service.impl;
 
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.utils.CheckerUtil;
+import com.cloudnote.common.utils.ResultUtil;
 import com.cloudnote.note.dao.mapper.ShareMapper;
-import com.cloudnote.note.dto.ResponseDto;
-import com.cloudnote.note.pojo.*;
+import com.cloudnote.common.pojo.*;
 import com.cloudnote.note.service.NoteContentService;
 import com.cloudnote.note.service.NoteService;
 import com.cloudnote.note.service.ShareService;
-import com.cloudnote.note.utils.CheckerUtil;
-import com.cloudnote.note.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +62,7 @@ public class ShareServiceImpl implements ShareService {
         map.put("link",link);
         map.put("isHasPwd",isHasPwd);
         map.put("pwd",pwd);
-        return ResultUtil.success(map);
+        return ResultUtil.success("",map);
     }
 
     /**
@@ -137,12 +137,11 @@ public class ShareServiceImpl implements ShareService {
         if (shareMsg.getIsSuccessful().equals("0")) return ResultUtil.error(shareMsg.getMsg());
         Map<String, String> map = (Map<String, String>) shareMsg.getData();
         if (CheckerUtil.checkNulls(noteBookId)) return ResultUtil.error("缺少参数");
-        //TODO test
-        NoteBook noteBook = (NoteBook) restTemplate.getForObject("http://notebookServices/noteBook/getNoteBookByNoteBookId?note_book_id=" + noteBookId, ResponseDto.class).getData();
+        NoteBook noteBook = restTemplate.getForObject("http://notebookServices/noteBook/getNoteBook?note_book_id=" + noteBookId, NoteBook.class);
         if (noteBook == null) return ResultUtil.error("笔记本对象无效");
         if (!userId.equals( noteBook.getUserId())) return ResultUtil.error("非法操作");
         //转存给自己
-        Note myNote = new Note(null, noteBookId, map.get("title"),0,null,0,null);
+        Note myNote = new Note(null, noteBookId, map.get("title"),0,null);
         noteService.insert(myNote);
         noteContentService.insert(new NoteContent(null, myNote.getId(), map.get("content")));
         return ResultUtil.success("", myNote.getId());

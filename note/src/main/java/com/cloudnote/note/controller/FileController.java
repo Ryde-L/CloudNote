@@ -28,9 +28,10 @@ public class FileController {
 
         try {
             String dir = request.getParameter("dir");
+            if (dir==null||"".equals(dir)) dir="media";
             System.out.println(dir);
             System.out.println(imgFile.getOriginalFilename());
-            newName = ""+System.currentTimeMillis() + Integer.valueOf ((String) request.getSession().getAttribute("userId")) + imgFile.getOriginalFilename();
+            newName = ""+System.currentTimeMillis() + imgFile.getOriginalFilename();
 
             if (dir.equals("image")) {
                 File realDir=new File(PathUtil.getContentImagePath());

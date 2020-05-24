@@ -1,12 +1,12 @@
 package com.cloudnote.note.service.impl;
 
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.utils.CheckerUtil;
+import com.cloudnote.common.utils.ResultUtil;
 import com.cloudnote.note.dao.mapper.NoteTagMapper;
-import com.cloudnote.note.dto.ResponseDto;
-import com.cloudnote.note.pojo.NoteTag;
+import com.cloudnote.common.pojo.NoteTag;
 import com.cloudnote.note.service.NoteService;
 import com.cloudnote.note.service.NoteTagService;
-import com.cloudnote.note.utils.CheckerUtil;
-import com.cloudnote.note.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class NoteTagServiceImpl implements NoteTagService {
      */
     public ResponseDto delByTagId(Integer id) {
         //TODO 用户操作验证
-        if (CheckerUtil.checkNull(id))
+        if (CheckerUtil.checkNulls(id))
             return ResultUtil.error("缺少参数");
         if (noteTagMapper.selectByPrimaryKey(id) == null)
             return ResultUtil.error( "存在无效标签对象");
@@ -90,7 +90,7 @@ public class NoteTagServiceImpl implements NoteTagService {
      */
     public ResponseDto getTags(Integer noteId){
         if (CheckerUtil.checkNulls(noteId)) return ResultUtil.error("缺少参数");
-        return ResultUtil.success( noteTagMapper.selectByNoteId(noteId));
+        return ResultUtil.success("", noteTagMapper.selectByNoteId(noteId));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class NoteTagServiceImpl implements NoteTagService {
 
     @Override
     public ResponseDto delTag(Integer noteId, String tag) {
-        return ResultUtil.success( noteTagMapper.delByNoteIdAndTag(noteId,tag));
+        return ResultUtil.success("", noteTagMapper.delByNoteIdAndTag(noteId,tag));
     }
 
 }

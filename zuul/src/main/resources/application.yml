@@ -3,7 +3,7 @@ spring:
     name: zuul
 eureka:
   instance:
-    instance-id: cloudnote.com
+    instance-id: localhost
     prefer-ip-address: true
   client:
     service-url:
@@ -11,15 +11,14 @@ eureka:
 
 server:
   port: 8800
-
 zuul:
   routes:
     sso-api:
       path: /sso/**
-      serviceId: SSO
+      serviceId: sso
     note-api:
       path: /noteServices/**
-      serviceId: note
+      serviceId: noteServices
     bin-api:
       path: /binServices/**
       serviceId: binServices
@@ -32,3 +31,8 @@ zuul:
     main-api:
       path: /mainService/**
       serviceId: EUREKA-CLIENT-WEB
+  #需要忽略的头部信息，不在传播到其他服务
+  sensitive-headers: Access-Control-Allow-Origin,Access-Control-Allow-Credentials
+  ignored-headers: Access-Control-Allow-Origin,Access-Control-Allow-Credentials,H-APP-Id,Token,APPToken
+ribbon:
+  ReadTimeout: 6000000

@@ -83,7 +83,6 @@
         <button type="button" view="turn_left" onclick="svgViewBoxChange(3)">←</button><br>
         <button type="button" view="turn_right" onclick="svgViewBoxChange(4)">→</button><br>
         <button type="button" view="turn_right" onclick="editNote()">e</button><br>
-        <button type="button" view="turn_right" onclick="test()">t</button><br>
     </form>
 </div>
 <div style="" class="title_div" id="title_div">
@@ -115,6 +114,7 @@
 <script type="text/javascript" src="../lib/pako/pako.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/requestInterceptor.js"></script>
 <script type="text/javascript" src="../lib/jquery-pretty-radio-checkbox/js/jquery-labelauty.js"></script>
 <script>
 
@@ -147,10 +147,6 @@
             operationInfo[(e.target.getAttribute('oper'))]();
         }
     });
-
-    function test() {
-
-    }
 
 
     function svgViewBoxChange(type) {
@@ -204,32 +200,35 @@
         var hasNote=false;
         var url="";
         var note=null;
+        var use_admin_filter=false;
         if (getUrlParam("note") != null){
             hasNote=true;
-            url='/note/getNoteWithNoteBookAndContent';
+            url='http://localhost:8800/noteServices/note/getNoteWithNoteBookAndContent';
             note=getUrlParam("note");
         }else if (getUrlParam("bin") != null) {
             hasNote=true;
-            url='http://cloudnote.com:9003/recycleBin/getNoteWithNoteBookAndContent';
+            url='http://localhost:8800/binServices/recycleBin/getNoteWithNoteBookAndContent';
             note=getUrlParam("bin");
         }
+        use_admin_filter=getUrlParam("use_admin_filter");
 
 
         if (hasNote) {
             isFirstSave=false;
             //获取笔记内容
-            getNoteContent(url,note,'');
+            getNoteContent(url,note,'',use_admin_filter);
         }
         svgViewBoxChange(0);
     };
 
-    function getNoteContent(url,note,pwd){
+    function getNoteContent(url,note,pwd,use_admin_filter){
         $.ajax({
             url: url,
             async: false,
             data: {
                 'note': note,
                 'pwd': pwd,
+                'use_admin_filter': use_admin_filter,
             },
             success: function (data) {
                 if (data['isSuccessful'] === '1') {
@@ -239,7 +238,7 @@
                     if (data['msg'] === '笔记密码错误') {
                         layer.prompt({title: '请输入正确的密码', formType: 1}, function(pass, index){
                             layer.close(index);
-                            getNoteContent(url,note,pass)
+                            getNoteContent(url,note,pass,use_admin_filter)
                         });
                     }
                 }

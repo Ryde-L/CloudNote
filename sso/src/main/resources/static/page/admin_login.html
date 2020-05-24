@@ -71,7 +71,7 @@
             data: $('#form').serialize(),
             success: function (data) {
                 if (data['isSuccessful'] === '1')
-                    document.location.href=data['msg'];
+                    document.location.href='http://localhost:8800/userServices/path/index.html';
                 else
                     layer.msg('登陆失败!'+data['msg'],{icon:2,time:2000});
             },

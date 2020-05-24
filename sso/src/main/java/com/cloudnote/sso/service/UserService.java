@@ -1,6 +1,6 @@
 package com.cloudnote.sso.service;
 
-import com.cloudnote.sso.pojo.User;
+import com.cloudnote.common.pojo.User;
 import org.springframework.stereotype.Service;
 
 /**

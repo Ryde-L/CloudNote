@@ -1,7 +1,7 @@
 package com.cloudnote.note.service;
 
-import com.cloudnote.note.dto.ResponseDto;
-import com.cloudnote.note.pojo.NoteTag;
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.pojo.NoteTag;
 
 /**
  * <p>

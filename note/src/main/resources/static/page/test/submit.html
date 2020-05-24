@@ -11,8 +11,8 @@
     <button onclick="register('name','pwd','1234')">注册</button><br>
 
     <h2>笔记本api</h2>
-    <button onclick="submit('http://cloudnote.com:9002/noteBook/add?title=笔记本名')">创建笔记本（通过）</button><br>
-    <button onclick="submit('http://cloudnote.com:9002/noteBook/delete?note_book_id=2')">删除笔记本（通过）</button><br>
+    <button onclick="submit('http://localhost:8800/notebookServices/noteBook/add?title=笔记本名')">创建笔记本（通过）</button><br>
+    <button onclick="submit('http://localhost:8800/notebookServices/noteBook/delete?note_book_id=2')">删除笔记本（通过）</button><br>
 
     <h2>笔记api</h2>
     <button onclick="submit('/note/getListByNoteBook?note_book_id=1')">获取笔记列表（通过）</button><br>
@@ -25,8 +25,8 @@
     <button onclick="submit('/noteTag/delAllByNoteId?note_id=1')">清空标签by笔记id（通过）</button><br>
 
     <h2>回收站api</h2>
-    <button onclick="submit('http://cloudnote.com:9003/recycleBin/noteThrowAway?note_id[]=1')">笔记丢入回收站（通过）</button><br>
-    <button onclick="submit('http://cloudnote.com:9003/recycleBin/noteRecover?note_id=1')">笔记从回收站恢复（通过）</button><br>
+    <button onclick="submit('http://localhost:8800/binServices/recycleBin/noteThrowAway?note_id[]=1')">笔记丢入回收站（通过）</button><br>
+    <button onclick="submit('http://localhost:8800/binServices/recycleBin/noteRecover?note_id=1')">笔记从回收站恢复（通过）</button><br>
 
     <h2>分享api</h2>
     <button onclick="submit('/share/create?note_id=6&is_has_pwd=0&limit_type=0&limit_content=0')">创建分享（）</button><br>

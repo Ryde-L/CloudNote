@@ -935,6 +935,9 @@ function _mediaType(src) {
 	if (/\.(mp4)(\?|$)/i.test(src)) {
 		return 'video/mp4';
 	}
+	if (/\.(3gp)(\?|$)/i.test(src)) {
+		return 'video/mp4';
+	}
 	return 'video/x-ms-asf-plugin';
 }
 
@@ -7786,11 +7789,11 @@ KindEditor.plugin('media', function(K) {
 				'</div>',
 				'<div class="ke-dialog-row">',
 				'<label for="keWidth" style="width:60px;">' + lang.width + '</label>',
-				'<input type="text" id="keWidth" class="ke-input-text ke-input-number" name="width" value="550" maxlength="4" />',
+				'<input type="text" id="keWidth" class="ke-input-text ke-input-number" name="width" value="200" maxlength="4" />',
 				'</div>',
 				'<div class="ke-dialog-row">',
 				'<label for="keHeight" style="width:60px;">' + lang.height + '</label>',
-				'<input type="text" id="keHeight" class="ke-input-text ke-input-number" name="height" value="400" maxlength="4" />',
+				'<input type="text" id="keHeight" class="ke-input-text ke-input-number" name="height" value="200" maxlength="4" />',
 				'</div>',
 				'<div class="ke-dialog-row">',
 				'<label for="keAutostart">' + lang.autostart + '</label>',

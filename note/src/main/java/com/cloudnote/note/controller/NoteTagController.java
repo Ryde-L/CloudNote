@@ -1,6 +1,6 @@
 package com.cloudnote.note.controller;
 
-import com.cloudnote.note.dto.ResponseDto;
+import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.note.service.NoteTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +25,7 @@ public class NoteTagController {
 
 
     @RequestMapping(value = {"/addTags"})
-    public ResponseDto addTags(@RequestParam("note_id") Integer noteId,@RequestParam("tags[]") String[] tags) throws Exception {
+    public ResponseDto addTags(@RequestParam("note_id") Integer noteId, @RequestParam("tags[]") String[] tags) throws Exception {
         return noteTagService.addTags(noteId, tags);
     }
     @RequestMapping(value = {"/delTag"})

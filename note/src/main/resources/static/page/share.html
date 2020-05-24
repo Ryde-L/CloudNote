@@ -98,6 +98,7 @@
 <script type="text/javascript" src="../lib/kindeditor/lang/zh-CN.js"></script>
 <script type="text/javascript" src="../lib/pako/pako.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/requestInterceptor.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="../lib/jquery-pretty-radio-checkbox/js/jquery-labelauty.js"></script>
 
@@ -135,8 +136,8 @@
                                 layer.close(index);
                                 openShare(pass);
                             });
-                        } else
-                            alert(data['msg']);
+                        }
+                        isRedirect(data)
                     }
                 },
                 error:function(data) {
@@ -189,14 +190,14 @@
         if (firstLoadNoteBook) {
             $.ajax({
                 type: 'post',
-                url: 'http://cloudnote.com:9002/noteBook/getNoteBooks',
-                async:false,
+                url: 'http://localhost:8800/notebookServices/noteBook/getNoteBooks',
                 success: function (data) {
                     if (data['isSuccessful'] == 1) {
                         for (var i = 0; i < data['data'].length; i++)
                             addNoteBookLi(data['data'][i]['id'], data['data'][i]['title']);
                         showNoteBooks();
                     } else {
+                        isRedirect(data)
                         console.log("失败！" + data['msg'])
                     }
                 },
@@ -241,14 +242,14 @@
     function showCreateNoteBook() {
         layer.prompt({title: '请输入笔记本名', formType: 0}, function(text, index){
             $.ajax({
-                url:'http://cloudnote.com:9002/noteBook/add',
-                async:false,
+                url:'http://localhost:8800/notebookServices/noteBook/add',
                 data:{'title':text},
                 success: function(data){
                     if (data['isSuccessful'] == 1)
                         save(data['data']['id']);
                     else
                         layer.msg("失败！"+data['msg']);
+                    isRedirect(data)
                     layer.close(index);
                 },
                 error:function(data) {
@@ -266,7 +267,6 @@
 
         $.ajax({
             url: '/share/save',
-            async: false,
             data: {
                 'link_suffix': getUrlParam("link_suffix"),
                 'pwd': password,
@@ -278,8 +278,10 @@
                     setTimeout(function () {
                         window.location.href='/page/new.html'
                     },2000)
-                } else
-                    layer.msg("保存失败！"+data['msg']);
+                } else {
+                    layer.msg("保存失败！" + data['msg']);
+                    isRedirect(data)
+                }
                 layer.close(index);
             },
             error: function (data) {layer.msg("error！");}

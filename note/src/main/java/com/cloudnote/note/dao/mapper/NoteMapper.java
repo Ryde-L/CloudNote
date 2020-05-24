@@ -1,6 +1,6 @@
 package com.cloudnote.note.dao.mapper;
 
-import com.cloudnote.note.pojo.Note;
+import com.cloudnote.common.pojo.Note;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +14,9 @@ public interface NoteMapper {
     @Delete("delete from note where id = #{id,jdbcType=INTEGER}")
     int deleteByPrimaryKey(Integer id);
 
-    @Insert(" insert into note (id, note_book_id, title, is_has_pwd, pwd,is_has_remind,remind)\n" +
+    @Insert(" insert into note (id, note_book_id, title, is_has_pwd, pwd)\n" +
             "    values (#{id,jdbcType=INTEGER}, #{noteBookId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, \n" +
-            "      #{isHasPwd,jdbcType=INTEGER}, #{pwd,jdbcType=VARCHAR},#{isHasRemind,jdbcType=INTEGER}, #{remind,jdbcType=TIMESTAMP})")
+            "      #{isHasPwd,jdbcType=INTEGER}, #{pwd,jdbcType=VARCHAR})")
     @Options(useGeneratedKeys = true)
     int insert(Note record);
 
@@ -27,9 +27,7 @@ public interface NoteMapper {
             "    set note_book_id = #{noteBookId,jdbcType=INTEGER},\n" +
             "      title = #{title,jdbcType=VARCHAR},\n" +
             "      is_has_pwd = #{isHasPwd,jdbcType=INTEGER},\n" +
-            "      pwd = #{pwd,jdbcType=VARCHAR},\n" +
-            "      is_has_remind = #{isHasRemind,jdbcType=INTEGER},\n" +
-            "      remind = #{remind,jdbcType=TIMESTAMP}\n" +
+            "      pwd = #{pwd,jdbcType=VARCHAR}\n" +
             "    where id = #{id,jdbcType=INTEGER}")
     int updateByPrimaryKey(Note record);
 
@@ -39,7 +37,7 @@ public interface NoteMapper {
      * @param tag 标签
      * @return 笔记集合
      */
-    @Select("select n.id,n.title,n.note_book_id ,is_has_pwd,pwd,is_has_remind,remind from note n " +
+    @Select("select n.id,n.title,n.note_book_id ,is_has_pwd,pwd from note n " +
             "left join note_tag ng on n.id=ng.note_id " +
             "left join note_book nb on n.note_book_id=nb.id " +
             "where ng.tag like  CONCAT('%',#{param1},'%') " +
@@ -54,7 +52,7 @@ public interface NoteMapper {
      * @param id 笔记id
      * @return Note对象
      */
-    @Select("select n.id,note_book_id,title,is_has_pwd,pwd,is_has_remind,remind,content from note n " +
+    @Select("select n.id,note_book_id,title,is_has_pwd,pwd,content from note n " +
             "left join note_content nc on n.id=nc.note_id where n.id=#{param}")
     @Results({
             @Result(property = "id", column = "id"),
@@ -69,7 +67,7 @@ public interface NoteMapper {
      * @param noteBookId 笔记本id
      * @return List<Note>
      */
-    @Select("select id as myId,title,note_book_id,is_has_pwd,pwd,is_has_remind,remind from note where note_book_id=#{param}")
+    @Select("select id as myId,title,note_book_id,is_has_pwd,pwd from note where note_book_id=#{param}")
     @Results({
             @Result(property = "id",column = "myId"),
             @Result(property = "noteTagList",column = "myId",

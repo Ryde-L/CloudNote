@@ -1,5 +1,7 @@
 package com.cloudnote.note.utils;
 
+import com.cloudnote.common.utils.CheckerUtil;
+
 /**
  * 保存一些路径
  */

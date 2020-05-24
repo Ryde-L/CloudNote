@@ -1,6 +1,6 @@
 package com.cloudnote.note.dao.mapper;
 
-import com.cloudnote.note.pojo.NoteBook;
+import com.cloudnote.common.pojo.NoteBook;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

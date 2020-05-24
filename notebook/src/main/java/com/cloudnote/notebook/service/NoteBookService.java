@@ -1,7 +1,7 @@
 package com.cloudnote.notebook.service;
 
-import com.cloudnote.notebook.dto.ResponseDto;
-import com.cloudnote.notebook.pojo.NoteBook;
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.pojo.NoteBook;
 
 /**
  * <p>
@@ -48,7 +48,7 @@ public interface NoteBookService {
      * @param id 笔记本id
      * @return ResponseDto
      */
-    public ResponseDto remove(Integer userId,Integer id);
+    public ResponseDto remove(Integer userId, Integer id);
 
 
     /**
@@ -66,4 +66,6 @@ public interface NoteBookService {
     public ResponseDto getNoteBooks(Integer userId);
 
     ResponseDto getNoteBookByNoteBookId(Integer noteBookId);
+
+    int createDefaultNoteBook(Integer userId);
 }

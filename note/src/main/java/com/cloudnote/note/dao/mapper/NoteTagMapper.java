@@ -1,7 +1,6 @@
 package com.cloudnote.note.dao.mapper;
 
-import com.cloudnote.note.dto.ResponseDto;
-import com.cloudnote.note.pojo.NoteTag;
+import com.cloudnote.common.pojo.NoteTag;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;

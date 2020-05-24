@@ -1,9 +1,9 @@
 package com.cloudnote.note.controller;
 
-import com.cloudnote.note.dto.ResponseDto;
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.utils.CheckerUtil;
+import com.cloudnote.common.utils.ResultUtil;
 import com.cloudnote.note.service.ShareService;
-import com.cloudnote.note.utils.CheckerUtil;
-import com.cloudnote.note.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;

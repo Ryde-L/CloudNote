@@ -1,6 +1,6 @@
 package com.cloudnote.note.service;
 
-import com.cloudnote.note.pojo.NoteContent;
+import com.cloudnote.common.pojo.NoteContent;
 
 /**
  * <p>

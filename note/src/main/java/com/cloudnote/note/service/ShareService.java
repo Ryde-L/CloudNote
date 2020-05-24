@@ -1,6 +1,6 @@
 package com.cloudnote.note.service;
 
-import com.cloudnote.note.dto.ResponseDto;
+import com.cloudnote.common.dto.ResponseDto;
 
 /**
  * <p>

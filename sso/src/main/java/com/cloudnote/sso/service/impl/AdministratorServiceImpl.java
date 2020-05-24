@@ -1,7 +1,7 @@
 package com.cloudnote.sso.service.impl;
 
 import com.cloudnote.sso.dao.mapper.AdministratorMapper;
-import com.cloudnote.sso.pojo.Administrator;
+import com.cloudnote.common.pojo.Administrator;
 import com.cloudnote.sso.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

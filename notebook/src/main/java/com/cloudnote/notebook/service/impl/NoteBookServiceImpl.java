@@ -1,12 +1,12 @@
 package com.cloudnote.notebook.service.impl;
 
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.utils.ResultUtil;
 import com.cloudnote.notebook.service.NoteBookService;
 import com.cloudnote.notebook.dao.mapper.NoteBookMapper;
-import com.cloudnote.notebook.dto.ResponseDto;
-import com.cloudnote.notebook.pojo.Note;
-import com.cloudnote.notebook.pojo.NoteBook;
-import com.cloudnote.notebook.utils.CheckerUtil;
-import com.cloudnote.notebook.utils.ResultUtil;
+import com.cloudnote.common.pojo.Note;
+import com.cloudnote.common.pojo.NoteBook;
+import com.cloudnote.common.utils.CheckerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,8 +50,8 @@ public class NoteBookServiceImpl implements NoteBookService {
      * @return 返回ResponseDto
      */
     public ResponseDto createNoteBook(Integer userId, String title) {
-        if (CheckerUtil.checkNull(userId)) return ResultUtil.error("获取不到用户id", null);
-        if (CheckerUtil.checkNull(title)) return ResultUtil.error("笔记本标题不为空", null);
+        if (CheckerUtil.checkNulls(userId)) return ResultUtil.error("获取不到用户id", null);
+        if (CheckerUtil.checkNulls(title)) return ResultUtil.error("笔记本标题不为空", null);
         NoteBook noteBook = new NoteBook(null, userId, title, 1);
         noteBookMapper.insert(noteBook);
         return ResultUtil.success("", noteBook);
@@ -86,8 +86,8 @@ public class NoteBookServiceImpl implements NoteBookService {
      * @param id 笔记本id
      * @return ResponseDto
      */
-    public ResponseDto remove(Integer userId,Integer id) {
-        if (CheckerUtil.checkNull(id)) return ResultUtil.error("缺少参数", null);
+    public ResponseDto remove(Integer userId, Integer id) {
+        if (CheckerUtil.checkNulls(id)) return ResultUtil.error("缺少参数", null);
 
         NoteBook noteBookWithNoteList = noteBookMapper.selectWithNoteList(id);
         List<Note> noteList = noteBookWithNoteList.getNoteList();
@@ -100,15 +100,11 @@ public class NoteBookServiceImpl implements NoteBookService {
 
         //删除笔记
         Map<String, String> orgNames = new HashMap<>();
-//        String[] allIdArray = new String[]{"id1", "id2"};
         MultiValueMap<String, Object> convertVars = new LinkedMultiValueMap<>();
-        convertVars.add("note_ids", noteIds);
+        convertVars.add("note_id", noteIds);
         convertVars.add("user_id", userId);
         String json = restTemplate.postForEntity("http://binServices/recycleBin/noteThrowAway", convertVars, String.class).getBody();
         System.out.println(json);
-//        String json = restTemplate.getForEntity("http://recycle-bin/recycleBin/noteThrowAway?user_id=" + userId + "note_id[]" +, String.class).getBody();
-//        recycleBinService.throwNoteIntoRecycleBin(userId, noteIds);
-
         //删除笔记本
         noteBookMapper.deleteByPrimaryKey(id);
 
@@ -137,6 +133,12 @@ public class NoteBookServiceImpl implements NoteBookService {
     @Override
     public ResponseDto getNoteBookByNoteBookId(Integer noteBookId) {
         return ResultUtil.success("", noteBookMapper.selectByPrimaryKey(noteBookId));
+    }
+
+    @Override
+    public int createDefaultNoteBook(Integer userId) {
+        NoteBook noteBook=new NoteBook(null,userId,"默认笔记本",0);
+        return noteBookMapper.insert(noteBook);
     }
 
 

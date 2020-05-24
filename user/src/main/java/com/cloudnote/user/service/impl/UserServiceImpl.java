@@ -1,12 +1,10 @@
 package com.cloudnote.user.service.impl;
 
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.utils.ResultUtil;
 import com.cloudnote.user.dao.mapper.UserMapper;
-import com.cloudnote.user.dto.ResponseDto;
-import com.cloudnote.user.pojo.User;
+import com.cloudnote.common.pojo.User;
 import com.cloudnote.user.service.UserService;
-import com.cloudnote.user.utils.ResultUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +50,8 @@ public class UserServiceImpl implements UserService {
         if (user==null) return ResultUtil.error("用户不存在");
         user.setStatus(0);
         userMapper.updateByPrimaryKey(user);
-        restTemplate.getForEntity("http://sso/user/tokenInvalidateByUserId?userId=" + user.getId(), String.class);
+//        restTemplate.getForEntity("http://sso/user/tokenInvalidateByUserId?userId=" + user.getId(), String.class);
+        restTemplate.getForEntity("http://sso/user/tokenFlush", String.class);
         return ResultUtil.success();
     }
 

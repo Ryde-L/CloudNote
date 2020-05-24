@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--    <meta http-equiv="Access-Control-Allow-Origin" content="*" />-->
     <meta charset="UTF-8">
     <title>云笔记-dev-v1</title>
     <style>
@@ -174,9 +175,72 @@
         .Hui-tags-list{padding:0 0 10px 0; display:none}
         .Hui-notag{font-size:12px}
         .Hui-tags-has span{cursor:pointer; font-size:12px; white-space:nowrap; margin-right:10px}
+
+        .col-1,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-10,.col-11,.col-12,.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {min-height: 1px;position: relative; padding-left:15px; padding-right:15px; box-sizing:border-box;-webkit-transition:all 0.3s ease-in;
+            -moz-transition:all 0.3s ease-in;
+            -o-transition:all 0.3s ease-in;
+            transition:all 0.3s ease-in}
+        /*.form-horizontal .form-label{margin-top:3px;cursor:text;text-align:right}*/
+
+        .c-red,.c-red a,a.c-red{color:red}
+        .c-red a:hover,a.c-red:hover{ color:red}
+
+        label,.placeholder{font-size:14px}
+        .form legend{font-size:20px}/*表单名称*/
+        .form .row{margin-top:15px}/*表单行*/
+        .form-label{display:block; color:#555}/*表单标题*/
+        .formControls{position:relative}/*表单控制区*/
+        .formControls > *{vertical-align:middle}
+        .placeholder{position:absolute; left:4px; top:4px;color:#c6c6c6; cursor:text}/*表单默认值*/
+        .form-horizontal .form-label{margin-top:3px;cursor:text;text-align:right}
+        .form-horizontal .Validform_checktip{ margin-top:5px}
+
+        .select-box{border:solid 1px #ddd;box-sizing:border-box;vertical-align:middle; width:100%; display:inline-block}
+        .select{border:solid 1px #ddd;box-sizing:border-box;cursor: pointer;line-height:normal;font-weight: normal;width:100%; white-space:nowrap}
+        .select-box .select{ border:none}
+        .select-box.inline,
+        .select-box.inline .select{ width:auto}
+
+        .select-box,
+        .select-box.size-M{padding:4px 5px}
+        .select,.size-M .select{font-size: 14px}
+
+        .select-box.size-MINI{padding:0px 5px}
+        .size-MINI .select{font-size: 12px}
+
+        .select-box.size-S{padding:3px 5px}
+        .size-S .select{font-size: 12px}
+
+        .select-box.size-L{padding:8px 5px}
+        .size-L .select{font-size: 16px}
+
+        .select-box.size-XL{padding:10px 5px}
+        .size-XL .select{font-size: 18px}
+
+        .btn-primary{color:#fff;background-color:#5a98de; border-color:#5a98de}
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active,
+        .btn-primary.active{color:#fff;background-color:#0a6999;border-color:#0a6999}
+
+        .radius{border-radius:4px}
+        .row.cl{}
+        .row{box-sizing:border-box; margin-left:-15px; margin-right:-15px}
+        [class*="span"].hide,.row-fluid [class*="span"].hide{display:none}
+        .cl:after,.clearfix:after{content:"\20";display:block;height:0;clear:both;visibility:hidden}.cl,.clearfix{zoom:1}
+
+        .page-container{ padding:20px}
+        @media (max-width: 767px) {
+            .page-container{ padding:15px}
+        }
+
     </style>
     <link href="../lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css">
-
+<!--    <link href="../lib/h-ui/css/H-ui.css" rel='stylesheet' type='text/css' />-->
+    <link href="../lib/share/css/style.css" rel='stylesheet' type='text/css' />
+    <link href="../lib/share/css/font-awesome.css" rel="stylesheet">
+    <!-- //end-smoth-scrolling -->
+    <link href="//fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
 </head>
 <div class="top-div">
 
@@ -349,32 +413,62 @@
 
 </div>
 
-<div id="share-div" style="display: none">
-    <form id="share-form" onsubmit=" return false">
-        <table>
-            <tr>
-                <td>是否需要提取码</td>
-                <td><input type="text" name="note_id" id="share-hidden-note-id" style="display: none"></td>
-            </tr>
-            <tr>
-                <td><input type="radio" name="is_has_pwd" value="1">是</td>
-                <td><input type="radio" name="is_has_pwd" value="0">否</td>
-            </tr>
-            <tr>
-                <td>分享天数</td>
-            </tr>
-            <tr>
-                <td><input type="radio" name="days" value="1">1</td>
-                <td><input type="radio" name="days" value="7">7</td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="分享" onclick="shareSubmit()"></td>
-            </tr>
-        </table>
+<div class="page-container" style="display: none;padding: 15px;" id="share-div">
+    <form class="form form-horizontal" id="share-form" name="forma">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>提取码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select class="select" size="1" name="is_has_pwd" id="is_has_pwd">
+						<option class="option" value="1" selected>要求</option>
+						<option class="option" value="0">不要求</option>
+					</select>
+				</span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分享天数：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select class="select" size="1" name="days" id="days">
+						<option class="option" value="1" selected>1天</option>
+						<option class="option" value="7">7天</option>
+					</select>
+				</span>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" onclick="shareSubmit()">
+<!--                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>-->
+            </div>
+        </div>
+        <input type="text" name="note_id" id="share-hidden-note-id" style="display: none">
     </form>
 </div>
+
+<div class="right-grid-w3ls text-center"  style="display: none;width: auto;height: auto" id="shareResult">
+    <h3>分享给你朋友吧</h3>
+    <form >
+        <div class="img-grid1">
+            <svg t="1587240458054" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2408" width="64" height="64"><path d="M994.305 166.16c-39.945-40.917-104.706-40.917-144.652 0L391.586 635.504 174.61 413.192c-39.946-40.936-104.706-40.936-144.643 0-39.956 40.918-39.956 107.283 0 148.214l289.296 296.42c39.946 40.936 104.7 40.936 144.647 0l530.395-543.451c39.947-40.927 39.947-107.283 0-148.215z" p-id="2409" fill="#1afa29"></path></svg>
+        </div>
+        <div class="w3ls-icon">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            <input type="email" class="user" name="email" placeholder="" required="" id="link"/>
+        </div>
+        <div class="w3ls-icon">
+            <i class="fa fa-lock" aria-hidden="true"></i>
+            <input type="email" class="lock" name="password" placeholder="" required="" id="pwd"/>
+        </div>
+        <input type="submit" value="复制链接和提取码" onclick="copyLinkAndPwd()">
+    </form>
+</div>
+
 </body>
 <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/requestInterceptor.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script>
@@ -387,27 +481,12 @@
     var currentNote='0';//当前笔记id
     var currentShareNote='0';
     var iconSuffix = "../icon/";
-
+    setToken(getUrlParam("token"));
     $(function () {
-        // var button2 = document.getElementById('record_start')
-        // button2.addEventListener('click',function(){
-        //     android.record();
-        // },false);
-        //
-        // var button3 = document.getElementById('record_end')
-        // button3.addEventListener('click',function(){
-        //     android.endrecord();
-        //
-        // },false);
-        // var button4 = document.getElementById('record_play')
-        // button4.addEventListener('click',function(){
-        //     android.playrecord();
-        //
-        // },false);
-
         addMouseOverAndLeaveEvent();
         noteBooksAddClickEvent();
         showNoteBooks();
+
     });
 
     /*鼠标移入移出事件*/
@@ -521,8 +600,10 @@
     /**从后台获取用户笔记本*/
     function getNoteBookList() {
         $.ajax({
-            url:"http://cloudnote.com:9002/noteBook/getNoteBooks",
+            url:'http://localhost:8800/notebookServices/noteBook/getNoteBooks',
             success:function (data) {
+                console.log("getNoteBooks成功");
+                console.log(data);
                 if (data['isSuccessful']==='1'){
                     var noteBooksDiv=document.getElementById("noteBookList");
                     noteBooksDiv.innerHTML="";
@@ -556,7 +637,7 @@
                         var secondDiv2 = document.createElement("div");
                         secondDiv2.setAttribute("class","notebook-operation-div");
                         topDiv.append(secondDiv2);
-                        if (data['data'][i]['title']!='默认') {
+                        if (data['data'][i]['deletable']!='0') {
                             var deleteImg = document.createElement("img");
                             deleteImg.setAttribute("src", "../icon/un-delete.png");
                             deleteImg.setAttribute("name", "over-leave");
@@ -574,11 +655,12 @@
                     }
                     addMouseOverAndLeaveEvent();
                 }else{
+                    isRedirect(data);
                     layer.msg("获取失败！"+data['msg']);
                 }
             },
-            error:function () {
-                layer.msg("发生错误！");
+            error:function (e) {
+                layer.msg("从后台获取用户笔记本时发生错误！"+e.toString());
             }
         })
     }
@@ -586,7 +668,7 @@
     /**从后台获取用户笔记*/
     function getNoteList(noteBookId) {
         $.ajax({
-            url:"http://cloudnote.com:9002/noteBook/getNotesWithTags",
+            url:"http://localhost:8800/notebookServices/noteBook/getNotesWithTags",
             data:{"note_book_id":noteBookId},
             success:function (data) {
                 if (data['isSuccessful']==='1'){
@@ -686,6 +768,7 @@
                     document.getElementById("notebook-title-label").innerText=data['data']['title'];
                     addMouseOverAndLeaveEvent();
                 }else{
+                    isRedirect(data);
                     layer.msg("获取笔记列表失败！"+data['msg']);
                 }
             },
@@ -702,7 +785,7 @@
     /**从后台获取搜索的笔记*/
     function getSearchList(keyword) {
         $.ajax({
-            url:"/note/getListByTag",
+            url:"http://localhost:8800/noteServices/note/getListByTag",
             data:{"tag":keyword},
             success:function (data) {
                 if (data['isSuccessful']==='1'){
@@ -732,31 +815,9 @@
                         thirdDiv.append(br);
                         thirdDiv.append(fourthDiv);
 
-                        // var words=0;
-                        // for (var j = 0; j <data['data'][i]['noteTagList'].length ; j++) {
-                        //     words+=data['data']['noteList'][i]['noteTagList'][j]['tag'].length;
-                        //     var tagLabel = document.createElement("label");
-                        //     tagLabel.setAttribute("class","notebook-number-font");
-                        //     tagLabel.innerText=data['data']['noteList'][i]['noteTagList'][j]['tag']+' ';
-                        //     fourthDiv.append(tagLabel);
-                        //     if (words>=10) {
-                        //         tagLabel.innerText='...';
-                        //         break;
-                        //     }
-                        // }
-
                         var secondDiv2 = document.createElement("div");
                         secondDiv2.setAttribute("class","notebook-operation-div");
                         topDiv.append(secondDiv2);
-
-                        // var clockImg=document.createElement("img");
-                        // clockImg.setAttribute("name","over-leave");
-                        // clockImg.setAttribute("operType","icon");
-                        // clockImg.setAttribute("class","center-icons");
-                        // clockImg.setAttribute("src","../icon/un-clock.png");
-                        // clockImg.setAttribute("icon","clock.png");
-                        // clockImg.setAttribute("tips","设置提醒");
-                        // secondDiv2.append(clockImg);
 
                         if (data['data'][i]['isHasPwd']===0) {
                             var lockImg = document.createElement("img");
@@ -810,6 +871,7 @@
                     document.getElementById("search-title-label").innerText=keyword;
                     addMouseOverAndLeaveEvent();
                 }else{
+                    isRedirect(data);
                     layer.msg("搜索失败！"+data['msg']);
                 }
             },
@@ -826,7 +888,7 @@
     /**从后台获取用户废纸篓笔记*/
     function getBinNoteList() {
         $.ajax({
-            url:"http://cloudnote.com:9003/recycleBin/getNotes",
+            url:"http://localhost:8800/binServices/recycleBin/getNotes",
             success:function (data) {
                 if (data['isSuccessful']==='1'){
                     var notesDiv=document.getElementById("bin-noteList");
@@ -879,6 +941,7 @@
                     document.getElementById("bin-note-number-label").innerText=data['data'].length;
                     addMouseOverAndLeaveEvent();
                 }else{
+                    isRedirect(data);
                     layer.msg("获取废纸篓笔记列表失败！"+data['msg']);
                 }
             },
@@ -894,9 +957,6 @@
 
     /*从后台获取用户标签*/
     function getTagList() {
-        // $(".Hui-tags-lable").show();
-        // $(".Hui-tags-input").val("");
-        // $("#tag-input-div").val("");
         $("#tag-list-div").html('<i class="Hui-tags-icon Hui-iconfont">&#xe64b;</i> ' +
             '                        <div class="Hui-tags-iptwrap" id="tag-input-div">' +
             '                            <input type="text" class="Hui-tags-input" maxlength="30" value="" id="tag-input">' +
@@ -927,7 +987,7 @@
     function noteBooksDelete(e) {
         console.log("笔记本删除");
         $.ajax({
-            url:"http://cloudnote.com:9002/noteBook/delete",
+            url:"http://localhost:8800/notebookServices/noteBook/delete",
             data:{"note_book_id":e.data.id},
             async:false,
             success:function (data) {
@@ -938,8 +998,10 @@
                     layer.msg("删除成功！");
                     e.stopImmediatePropagation();
                 }
-                else
+                else{
+                    isRedirect(data);
                     layer.msg("删除失败！"+data['msg']);
+                }
             },
             error:function (e) {
                 var data=JSON.parse(e.responseText);
@@ -955,7 +1017,7 @@
     function notesDelete(e) {
         console.log("笔记删除："+e.data.id)
         $.ajax({
-            url:"http://cloudnote.com:9003/recycleBin/noteThrowAway",
+            url:"http://localhost:8800/binServices/recycleBin/noteThrowAway",
             data:{"note_id[]":e.data.id},
             success:function (data) {
                 if (data['isSuccessful']==='1') {
@@ -967,12 +1029,12 @@
                     var noteNumber = document.getElementById("note-number-label");
                     noteNumber.innerText= parseInt(noteNumber.innerText)-1;
                     document.getElementById("note-show-iframe").setAttribute("src","show.html");
-
-
                     layer.msg("删除成功！");
                 }
-                else
+                else{
                     layer.msg("删除失败！"+data['msg']);
+                    isRedirect(data);
+                }
             },
             error:function (e) {
                 var data=JSON.parse(e.responseText);
@@ -987,7 +1049,7 @@
     /*删除废纸篓的笔记*/
     function binNotesDelete(e) {
         $.ajax({
-            url:"http://cloudnote.com:9003/recycleBin/delete",
+            url:"http://localhost:8800/binServices/recycleBin/delete",
             data:{"id[]":e.data.id},
             success:function (data) {
                 if (data['isSuccessful']==='1') {
@@ -999,8 +1061,10 @@
                     noteNumber.innerText= parseInt(noteNumber.innerText)-1;
                     layer.msg("删除成功！");
                 }
-                else
+                else{
+                    isRedirect(data);
                     layer.msg("删除失败！"+data['msg']);
+                }
             },
             error:function (e) {
                 var data=JSON.parse(e.responseText);
@@ -1015,7 +1079,7 @@
     /*笔记恢复*/
     function noteRecover(e) {
         $.ajax({
-            url:"http://cloudnote.com:9003/recycleBin/noteRecover",
+            url:"http://localhost:8800/binServices/recycleBin/noteRecover",
             data:{"note_id":e.data.id},
             success:function (data) {
                 if (data['isSuccessful']==='1') {
@@ -1027,8 +1091,10 @@
                     noteNumber.innerText= parseInt(noteNumber.innerText)-1;
                     layer.msg("恢复成功！");
                 }
-                else
+                else{
+                    isRedirect(data);
                     layer.msg("恢复失败！"+data['msg']);
+                }
             },
             error:function (e) {
                 var data=JSON.parse(e.responseText);
@@ -1044,15 +1110,17 @@
     function showCreateNoteBook() {
         layer.prompt({title: '请输入笔记本名', formType: 0}, function(text, index){
             $.ajax({
-                url:'http://cloudnote.com:9002/noteBook/add',
+                url:'http://localhost:8800/notebookServices/noteBook/add',
                 async:false,
                 data:{'title':text},
                 success: function(data){
                     if (data['isSuccessful'] == 1){
                         layer.msg("创建成功");
                         showNoteBooks();
-                    } else
+                    } else{
+                        isRedirect(data);
                         layer.msg("失败！"+data['msg']);
+                    }
                     layer.close(index);
                 },
                 error:function(data) {
@@ -1074,6 +1142,8 @@
         });
     }
 
+    var shareLink='';
+    var sharePwd='';
     /*提交分享*/
     function shareSubmit() {
         $.ajax({
@@ -1082,24 +1152,18 @@
             data: $('#share-form').serialize(),
             success: function (data) {
                 if (data["isSuccessful"] === "1") {
-
-
-                    $.cookie('shareLink',window.location.host+'/'+data["data"]['link'],{expires:7,path:'/'});
-                    $.cookie('sharePwd',data["data"]['pwd'],{expires:7,path:'/'});
-                    localStorage.setItem("shareLink", window.location.host+'/'+data["data"]['link']);
-                    localStorage.setItem("sharePwd", data["data"]['pwd']);
+                    shareLink=window.location.host+'/'+data["data"]['link'];
+                    sharePwd=data["data"]['pwd'];
+                    $("#link").val(shareLink);
+                    $("#pwd").val(sharePwd);
                     layer.open({
                         type: 1,
-                        skin: 'layui-layer-rim', //加上边框
-                        area: ['420px', '240px'], //宽高
-                        content: 'html内容'
+                        shade: false,
+                        title: '分享结果',
+                        content: $('#shareResult')
                     });
-                    // var pwd = '';
-                    // if (data["data"]['isHasPwd'] == 1)
-                    //     pwd = '<br>提取码为：' + data["data"]['pwd'];
-                    // document.getElementById("share-div").style.display='none';
-                    // layer.alert('分享创建成功!链接为：<br>' + window.location.host+'/'+data["data"]['link'] + pwd);
                 } else {
+                    isRedirect(data);
                     layer.msg('分享创建失败!' + data["msg"], {icon: 2, time: 3500});
                 }
             },
@@ -1115,7 +1179,7 @@
             layer.close(index);
             $.ajax({
                 type: 'post',
-                url: "/note/lock",
+                url: "http://localhost:8800/noteServices/note/lock",
                 data: {
                     'note_id':e.data.id,
                     'pwd':pass
@@ -1128,6 +1192,7 @@
                         $(e.target).click({id:e.data.id},unlock);
                         layer.msg('加密成功', {icon: 1, time: 2000});
                     } else {
+                        isRedirect(data);
                         layer.msg('加密失败!' + data["msg"], {icon: 2, time: 3500});
                     }
                 },
@@ -1144,7 +1209,7 @@
             layer.close(index);
             $.ajax({
                 type: 'post',
-                url: "/note/unlock",
+                url: "http://localhost:8800/noteServices/note/unlock",
                 data: {
                     'note_id':e.data.id,
                     'pwd':pass
@@ -1157,6 +1222,7 @@
                         $(e.target).click({id:e.data.id},lock);
                         layer.msg('解锁成功', {icon: 1, time: 2000});
                     } else {
+                        isRedirect(data);
                         layer.msg('解锁失败!' + data["msg"], {icon: 2, time: 3500});
                     }
                 },
@@ -1173,7 +1239,7 @@
         android.notification();
         $.ajax({
             type: 'post',
-            url: "/note/remind",
+            url: "http://localhost:8800/noteServices/note/remind",
             data: {
                 'note_id': e.data.id,
                 'remind': "内容待添加"
@@ -1186,6 +1252,7 @@
                     $(e.target).click({id: e.data.id}, cancelRemind);
                     layer.msg('定时提醒设置成功', {icon: 1, time: 2000});
                 } else {
+                    isRedirect(data);
                     layer.msg('定时提醒设置失败!' + data["msg"], {icon: 2, time: 3500});
                 }
             },
@@ -1200,7 +1267,7 @@
     function cancelRemind(e) {
         $.ajax({
             type: 'post',
-            url: "/note/cancelRemind",
+            url: "http://localhost:8800/noteServices/note/cancelRemind",
             data: {
                 'note_id': e.data.id,
                 '内容待添加': "内容待添加"
@@ -1213,6 +1280,7 @@
                     $(e.target).click({id: e.data.id}, remind);
                     layer.msg('定时提醒撤销成功', {icon: 1, time: 2000});
                 } else {
+                    isRedirect(data);
                     layer.msg('定时提醒撤销失败!' + data["msg"], {icon: 2, time: 3500});
                 }
             },
@@ -1299,7 +1367,6 @@
     function gettagval(obj){
         var str ="";
         var token =$(obj).parents(".Hui-tags").find(".Hui-tags-token");
-        //alert(token.length)
         if(token.length<1){
             $(obj).parents(".Hui-tags").find(".Hui-tags-val").val("");
             return false;
@@ -1326,7 +1393,6 @@
             }
         }else{
             if(event.keyCode==8){
-                alert("2"+v);
                 if(token.length>=1){
                     $(this).parents(".Hui-tags").find(".Hui-tags-token:last").remove();
                     gettagval(this);
@@ -1377,7 +1443,6 @@
         }
         var str ="";
         var token =it.find(".Hui-tags-token");
-        //alert(token.length)
         if(token.length<1){
             it.find(".Hui-tags-val").val("");
             return false;
@@ -1388,6 +1453,30 @@
         }
     });
 
+
+    function copyLinkAndPwd() {
+        copyText('链接：'+shareLink+'\r\n'+(sharePwd==null?'':'；提取码：'+sharePwd));
+    }
+
+    /*复制文本*/
+    function copyText(text) {
+        var textarea = document.createElement("input");//创建input对象
+        var currentFocus = document.activeElement;//当前获得焦点的元素
+        document.body.appendChild(textarea);//添加元素
+        textarea.value = text;
+        textarea.focus();
+        if(textarea.setSelectionRange)
+            textarea.setSelectionRange(0, textarea.value.length);//获取光标起始位置到结束位置
+        else
+            textarea.select();
+        try {
+            var flag = document.execCommand("copy");//执行复制
+        } catch(eo) {
+            var flag = false;
+        }
+        document.body.removeChild(textarea);//删除元素
+        currentFocus.focus();
+    }
 
 </script>
 </html>

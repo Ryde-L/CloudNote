@@ -1,7 +1,7 @@
 package com.cloudnote.note.service.impl;
 
 import com.cloudnote.note.dao.mapper.NoteContentMapper;
-import com.cloudnote.note.pojo.NoteContent;
+import com.cloudnote.common.pojo.NoteContent;
 import com.cloudnote.note.service.NoteContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

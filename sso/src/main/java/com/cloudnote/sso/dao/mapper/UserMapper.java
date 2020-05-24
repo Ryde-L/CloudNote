@@ -1,6 +1,6 @@
 package com.cloudnote.sso.dao.mapper;
 
-import com.cloudnote.sso.pojo.User;
+import com.cloudnote.common.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;

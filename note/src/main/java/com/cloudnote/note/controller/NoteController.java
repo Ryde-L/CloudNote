@@ -1,19 +1,20 @@
 package com.cloudnote.note.controller;
 
+import com.cloudnote.common.dto.ResponseDto;
+import com.cloudnote.common.pojo.Note;
+import com.cloudnote.common.utils.JsonUtil;
 import com.cloudnote.note.dto.DatatablePage;
-import com.cloudnote.note.dto.ResponseDto;
 import com.cloudnote.note.service.NoteService;
 import com.cloudnote.note.utils.GzipUtil;
-import com.cloudnote.note.utils.JsonUtil;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -35,7 +36,7 @@ public class NoteController {
     @Autowired
     NoteService noteService;
 
-    @RequestMapping("datatable")
+    @RequestMapping("datatableByAdministrator")
     public String datatable(HttpServletRequest request, HttpServletResponse response) {
         List<Map> list = new ArrayList<>();
         String start = request.getParameter("start");
@@ -60,7 +61,7 @@ public class NoteController {
     public ResponseDto add(HttpServletRequest request) throws IOException {
         String params = "";
         // 获取 Content-Encoding 请求头
-        String contentEncoding = request.getHeader("Content-Encoding");
+        String contentEncoding = request.getHeader("Content-Encoding")!=null?request.getHeader("Content-Encoding"):request.getHeader("accept-encoding");
         if (contentEncoding != null && contentEncoding.equals("gzip")) {
             // 获取输入流
             BufferedReader reader = request.getReader();
@@ -94,7 +95,7 @@ public class NoteController {
 
         String params = "";
         // 获取 Content-Encoding 请求头
-        String contentEncoding = request.getHeader("Content-Encoding");
+        String contentEncoding = request.getHeader("Content-Encoding")!=null?request.getHeader("Content-Encoding"):request.getHeader("accept-encoding");
         if (contentEncoding != null && contentEncoding.equals("gzip")) {
             // 获取输入流
             BufferedReader reader = request.getReader();
@@ -110,7 +111,7 @@ public class NoteController {
             // 因为前台对参数进行了 url 编码, 在此进行解码
             params = URLDecoder.decode(params, "utf-8");
         }
-        Integer userId = Integer.valueOf ((String) request.getSession().getAttribute("userId"));
+        Integer userId = Integer.valueOf ( request.getHeader("userId"));
         HashMap map = JsonUtil.jsonToPojo(params, HashMap.class);
         //TODO 直接点编辑按钮无法添加
         if (map.get("note_book_id")!=null)
@@ -120,34 +121,29 @@ public class NoteController {
     }
 
 
-//    @RequestMapping(value = {"/getNotesWithTags"})
-//    public ResponseDto getList(@RequestParam("note_book_id")Integer noteBookId) {
-//        return noteService.getNoteBookList(noteBookId);
-//    }
-
     @RequestMapping(value = {"/getContent"})
     public ResponseDto getContent(@RequestParam("note_id")Integer noteId) {
         return noteService.getContent(noteId);
     }
 
     @RequestMapping(value = {"/getListByTag"})
-    public ResponseDto findByTags(HttpSession session,String tag){
-        return noteService.getNoteListByTag(tag,Integer.valueOf ((String) session.getAttribute("userId")));
+    public ResponseDto findByTags(HttpServletRequest request,String tag){
+        return noteService.getNoteListByTag(tag,Integer.parseInt(request.getHeader("userId")));
     }
 
     @RequestMapping(value = {"/getNoteWithNoteBookAndContent"})
-    public ResponseDto getNote(HttpSession session, @RequestParam("note") Integer noteId,String pwd){
-        return noteService.getNoteWithNoteBookAndContent(Integer.valueOf ((String) session.getAttribute("userId")),noteId,pwd, String.valueOf(session.getAttribute("isAdmin")));
+    public ResponseDto getNote(HttpServletRequest request, @RequestParam("note") Integer noteId,String pwd){
+        return noteService.getNoteWithNoteBookAndContent(Integer.parseInt(request.getHeader("userId")),noteId,pwd, request.getHeader("isAdmin"));
     }
 
     @RequestMapping(value = {"/unlock"})
-    public ResponseDto unlock(HttpSession session, @RequestParam("note_id") Integer noteId,String pwd){
-        return noteService.unlock(Integer.valueOf ((String) session.getAttribute("userId")),noteId,pwd);
+    public ResponseDto unlock(HttpServletRequest request, @RequestParam("note_id") Integer noteId,String pwd){
+        return noteService.unlock(Integer.parseInt(request.getHeader("userId")),noteId,pwd);
     }
 
     @RequestMapping(value = {"/lock"})
-    public ResponseDto lock(HttpSession session, @RequestParam("note_id") Integer noteId,String pwd){
-        return noteService.lock(Integer.valueOf ((String) session.getAttribute("userId")),noteId,pwd);
+    public ResponseDto lock(HttpServletRequest request, @RequestParam("note_id") Integer noteId,String pwd){
+        return noteService.lock(Integer.parseInt(request.getHeader("userId")),noteId,pwd);
     }
 
 
@@ -155,8 +151,34 @@ public class NoteController {
      * 管理员直接删除
      */
     @RequestMapping(value = {"/delByAdministrator"})
-    public ResponseDto delByAdministrator(HttpSession session,@RequestParam("note_id") Integer noteId,HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        return noteService.deleteForever(Integer.valueOf ((String) session.getAttribute("userId")),noteId);
+    public ResponseDto delByAdministrator(@RequestParam("note_id") Integer noteId){
+        return noteService.deleteForever(noteId);
     }
+
+    /** restTemplate调用 */
+//    @RequestMapping(value = {"getUserNoteWithNoteBookByUserIdAndNoteId"}, produces = {"application/json;charset=utf-8"})
+    @RequestMapping(value = {"getUserNoteWithNoteBookByUserIdAndNoteId"})
+    public Note getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId){
+        return noteService.getUserNoteWithNoteBookByUserIdAndNoteId(userId, noteId).getData();
+    }
+
+    /** restTemplate调用 */
+    @RequestMapping(value = {"/del"})
+    public int del(@RequestParam("note_id") Integer noteId){
+        return noteService.delete(noteId);
+    }
+
+    /** restTemplate调用 */
+//    @RequestMapping(value = {"/getNote"})
+    @RequestMapping(value = {"getNote"}, produces = {"application/json;charset=utf-8"})
+    public Note getNote(@RequestParam("note_id") Integer noteId){
+        return noteService.getNote(noteId);
+    }
+
+    /** restTemplate调用 */
+    @RequestMapping(value = {"/insert"})
+    public int insert(@RequestBody Note note){
+        return noteService.insert(note);
+    }
+
 }

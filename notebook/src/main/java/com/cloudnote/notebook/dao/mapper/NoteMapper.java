@@ -1,6 +1,6 @@
 package com.cloudnote.notebook.dao.mapper;
 
-import com.cloudnote.notebook.pojo.Note;
+import com.cloudnote.common.pojo.Note;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +19,7 @@ public interface NoteMapper {
      * @param noteBookId 笔记本id
      * @return List<Note>
      */
-    @Select("select id as myId,title,note_book_id,is_has_pwd,pwd,is_has_remind,remind from note where note_book_id=#{param}")
+    @Select("select id as myId,title,note_book_id,is_has_pwd,pwd from note where note_book_id=#{param}")
     @Results({
             @Result(property = "id",column = "myId"),
             @Result(property = "noteTagList",column = "myId",
