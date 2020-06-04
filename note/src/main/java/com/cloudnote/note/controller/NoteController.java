@@ -7,6 +7,7 @@ import com.cloudnote.note.dto.DatatablePage;
 import com.cloudnote.note.service.NoteService;
 import com.cloudnote.note.utils.GzipUtil;
 import org.apache.commons.io.IOUtils;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,9 @@ public class NoteController {
 
     @Autowired
     NoteService noteService;
+
+    @Autowired
+    RestHighLevelClient restHighLevelClient;
 
     @RequestMapping("datatableByAdministrator")
     public String datatable(HttpServletRequest request, HttpServletResponse response) {
@@ -86,6 +90,8 @@ public class NoteController {
         else if (map.get("note_book_id") instanceof Integer)
             noteBookId= (Integer) map.get("note_book_id");
 
+
+        
         return noteService.createNote(noteBookId,(String) map.get("title"), (String) map.get("content"));
 
     }
@@ -126,8 +132,8 @@ public class NoteController {
         return noteService.getContent(noteId);
     }
 
-    @RequestMapping(value = {"/getListByTag"})
-    public ResponseDto findByTags(HttpServletRequest request,String tag){
+    @RequestMapping(value = {"/getListByKeyWord"})
+    public ResponseDto findByTags(HttpServletRequest request,String tag) throws IOException {
         return noteService.getNoteListByTag(tag,Integer.parseInt(request.getHeader("userId")));
     }
 

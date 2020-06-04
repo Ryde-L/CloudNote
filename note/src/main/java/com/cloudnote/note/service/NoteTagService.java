@@ -3,6 +3,8 @@ package com.cloudnote.note.service;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.pojo.NoteTag;
 
+import java.io.IOException;
+
 /**
  * <p>
   * 笔记标签表 Service 接口
@@ -28,7 +30,7 @@ public interface NoteTagService {
      * @param id 标签id
      * @return json
      */
-    public ResponseDto delByTagId(Integer id);
+    public ResponseDto delByTagId(Integer id) throws IOException;
 
     /**
      * 清空笔记标签

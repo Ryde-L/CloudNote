@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 /**
  * <p>
   * 笔记标签表 Controller 接口
@@ -34,7 +36,7 @@ public class NoteTagController {
     }
 
     @RequestMapping("/delByTagId")
-    public ResponseDto delOne( @RequestParam("tag_id") Integer tagId) {
+    public ResponseDto delOne( @RequestParam("tag_id") Integer tagId) throws IOException {
         return noteTagService.delByTagId(tagId);
     }
 

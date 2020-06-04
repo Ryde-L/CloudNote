@@ -7,11 +7,20 @@ import com.cloudnote.note.dao.mapper.NoteTagMapper;
 import com.cloudnote.common.pojo.NoteTag;
 import com.cloudnote.note.service.NoteService;
 import com.cloudnote.note.service.NoteTagService;
+import com.cloudnote.note.utils.ElasticSearchUtil;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -34,6 +43,9 @@ public class NoteTagServiceImpl implements NoteTagService {
     @Autowired
     NoteService noteService;
 
+    @Autowired
+    RestHighLevelClient restHighLevelClient;
+
 
 
     public int insert(NoteTag noteTag){
@@ -47,12 +59,19 @@ public class NoteTagServiceImpl implements NoteTagService {
      * @param tags   标签数组
      * @return ResponseDto
      */
-    public ResponseDto addTags(Integer noteId, String[] tags) {
+    public ResponseDto addTags(Integer noteId, String[] tags) throws IOException {
         //TODO 用户操作验证
         if (CheckerUtil.checkNulls(noteId, tags)) return ResultUtil.error( "缺少参数");
         if (noteService.getNote(noteId) == null) return ResultUtil.error( "笔记无效");
-        for (String tag : tags)
+        Map<String, Object> esMap = ElasticSearchUtil.documentQuery(restHighLevelClient, "cloud_note", String.valueOf(noteId));
+        List<String> esTagList = (List<String>) esMap.get("tag");
+        for (String tag : tags) {
             insert(new NoteTag(null, noteId, tag));
+            esTagList.add(tag);
+        }
+        Map map=new HashMap(1);
+        map.put("tag",esTagList);
+        ElasticSearchUtil.documentUpdate(restHighLevelClient,"cloud_note", String.valueOf(noteId),map);
         return ResultUtil.success("200");
     }
 
@@ -61,13 +80,27 @@ public class NoteTagServiceImpl implements NoteTagService {
      * @param id 标签id
      * @return json
      */
-    public ResponseDto delByTagId(Integer id) {
+    public ResponseDto delByTagId(Integer id) throws IOException {
         //TODO 用户操作验证
         if (CheckerUtil.checkNulls(id))
             return ResultUtil.error("缺少参数");
         if (noteTagMapper.selectByPrimaryKey(id) == null)
             return ResultUtil.error( "存在无效标签对象");
+        //数据库删除
+        NoteTag noteTag = noteTagMapper.selectByPrimaryKey(id);
         noteTagMapper.deleteByPrimaryKey(id);
+        //es删除
+        Map<String, Object> esMap = ElasticSearchUtil.documentQuery(restHighLevelClient, "cloud_note", String.valueOf(noteTag.getNoteId()));
+        List<String> esTagList = (List<String>) esMap.get("tag");
+        for (int i = 0; i <esTagList.size() ; i++) {
+            if (esTagList.get(i).equals(noteTag.getTag())) {
+                esTagList.remove(i);
+                break;
+            }
+        }
+        Map map=new HashMap(1);
+        map.put("tag",esTagList);
+        ElasticSearchUtil.documentUpdate(restHighLevelClient,"cloud_note", String.valueOf(noteTag.getNoteId()),map);
         return ResultUtil.success("");
 
     }

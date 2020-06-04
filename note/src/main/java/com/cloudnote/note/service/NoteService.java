@@ -4,6 +4,7 @@ import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.pojo.Note;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public interface NoteService {
      * @param content    笔记内容
      * @return json
      */
-    ResponseDto createNote(Integer noteBookId, String title, String content);
+    ResponseDto createNote(Integer noteBookId, String title, String content) throws IOException;
 
     /**
      * 更新
@@ -44,7 +45,7 @@ public interface NoteService {
      * @param content 笔记内容
      * @return ResponseDto
      */
-    ResponseDto update(Integer userId, Integer noteId, String title, String content);
+    ResponseDto update(Integer userId, Integer noteId, String title, String content) throws IOException;
 
     /**
      * 根据笔记本id获取笔记本里的笔记列表
@@ -69,7 +70,7 @@ public interface NoteService {
      * @param userId 用户Id
      * @return ResponseDto
      */
-    ResponseDto getNoteListByTag(String tag, Integer userId);
+    ResponseDto getNoteListByTag(String tag, Integer userId) throws IOException;
 
 
     /**

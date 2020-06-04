@@ -785,7 +785,7 @@
     /**从后台获取搜索的笔记*/
     function getSearchList(keyword) {
         $.ajax({
-            url:"http://localhost:8800/noteServices/note/getListByTag",
+            url:"http://localhost:8800/noteServices/note/getListByKeyWord",
             data:{"tag":keyword},
             success:function (data) {
                 if (data['isSuccessful']==='1'){

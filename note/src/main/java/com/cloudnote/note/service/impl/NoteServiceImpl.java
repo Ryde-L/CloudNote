@@ -7,6 +7,12 @@ import com.cloudnote.common.utils.CheckerUtil;
 import com.cloudnote.common.utils.ResultUtil;
 import com.cloudnote.note.dao.mapper.NoteMapper;
 import com.cloudnote.note.service.*;
+import com.cloudnote.note.utils.ElasticSearchUtil;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +56,9 @@ public class NoteServiceImpl implements NoteService {
     @Autowired
     NoteMapper noteMapper;
 
+    @Autowired
+    RestHighLevelClient restHighLevelClient;
+
 
     public Note getNote(Integer id) {
         return noteMapper.selectByPrimaryKey(id);
@@ -66,12 +78,15 @@ public class NoteServiceImpl implements NoteService {
      * @param content    笔记内容
      * @return ResponseDto
      */
-    public ResponseDto createNote(Integer noteBookId, String title, String content) {
+    public ResponseDto createNote(Integer noteBookId, String title, String content) throws IOException {
         ResponseDto responseDto = restTemplate.getForObject("http://notebookServices/noteBook/getNoteBookByNoteBookId?note_book_id=" + noteBookId, ResponseDto.class);
         if ("1".equals(responseDto.getIsSuccessful())&&responseDto.getData()==null) return ResultUtil.error("笔记本对象无效");
         Note note = new Note(null, noteBookId, title,0,null);
         noteMapper.insert(note);
         noteContentService.insert(new NoteContent(null, note.getId(), content));
+        Map<String, Object> map = new HashMap<>(1);
+        map.put("content",content);
+        ElasticSearchUtil.documentUpdate(restHighLevelClient,"cloud_note",String.valueOf(note.getId()),map);
         return ResultUtil.success("",String.valueOf(note.getId()));
     }
 
@@ -83,7 +98,7 @@ public class NoteServiceImpl implements NoteService {
      * @param content 笔记内容
      * @return ResponseDto
      */
-    public ResponseDto update(Integer userId,Integer noteId, String title, String content){
+    public ResponseDto update(Integer userId,Integer noteId, String title, String content) throws IOException {
         if (CheckerUtil.checkNulls(noteId,title,content)) return ResultUtil.error("缺少参数");
         Note note = noteMapper.selectByIdWithNoteBookAndContent(noteId);
         if (note==null) return ResultUtil.error("笔记对象无效");
@@ -100,6 +115,10 @@ public class NoteServiceImpl implements NoteService {
             noteContent.setContent(content);
             noteContentService.update(noteContent);
         }
+        Map<String, Object> map = new HashMap<>(1);
+        map.put("content",content);
+        ElasticSearchUtil.documentUpdate(restHighLevelClient,"cloud_note",String.valueOf(note.getId()),map);
+
         return ResultUtil.success();
     }
     /**
@@ -127,15 +146,24 @@ public class NoteServiceImpl implements NoteService {
     }
 
     /**
-     * 通过笔记标签模糊匹配出笔记
+     * 通过笔记关键字模糊匹配出笔记
      *
      * @param tag 标签
      * @param userId 用户Id
      * @return ResponseDto
      */
-    public ResponseDto getNoteListByTag(String tag,Integer userId) {
+    public ResponseDto getNoteListByTag(String tag,Integer userId) throws IOException {
         if (CheckerUtil.checkNulls(tag)) return ResultUtil.error("标签不为空");
-        return ResultUtil.success("", noteMapper.selectByTag(tag,userId));
+        List<Note> data=new ArrayList<>();
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery().
+                must(QueryBuilders.matchQuery("user_id", userId)).
+                must(QueryBuilders.queryStringQuery(tag).field("tag").field("content"));
+
+        SearchHits hits = ElasticSearchUtil.query(restHighLevelClient,"cloud_note",boolQuery);
+        SearchHit[] searchHits = hits.getHits();
+        for (SearchHit hit : searchHits)
+            data.add( noteMapper.selectByPrimaryKey(Integer.valueOf(hit.getId())));
+        return ResultUtil.success("", data);
     }
 
     /**
