@@ -15,17 +15,15 @@ import java.io.File;
  * <p>
   * 笔记附件表 Controller 接口
  * </p>
- *
- *
- * @author ryde
- * @since 2019-09-10T10:22:00Z
  */
 @RestController
 @RequestMapping("noteAttachment")
 public class NoteAttachmentController {
 
 
-
+    /**
+     * 录音上传
+     */
     @RequestMapping(value = {"/voiceUpload"})
     public FileResponseDto voiceUpload(HttpServletRequest request) {
         try {

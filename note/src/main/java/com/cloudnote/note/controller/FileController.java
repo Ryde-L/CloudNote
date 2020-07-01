@@ -22,6 +22,9 @@ import java.util.Calendar;
 @RequestMapping("file")
 public class FileController {
 
+    /**
+     * 文件上传
+     */
     @RequestMapping(value = {"/upload"})
     public FileResponseDto upload(HttpServletRequest request, MultipartFile imgFile) {
         String newName =null;

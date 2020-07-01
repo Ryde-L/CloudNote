@@ -42,12 +42,11 @@ public class NoteController {
 
     @RequestMapping("datatableByAdministrator")
     public String datatable(HttpServletRequest request, HttpServletResponse response) {
-        List<Map> list = new ArrayList<>();
         String start = request.getParameter("start");
         String length = request.getParameter("length");
         DatatablePage<Map> data = new DatatablePage<>();
         String search = "";
-        list=noteService.selectList(Integer.parseInt( start),Integer.parseInt(length));
+        List<Map> list=noteService.selectList(Integer.parseInt( start),Integer.parseInt(length));
         data.setRecordsFiltered(noteService.countAll());//过滤后的总记录数
         data.setDraw(Integer.parseInt(request.getParameter("draw")) + 1);
         data.setData(list);
@@ -162,7 +161,6 @@ public class NoteController {
     }
 
     /** restTemplate调用 */
-//    @RequestMapping(value = {"getUserNoteWithNoteBookByUserIdAndNoteId"}, produces = {"application/json;charset=utf-8"})
     @RequestMapping(value = {"getUserNoteWithNoteBookByUserIdAndNoteId"})
     public Note getUserNoteWithNoteBookByUserIdAndNoteId(Integer userId, Integer noteId){
         return noteService.getUserNoteWithNoteBookByUserIdAndNoteId(userId, noteId).getData();
@@ -175,7 +173,6 @@ public class NoteController {
     }
 
     /** restTemplate调用 */
-//    @RequestMapping(value = {"/getNote"})
     @RequestMapping(value = {"getNote"}, produces = {"application/json;charset=utf-8"})
     public Note getNote(@RequestParam("note_id") Integer noteId){
         return noteService.getNote(noteId);
