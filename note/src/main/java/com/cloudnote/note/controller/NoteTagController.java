@@ -1,5 +1,6 @@
 package com.cloudnote.note.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.note.service.NoteTagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("noteTag")
+@SaCheckLogin
 public class NoteTagController {
 
     @Autowired

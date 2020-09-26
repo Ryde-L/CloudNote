@@ -1,8 +1,10 @@
 package com.cloudnote.note.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.pojo.Note;
 import com.cloudnote.common.utils.JsonUtil;
+import com.cloudnote.note.dao.redis.SaTokenDaoRedis;
 import com.cloudnote.note.dto.DatatablePage;
 import com.cloudnote.note.service.NoteService;
 import com.cloudnote.note.utils.GzipUtil;
@@ -32,6 +34,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("note")
+@SaCheckLogin
 public class NoteController {
 
     @Autowired
@@ -39,6 +42,10 @@ public class NoteController {
 
     @Autowired
     RestHighLevelClient restHighLevelClient;
+
+    @Autowired
+    SaTokenDaoRedis saTokenDaoRedis;
+
 
     @RequestMapping("datatableByAdministrator")
     public String datatable(HttpServletRequest request, HttpServletResponse response) {
@@ -89,11 +96,10 @@ public class NoteController {
         else if (map.get("note_book_id") instanceof Integer)
             noteBookId= (Integer) map.get("note_book_id");
 
-
-        
         return noteService.createNote(noteBookId,(String) map.get("title"), (String) map.get("content"));
 
     }
+
 
     @RequestMapping(value = {"/update"})
     public ResponseDto update(HttpServletRequest request) throws IOException {
@@ -135,6 +141,7 @@ public class NoteController {
     public ResponseDto findByTags(HttpServletRequest request,String tag) throws IOException {
         return noteService.getNoteListByTag(tag,Integer.parseInt(request.getHeader("userId")));
     }
+
 
     @RequestMapping(value = {"/getNoteWithNoteBookAndContent"})
     public ResponseDto getNote(HttpServletRequest request, @RequestParam("note") Integer noteId,String pwd){

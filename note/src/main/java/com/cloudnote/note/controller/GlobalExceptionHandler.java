@@ -1,5 +1,6 @@
 package com.cloudnote.note.controller;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.utils.ResultUtil;
 import org.slf4j.Logger;
@@ -75,6 +76,11 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(NotLoginException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseDto handleNotLoginException(NotLoginException e){
+        return ResultUtil.error(HttpStatus.BAD_REQUEST.toString(),"当前会话未登录");
+    }
 
     @ExceptionHandler(Exception.class) //表示让Spring捕获到所有抛出的SignException异常，并交由这个被注解的方法处理。
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  //表示设置状态码。
@@ -84,4 +90,6 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return ResultUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.toString(),e.getMessage());
     }
+
+
 }

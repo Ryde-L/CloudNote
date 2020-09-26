@@ -1,13 +1,14 @@
 package com.cloudnote.sso;
 
+import cn.dev33.satoken.spring.SaTokenSetup;
 import com.cloudnote.common.utils.JedisClientPool;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -15,9 +16,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableRedisHttpSession
 @MapperScan("com.cloudnote.sso.dao.mapper")
+@ComponentScan(basePackages = {"com.cloudnote.sso.config","com.cloudnote.sso.controller","com.cloudnote.sso.service","com.cloudnote.sso.dao.redis"})
 @Import({JedisClientPool.class})
+@SaTokenSetup
 //@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 7200)// 开启redis session ，并且设置session有效时长
 public class SsoApplication {
 

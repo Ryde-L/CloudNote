@@ -50,10 +50,11 @@ public class JwtAdministratorAuthPreFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
         //路径与配置的相匹配，则执行过滤
-        RequestContext ctx = getCurrentContext();
-        System.out.println(ctx.getRequest().getRequestURI()+"管理员过滤检查");
-        String uri = ctx.getRequest().getRequestURI();
-        return !uri.contains("login")&&(uri.contains("ByAdministrator") || uri.contains("/userServices/")||"true".equals(ctx.getRequest().getParameter("use_admin_filter")));
+//        RequestContext ctx = getCurrentContext();
+//        System.out.println(ctx.getRequest().getRequestURI()+"管理员过滤检查");
+//        String uri = ctx.getRequest().getRequestURI();
+//        return !uri.contains("login")&&(uri.contains("ByAdministrator") || uri.contains("/userServices/")||"true".equals(ctx.getRequest().getParameter("use_admin_filter")));
+        return false;
     }
 
     /**

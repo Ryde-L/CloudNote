@@ -1,5 +1,7 @@
 package com.cloudnote.sso.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.pojo.User;
 import com.cloudnote.sso.service.UserService;
@@ -15,10 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -47,21 +45,28 @@ public class UserController {
         if (user == null) return ResultUtil.error("不正确的账号密码");
         if (user.getStatus()==0) return ResultUtil.error("账号被封禁！");
 
-        //生成token
-        String token = JwtUtil.sign(user.getId());
-        response.setHeader("token",token);
-        //token写入cookie
-        Cookie cookie = new Cookie("sso_token",token);
-        cookie.setPath("/");
-        cookie.setDomain("localhost");
-        cookie.setMaxAge(7200);
-        response.addCookie(cookie);
-        //token写入redis
-        jedisClientPool.set(token, String.valueOf(user.getId()));
-        jedisClientPool.set(String.valueOf(user.getId()),token);
-        //设置过期时间
-        jedisClientPool.expire(token,3600);
-        jedisClientPool.expire(String.valueOf(user.getId()),3600);
+//        //生成token
+//        String token = JwtUtil.sign(user.getId());
+//        response.setHeader("token",token);
+//        //token写入cookie
+//        Cookie cookie = new Cookie("sso_token",token);
+//        cookie.setPath("/");
+//        cookie.setDomain("localhost");
+//        cookie.setMaxAge(7200);
+//        response.addCookie(cookie);
+
+//        //token写入redis
+//        jedisClientPool.set(token, String.valueOf(user.getId()));
+//        jedisClientPool.set(String.valueOf(user.getId()),token);
+//        //设置过期时间
+//        jedisClientPool.expire(token,3600);
+//        jedisClientPool.expire(String.valueOf(user.getId()),3600);
+
+
+        //sa-token
+        StpUtil.setLoginId("user_"+user.getId());
+
+
         //返回成功结果
         return ResultUtil.success();
     }
@@ -83,20 +88,26 @@ public class UserController {
         restTemplate.getForEntity("http://notebookServices/noteBook/createDefault?userId="+user.getId(), String.class);
 
         //生成token
-        String token = JwtUtil.sign(user.getId());
-        response.setHeader("token",token);
-        //token写入cookie
-        Cookie cookie = new Cookie("sso_token",token);
-        cookie.setPath("/");
-        cookie.setDomain("localhost");
-        cookie.setMaxAge(7200);
-        response.addCookie(cookie);
-        //token写入redis
-        jedisClientPool.set(token, String.valueOf(user.getId()));
-        jedisClientPool.set(String.valueOf(user.getId()),token);
-        //设置过期时间
-        jedisClientPool.expire(token,3600);
-        jedisClientPool.expire(String.valueOf(user.getId()),3600);
+//        String token = JwtUtil.sign(user.getId());
+//        response.setHeader("token",token);
+//        //token写入cookie
+//        Cookie cookie = new Cookie("sso_token",token);
+//        cookie.setPath("/");
+//        cookie.setDomain("localhost");
+//        cookie.setMaxAge(7200);
+//        response.addCookie(cookie);
+//        //token写入redis
+//        jedisClientPool.set(token, String.valueOf(user.getId()));
+//        jedisClientPool.set(String.valueOf(user.getId()),token);
+//        //设置过期时间
+//        jedisClientPool.expire(token,3600);
+//        jedisClientPool.expire(String.valueOf(user.getId()),3600);
+
+
+        //sa-token
+        StpUtil.setLoginId("user_"+user.getId());
+
+
         //返回成功结果
         return ResultUtil.success();
     }

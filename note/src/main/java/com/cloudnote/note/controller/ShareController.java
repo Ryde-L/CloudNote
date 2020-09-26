@@ -1,5 +1,6 @@
 package com.cloudnote.note.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.utils.CheckerUtil;
 import com.cloudnote.common.utils.ResultUtil;
@@ -39,6 +40,7 @@ public class ShareController {
      * 创建分享
      */
     @RequestMapping(value = {"/create"})
+    @SaCheckLogin
     public ResponseDto add(HttpServletRequest request,
                            @RequestParam(value = "is_has_pwd",required = false) Integer isHasPwd,
                            @RequestParam(value = "days",required = false) Integer days) {
@@ -69,6 +71,7 @@ public class ShareController {
      * 取消分享
      */
     @RequestMapping(value = {"/cancel"})
+    @SaCheckLogin
     public ResponseDto cancel( HttpSession session,@RequestParam("share_id") Integer shareId) {
         return shareService.cancel(Integer.valueOf ((String) session.getAttribute("userId")),shareId);
     }
@@ -77,6 +80,7 @@ public class ShareController {
      * 转存分享到自己的笔记本
      */
     @RequestMapping(value = {"/save"})
+    @SaCheckLogin
     public ResponseDto save( HttpSession session,@RequestParam("note_book_id") Integer noteBookId,@RequestParam("pwd") String pwd, @RequestParam("link_suffix")String linkSuffix){
         return shareService.save(Integer.valueOf ((String) session.getAttribute("userId")),noteBookId, shareLinkPrefix + linkSuffix,  pwd);
     }
