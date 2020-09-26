@@ -1,11 +1,12 @@
 package com.cloudnote.note.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.pojo.Note;
 import com.cloudnote.common.utils.JsonUtil;
-import com.cloudnote.note.dao.redis.SaTokenDaoRedis;
 import com.cloudnote.note.dto.DatatablePage;
+import com.cloudnote.note.satoken.SaTokenDaoRedis;
 import com.cloudnote.note.service.NoteService;
 import com.cloudnote.note.utils.GzipUtil;
 import org.apache.commons.io.IOUtils;
@@ -21,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +47,7 @@ public class NoteController {
     SaTokenDaoRedis saTokenDaoRedis;
 
 
+    @SaCheckPermission("admin-operation")
     @RequestMapping("datatableByAdministrator")
     public String datatable(HttpServletRequest request, HttpServletResponse response) {
         String start = request.getParameter("start");
@@ -64,9 +65,8 @@ public class NoteController {
 
     /**
      * 添加笔记
-     *
-     * @return
      */
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/add"})
     public ResponseDto add(HttpServletRequest request) throws IOException {
         String params = "";
@@ -100,7 +100,7 @@ public class NoteController {
 
     }
 
-
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/update"})
     public ResponseDto update(HttpServletRequest request) throws IOException {
 
@@ -131,28 +131,31 @@ public class NoteController {
 
     }
 
-
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/getContent"})
     public ResponseDto getContent(@RequestParam("note_id")Integer noteId) {
         return noteService.getContent(noteId);
     }
 
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/getListByKeyWord"})
     public ResponseDto findByTags(HttpServletRequest request,String tag) throws IOException {
         return noteService.getNoteListByTag(tag,Integer.parseInt(request.getHeader("userId")));
     }
 
-
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/getNoteWithNoteBookAndContent"})
     public ResponseDto getNote(HttpServletRequest request, @RequestParam("note") Integer noteId,String pwd){
         return noteService.getNoteWithNoteBookAndContent(Integer.parseInt(request.getHeader("userId")),noteId,pwd, request.getHeader("isAdmin"));
     }
 
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/unlock"})
     public ResponseDto unlock(HttpServletRequest request, @RequestParam("note_id") Integer noteId,String pwd){
         return noteService.unlock(Integer.parseInt(request.getHeader("userId")),noteId,pwd);
     }
 
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/lock"})
     public ResponseDto lock(HttpServletRequest request, @RequestParam("note_id") Integer noteId,String pwd){
         return noteService.lock(Integer.parseInt(request.getHeader("userId")),noteId,pwd);
@@ -162,6 +165,7 @@ public class NoteController {
     /**
      * 管理员直接删除
      */
+    @SaCheckPermission("admin-operation")
     @RequestMapping(value = {"/delByAdministrator"})
     public ResponseDto delByAdministrator(@RequestParam("note_id") Integer noteId){
         return noteService.deleteForever(noteId);

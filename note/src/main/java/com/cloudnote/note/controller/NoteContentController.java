@@ -1,5 +1,6 @@
 package com.cloudnote.note.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.cloudnote.common.pojo.NoteContent;
 import com.cloudnote.note.service.NoteContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class NoteContentController {
     @Autowired
     NoteContentService noteContentService;
 
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/getNoteContent"})
     public NoteContent getNoteContent(@RequestParam("note_id") Integer noteId){
         return noteContentService.getNoteContent(noteId);

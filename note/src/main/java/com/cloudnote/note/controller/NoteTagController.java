@@ -1,6 +1,7 @@
 package com.cloudnote.note.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.note.service.NoteTagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,22 +28,24 @@ public class NoteTagController {
     @Autowired
     NoteTagService noteTagService;
 
-
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/addTags"})
     public ResponseDto addTags(@RequestParam("note_id") Integer noteId, @RequestParam("tags[]") String[] tags) throws Exception {
         return noteTagService.addTags(noteId, tags);
     }
+    @SaCheckPermission("user-operation")
     @RequestMapping(value = {"/delTag"})
     public ResponseDto delTag(@RequestParam("note_id") Integer noteId,@RequestParam("tag") String tag) throws Exception {
         return noteTagService.delTag(noteId, tag);
     }
 
+    @SaCheckPermission("user-operation")
     @RequestMapping("/delByTagId")
     public ResponseDto delOne( @RequestParam("tag_id") Integer tagId) throws IOException {
         return noteTagService.delByTagId(tagId);
     }
 
-
+    @SaCheckPermission("user-operation")
     @RequestMapping("/delAllByNoteId")
     public ResponseDto delAll( @RequestParam("note_id") Integer noteId) {
         return noteTagService.delAll(noteId);

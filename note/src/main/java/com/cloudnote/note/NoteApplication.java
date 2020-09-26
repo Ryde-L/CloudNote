@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableEurekaClient
 @MapperScan("com.cloudnote.note.dao.mapper")
 @ServletComponentScan("com.cloudnote.note.filter")
-@ComponentScan(basePackages = {"com.cloudnote.note.config","com.cloudnote.note.controller","com.cloudnote.note.service","com.cloudnote.note.dao.redis"})
+@ComponentScan(basePackages = {"com.cloudnote.note.config","com.cloudnote.note.controller","com.cloudnote.note.service","com.cloudnote.note.satoken"})
 @SaTokenSetup
 public class NoteApplication {
 

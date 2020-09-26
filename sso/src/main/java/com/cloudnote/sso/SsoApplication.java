@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan("com.cloudnote.sso.dao.mapper")
-@ComponentScan(basePackages = {"com.cloudnote.sso.config","com.cloudnote.sso.controller","com.cloudnote.sso.service","com.cloudnote.sso.dao.redis"})
+@ComponentScan(basePackages = {"com.cloudnote.sso.config","com.cloudnote.sso.controller","com.cloudnote.sso.service","com.cloudnote.sso.satoken"})
 @Import({JedisClientPool.class})
 @SaTokenSetup
 //@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 7200)// 开启redis session ，并且设置session有效时长

@@ -1,6 +1,7 @@
 package com.cloudnote.note.controller;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
 import com.cloudnote.common.dto.ResponseDto;
 import com.cloudnote.common.utils.ResultUtil;
 import org.slf4j.Logger;
@@ -80,6 +81,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseDto handleNotLoginException(NotLoginException e){
         return ResultUtil.error(HttpStatus.BAD_REQUEST.toString(),"当前会话未登录");
+    }
+
+    @ExceptionHandler(NotPermissionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseDto handleNotPermissionException(NotPermissionException e){
+        System.out.println(e.getMessage());
+        return ResultUtil.error(HttpStatus.BAD_REQUEST.toString(),"无权操作");
     }
 
     @ExceptionHandler(Exception.class) //表示让Spring捕获到所有抛出的SignException异常，并交由这个被注解的方法处理。
