@@ -39,12 +39,29 @@
 
     <build>
         <plugins>
+            <!--    java -jar 执行不报 no main manifest attribute     -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+<!--                    <executable>true</executable>-->
+                    <mainClass>com.cloudnote.eurekaserver.EurekaServerApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--      docker 打包成镜像上传      -->
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.4.14</version>
                 <configuration>
-                    <imageName>cloudnote-eureka-server</imageName>
+                    <imageName>cloudnote-eureka-8761</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <dockerHost>http://47.107.128.33:2375</dockerHost>
                     <resources>
