@@ -24,6 +24,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class SsoApplication {
 
     public static void main(String[] args) {
+        System.out.println("SsoApplication started...");
         SpringApplication.run(SsoApplication.class, args);
     }
 

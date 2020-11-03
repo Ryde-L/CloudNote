@@ -44,7 +44,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-<!--                    <executable>true</executable>-->
                     <mainClass>com.cloudnote.eurekaserver.EurekaServerApplication</mainClass>
                 </configuration>
                 <executions>
@@ -61,7 +60,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.4.14</version>
                 <configuration>
-                    <imageName>cloudnote-eureka-8761</imageName>
+                    <imageName>cloudnote-eureka-8671</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <dockerHost>http://47.107.128.33:2375</dockerHost>
                     <resources>
