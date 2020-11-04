@@ -1,0 +1,51 @@
+version: '2'
+services:
+  myRedis:
+    image: redis
+    container_name: myRedis
+    ports:
+      - "6379:6379"
+  cloudnote-eureka-8671:    #自定义服务名--注册中心
+    #restart: on-failure
+    image: cloudnote-eureka-8671  #镜像名称
+    container_name: cloudnote-eureka-8671
+    ports:
+      - "8671:8671"          #映射的端口
+  cloudnote-zuul-8800:
+    #restart: on-failure
+    image: cloudnote-zuul-8800
+    container_name: cloudnote-zuul-8800
+    ports:
+      - "8800:8800"
+    links:
+      - myRedis
+  cloudnote-sso-9010:
+    image: cloudnote-sso-9010
+    container_name: cloudnote-sso-9010
+    ports:
+      - "9010:9010"
+    links:
+      - myRedis
+  cloudnote-note-9001:
+    image: cloudnote-note-9001
+    container_name: cloudnote-note-9001
+    ports:
+      - "9001:9001"
+    links:
+      - myRedis
+  cloudnote-notebook-9002:
+    #restart: on-failure
+    image: cloudnote-notebook-9002
+    container_name: cloudnote-notebook-9002
+    ports:
+      - "9002:9002"
+    links:
+      - myRedis
+  cloudnote-recycle-bin-9003:
+    #restart: on-failure
+    image: cloudnote-recycle-bin-9003
+    container_name: cloudnote-recycle-bin-9003
+    ports:
+      - "9003:9003"
+    links:
+      - myRedis
